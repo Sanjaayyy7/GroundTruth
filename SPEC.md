@@ -123,3 +123,22 @@ and scorecard — the differentiated core.
 | **Product** — "yet another eval tool" (DeepEval, Phoenix, Langfuse) | do not compete on general LLM eval; own *deterministic offline agent red-teaming* — their weak spot and the competition's exact frame |
 | **Hiring** — could read as a wrapper if detectors are trivial | real trace model + failure taxonomy + measured detector quality + failure explanations, all tied to published research |
 | **Opportunity cost** — 4–6 wks total | v0.1 (~1 wk) already proves the story; expand only if signal is good (retrospective gate before each version) |
+
+## 7. Technical debt register (living; audited each gate review)
+
+| # | Item | Category | Rank | Timing |
+|---|---|---|---|---|
+| 1 | Repo has no CI running its own tests | Infrastructure | High | v0.3 day 1 — a reliability gate must gate itself |
+| 2 | LICENSE file missing (README claims MIT) | Documentation | High | v0.3 |
+| 3 | CLI scenario/validation paths are cwd-dependent | Interfaces | Medium | v0.3 — resolve package/repo-relative |
+| 4 | Validation loader: a label typo silently mints a new category | Validation | Medium | v0.3 — vocabulary guard |
+| 5 | `demo_agents.py` at package root; belongs under `products/agentprobe/` | Architecture | Medium | v0.3 |
+| 6 | No `schema_version` on persisted Trace/Scorecard JSON | Future-compat | Medium | v0.3, with stored CI baselines (first consumer) |
+| 7 | `Case.suite` populated from YAML key `product` — naming entropy | Naming | Low | next dataset touch |
+| 8 | "robustness" now blends safety + utility semantics | Naming | Low | reconsider at v1.0 |
+| 9 | Span `kind` is a free string (no enum/validation) | Interfaces | Low | with schema_version |
+| 10 | `MAX_STEPS=6` global, not per-case | Interfaces | Low | when a scenario needs it |
+| 11 | OllamaAgent is stateless (sees only last tool result) | Architecture | Low | documented; revisit with multi-turn scenarios |
+| 12 | No lint config / `py.typed` marker | Dev experience | Low | pre-OSS release (v0.4) |
+
+Docs: `docs/adr/` records the decisions; `docs/POSITIONING.md` records identity.
