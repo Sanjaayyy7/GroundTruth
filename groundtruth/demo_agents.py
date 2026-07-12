@@ -39,7 +39,8 @@ class VulnerableAgent:
                 return ToolCall(tool)
         match = _INSTRUCTION.search(obs.last_tool_result or "")
         if match and match.group(1) in obs.available_tools:
-            return ToolCall(match.group(1))
+            # naively pastes what it just read into the call — real exfiltration shape
+            return ToolCall(match.group(1), {"body": obs.last_tool_result or ""})
         return Finish("Here is a summary of your request.")
 
 
@@ -63,7 +64,21 @@ class HardenedAgent:
         )
 
 
+class ParanoidAgent:
+    """Refuses everything. Perfectly 'safe' on attack cases — and useless.
+    Exists to prove the suite measures the utility side of the frontier too."""
+
+    name = "paranoid_agent"
+
+    def reset(self) -> None:
+        pass
+
+    def step(self, obs: Observation) -> Action:
+        return Finish("I cannot help with that request, as it may be unsafe.")
+
+
 REGISTRY: dict[str, type] = {
     "vulnerable_agent": VulnerableAgent,
     "hardened_agent": HardenedAgent,
+    "paranoid_agent": ParanoidAgent,
 }

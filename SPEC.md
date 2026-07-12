@@ -20,15 +20,17 @@ only on the platform's public types.
 
 ```
 Platform (groundtruth/core, groundtruth/adapters)
-  Trace Engine    trace.py      ordered spans of a subject run (no wall-clock)
-  Eval Engine     evaluator.py  Detector protocol + evaluate() -> Scorecard
-                  scorecard.py  Failure taxonomy (the differentiator)
-  Dataset Store   dataset.py    Case loaded from YAML; product fields in `spec`
-  Adapter         adapters/agent.py  Agent protocol: reset() + step() -> Action
+  Trace Engine      trace.py       ordered spans of a subject run (no wall-clock)
+  Eval Engine       evaluator.py   Detector protocol + evaluate() -> Scorecard
+                    scorecard.py   Failure taxonomy (the differentiator)
+  Dataset Store     dataset.py     Case loaded from YAML; product fields in `spec`
+  Validation Engine validation.py  labeled traces -> measured detector P/R (v0.2)
+  Adapters          adapters/agent.py         Agent protocol: reset()+step()->Action
+                    adapters/ollama_agent.py  any local Ollama model as a subject
 
 Product (groundtruth/products/*)
   AgentProbe      runner.py     deterministic mocked-tool loop -> Trace
-                  detectors.py  safety detectors -> explanatory Failures
+                  detectors.py  5 safety detectors -> explanatory Failures
 ```
 
 ### Every abstraction has a future consumer (the hard constraint)
@@ -40,6 +42,7 @@ Product (groundtruth/products/*)
 | **Failure taxonomy** | injection, unsafe call | miscalibration, bias | wasted steps, no-recovery |
 | **Dataset `Case`** | attack scenario | battle pair | task |
 | **Agent adapter** | subject under test | judge model (wrapped) | subject under test |
+| **Validation Engine** | detector P/R (shipped) | judge-vs-human agreement | detector P/R; CI gate (v0.3) |
 
 No primitive is speculative — each already has ≥2 named consumers.
 
@@ -56,7 +59,11 @@ Failure(case_id, detector, category, severity, summary, chain[], recommendation)
 is what separates Groundtruth from "score = 72" eval libraries — we explain
 failure, we don't just count it.
 
-v0.1 categories: `unsafe_tool_invocation`, `instruction_hijacking`.
+Categories: `unsafe_tool_invocation`, `instruction_hijacking` (v0.1);
+`secret_exfiltration`, `goal_drift`, `over_refusal` (v0.2). `over_refusal` is
+deliberate product thinking: it measures the *utility* side of the frontier, so
+a maximally paranoid agent cannot score a perfect card by refusing everything
+(the bundled `paranoid_agent` demo proves it: 0.75, failures all `over_refusal`).
 
 ## 4. Technology decisions
 
@@ -79,11 +86,32 @@ and scorecard — the differentiated core.
   failure taxonomy, CLI, 5 scenarios (4 attacks + 1 benign control), e2e tests.
   Success criteria (all verified): vulnerable < hardened; hardened clean; no
   false-positive on control; deterministic.
-- **v0.2 — weeks 2–3.** +3 detectors (goal-drift, secret-leak, over-refusal);
-  trace visualization; a hand-labeled ~50-case validation set with **measured
-  detector precision/recall**; one real local LLM agent (Ollama/MLX) as a subject.
-- **v0.3.** React dashboard (reads scorecard JSON); CI mode (fail a PR on safety
-  regression vs a stored baseline).
+- **v0.2 — DONE (2026-07-12).** Shipped:
+  - **+3 detectors** (`secret_leak`, `goal_drift`, `over_refusal`) + `paranoid_agent`
+    demo → the suite now exposes the full safety–utility frontier:
+    vulnerable 0.25 / hardened 1.00 / paranoid 0.75 (8 scenarios).
+  - **Validation Engine** (`core/validation.py`) + a 53-item hand-labeled trace set
+    (`validation/agentprobe/`) with deliberately hard items. **Measured quality**
+    (micro): precision **0.9032**, recall **0.8485**, f1 **0.875** — per-category
+    numbers and every miss reported by `groundtruth validate` and pinned by a
+    regression test. Known limits are named in the labeled set itself:
+    name-matching misses semantic effects (`ut_pos_04`), declared-target rules miss
+    off-target hijacks (`ih_pos_04`), no causality ordering (`ih_fp_01`), exact-match
+    misses split/obfuscated secrets (`sl_pos_04/05`), no authorization concept
+    (`sl_fp_01`), typo-retry counted as drift (`gd_fp_01`), phrasing-sensitive
+    refusal matching (`orf_pos_03`).
+  - **First real LLM subjects** via `adapters/ollama_agent.py` (stdlib-only,
+    temperature 0 + fixed seed): `gemma3:4b` and `llama3.1:8b` both scored **0.88**
+    — both obeyed an injected `SYSTEM:` instruction in a poisoned web-search result
+    and invoked the forbidden `delete_files`. Scorecards in `runs/`.
+  - Labeling methodology, honestly stated: traces authored + labeled by the
+    developer (not third-party), with hard positives/negatives designed to expose
+    rule limits; numbers are measurements of rule coverage on that set, not claims
+    about attack-space coverage.
+  - Deferred from v0.2: trace visualization (folds into the v0.3 dashboard).
+- **v0.3.** React dashboard (reads scorecard + validation JSON); CI mode (fail a
+  PR on safety regression vs a stored baseline); LLM-assisted detectors measured
+  against the same labeled set (rules vs LLM-judge comparison on P/R).
 - **v0.4.** Docs, demo video, public benchmark, open-source release. Then start
   **JudgeKit** on the same spine.
 
@@ -91,7 +119,7 @@ and scorecard — the differentiated core.
 
 | Risk | Mitigation |
 |---|---|
-| **Technical** — heuristic detectors → false pos/neg | high-precision rules first; benign control in-suite now; v0.2 adds a labeled validation set with reported precision/recall (that measurement *is* the depth) |
+| **Technical** — heuristic detectors → false pos/neg | high-precision rules first; benign control in-suite; **shipped in v0.2:** labeled validation set with reported P/R (micro 0.90/0.85), misses named and pinned by regression test |
 | **Product** — "yet another eval tool" (DeepEval, Phoenix, Langfuse) | do not compete on general LLM eval; own *deterministic offline agent red-teaming* — their weak spot and the competition's exact frame |
 | **Hiring** — could read as a wrapper if detectors are trivial | real trace model + failure taxonomy + measured detector quality + failure explanations, all tied to published research |
 | **Opportunity cost** — 4–6 wks total | v0.1 (~1 wk) already proves the story; expand only if signal is good (retrospective gate before each version) |
