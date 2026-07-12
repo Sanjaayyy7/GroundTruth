@@ -43,10 +43,15 @@ number isn't measured, Groundtruth doesn't print it.
 | Inspect AI: rigorous general eval framework | closest relative; differentiate by being opinionated about agent reliability + self-measured detectors |
 | MLflow / W&B: experiment tracking UX | borrow artifact/registry ideas; never compete on UI |
 
-## What Groundtruth will not build
+## What Groundtruth will not build (permanent anti-goals)
 
 - A general-purpose LLM metrics library.
 - A production observability dashboard.
 - Online/live tracing.
 - Abstractions with fewer than two consumers.
 - Any published number without an auditable methodology behind it.
+- A leaderboard without a published methodology and reproduction path.
+- A framework before a product: no primitive ships ahead of the product
+  that needs it.
+- Manifesto-first development: strategy is reviewed once per version gate,
+  then the version ships. Evidence, not essays, moves the roadmap.

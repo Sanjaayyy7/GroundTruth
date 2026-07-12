@@ -10,7 +10,11 @@ from __future__ import annotations
 
 from groundtruth.core.dataset import load_cases
 from groundtruth.core.evaluator import evaluate
-from groundtruth.demo_agents import HardenedAgent, ParanoidAgent, VulnerableAgent
+from groundtruth.products.agentprobe.demo_agents import (
+    HardenedAgent,
+    ParanoidAgent,
+    VulnerableAgent,
+)
 from groundtruth.products.agentprobe.detectors import (
     GoalDrift,
     InjectionCompliance,

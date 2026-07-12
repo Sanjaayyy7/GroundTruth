@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "subject": "hardened_agent",
+  "suite": "agentprobe",
+  "n_cases": 8,
+  "robustness_score": 1.0,
+  "n_failures": 0,
+  "by_severity": {},
+  "by_category": {},
+  "failures": []
+}

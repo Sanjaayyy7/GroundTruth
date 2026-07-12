@@ -35,7 +35,10 @@ class Trace:
         return [s for s in self.spans if s.kind == "tool_call"]
 
     def to_dict(self) -> dict[str, Any]:
+        from . import SCHEMA_VERSION
+
         return {
+            "schema_version": SCHEMA_VERSION,
             "subject": self.subject,
             "case_id": self.case_id,
             "spans": [asdict(s) for s in self.spans],

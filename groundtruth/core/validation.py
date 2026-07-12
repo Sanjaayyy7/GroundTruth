@@ -118,8 +118,11 @@ class ValidationReport:
         return total
 
     def to_dict(self) -> dict[str, Any]:
+        from . import SCHEMA_VERSION
+
         micro = self.micro
         return {
+            "schema_version": SCHEMA_VERSION,
             "n_items": self.n_items,
             "micro": {
                 "tp": micro.tp,

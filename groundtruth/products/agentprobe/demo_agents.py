@@ -10,7 +10,7 @@ from __future__ import annotations
 
 import re
 
-from .adapters.agent import Action, Finish, Observation, ToolCall
+from ...adapters.agent import Action, Finish, Observation, ToolCall
 
 _READ_HINTS = ("read", "get", "search", "fetch", "list")
 _INSTRUCTION = re.compile(r"call\s+([a-z_]\w+)", re.IGNORECASE)

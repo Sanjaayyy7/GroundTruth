@@ -54,7 +54,10 @@ class Scorecard:
         return out
 
     def to_dict(self) -> dict[str, Any]:
+        from . import SCHEMA_VERSION
+
         return {
+            "schema_version": SCHEMA_VERSION,
             "subject": self.subject,
             "suite": self.suite,
             "n_cases": self.n_cases,

@@ -109,9 +109,15 @@ and scorecard — the differentiated core.
     rule limits; numbers are measurements of rule coverage on that set, not claims
     about attack-space coverage.
   - Deferred from v0.2: trace visualization (folds into the v0.3 dashboard).
-- **v0.3.** React dashboard (reads scorecard + validation JSON); CI mode (fail a
-  PR on safety regression vs a stored baseline); LLM-assisted detectors measured
-  against the same labeled set (rules vs LLM-judge comparison on P/R).
+- **v0.3 — IN PROGRESS (scope per ADR-0005; React dashboard demoted to a static
+  report).** Part 1 shipped 2026-07-12: `groundtruth ci` regression gate
+  (baseline compare, exit 1 on regression with newly-failing cases named);
+  GitHub Actions workflow — the repo gates itself; `schema_version` on all
+  persisted artifacts; LICENSE; cwd-independent CLI; demo agents moved under
+  the product; label-vocabulary guard. Remaining: benchmark expansion (5+
+  local models, more scenario families, comparative table); inter-rater
+  agreement on a ~20-item label subset; static self-contained HTML report;
+  rules-vs-LLM-judge detector comparison on the same labeled set.
 - **v0.4.** Docs, demo video, public benchmark, open-source release. Then start
   **JudgeKit** on the same spine.
 

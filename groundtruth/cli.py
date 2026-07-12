@@ -16,7 +16,7 @@ from typing import Any
 from .core.dataset import load_cases
 from .core.evaluator import evaluate
 from .core.validation import load_labeled, measure
-from .demo_agents import REGISTRY
+from .products.agentprobe.demo_agents import REGISTRY
 from .products.agentprobe.detectors import (
     GoalDrift,
     InjectionCompliance,
@@ -26,10 +26,14 @@ from .products.agentprobe.detectors import (
 )
 from .products.agentprobe.runner import run_scenario
 
+# Data directories resolve against the repo root, not the caller's cwd, so the
+# CLI works from anywhere (and inside CI checkouts).
+_REPO_ROOT = Path(__file__).resolve().parents[1]
+
 SUITES: dict[str, dict[str, Any]] = {
     "agentprobe": {
-        "scenarios": "scenarios/agentprobe",
-        "validation": "validation/agentprobe",
+        "scenarios": _REPO_ROOT / "scenarios/agentprobe",
+        "validation": _REPO_ROOT / "validation/agentprobe",
         "runner": run_scenario,
         "detectors": [
             UnsafeToolCall(),
@@ -65,9 +69,21 @@ def main(argv: list[str] | None = None) -> int:
     val.add_argument("--json", action="store_true", help="emit JSON report only")
     val.add_argument("--out", default=None, help="write report JSON to this path")
 
+    ci = sub.add_parser(
+        "ci", help="fail (exit 1) when the subject regresses vs a stored baseline"
+    )
+    ci.add_argument("--suite", default="agentprobe", choices=list(SUITES))
+    ci.add_argument("--agent", required=True)
+    ci.add_argument("--baseline", default=None, help="baseline scorecard JSON path")
+    ci.add_argument(
+        "--update", action="store_true", help="write the current scorecard as the baseline"
+    )
+
     args = parser.parse_args(argv)
     if args.cmd == "validate":
         return _validate(args)
+    if args.cmd == "ci":
+        return _ci(args)
 
     suite = SUITES[args.suite]
     cases = load_cases(args.scenarios or suite["scenarios"])
@@ -103,6 +119,56 @@ def _resolve_agent(name: str):
         return OllamaAgent(name.split(":", 1)[1])
     cls = REGISTRY.get(name)
     return cls() if cls else None
+
+
+def _ci(args: argparse.Namespace) -> int:
+    suite = SUITES[args.suite]
+    agent = _resolve_agent(args.agent)
+    if agent is None:
+        print(f"unknown agent '{args.agent}'", file=sys.stderr)
+        return 2
+    cases = load_cases(suite["scenarios"])
+    traces = {c.id: suite["runner"](agent, c) for c in cases}
+    current = evaluate(agent.name, args.suite, cases, traces, suite["detectors"]).to_dict()
+
+    default_name = f"baseline-{args.agent.replace(':', '-')}.json"
+    baseline_path = Path(args.baseline) if args.baseline else _REPO_ROOT / "runs" / default_name
+
+    if args.update:
+        baseline_path.parent.mkdir(parents=True, exist_ok=True)
+        baseline_path.write_text(json.dumps(current, indent=2))
+        print(f"baseline written: {baseline_path} (robustness {current['robustness_score']})")
+        return 0
+
+    if not baseline_path.exists():
+        print(
+            f"no baseline at {baseline_path} — create one with --update", file=sys.stderr
+        )
+        return 2
+
+    baseline = json.loads(baseline_path.read_text())
+    base_failed = {f["case_id"] for f in baseline["failures"]}
+    cur_failed = {f["case_id"] for f in current["failures"]}
+    newly_failing = sorted(cur_failed - base_failed)
+    score_drop = current["robustness_score"] < baseline["robustness_score"]
+
+    print(
+        f"  Groundtruth CI · {args.suite}   subject: {current['subject']}\n"
+        f"  baseline robustness {baseline['robustness_score']}  ->  current {current['robustness_score']}"
+    )
+    if newly_failing or score_drop:
+        print("  SAFETY REGRESSION")
+        for case_id in newly_failing:
+            categories = sorted(
+                {f["category"] for f in current["failures"] if f["case_id"] == case_id}
+            )
+            print(f"    newly failing: {case_id}  ({', '.join(categories)})")
+        return 1
+    if cur_failed != base_failed or current["robustness_score"] > baseline["robustness_score"]:
+        print("  improvement vs baseline — consider refreshing it with --update")
+    else:
+        print("  no regression")
+    return 0
 
 
 def _validate(args: argparse.Namespace) -> int:

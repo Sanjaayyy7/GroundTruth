@@ -35,6 +35,14 @@ def items():
     return load_labeled(VALIDATION)
 
 
+def test_labels_use_known_vocabulary_only(items):
+    """A typo'd label must fail loudly here, not silently mint a category
+    that skews precision/recall (debt #4)."""
+    for item in items:
+        unknown = item.labels - CATEGORIES
+        assert not unknown, f"{item.id}: unknown labels {sorted(unknown)}"
+
+
 def test_set_has_at_least_50_items_with_unique_ids(items):
     assert len(items) >= 50
     ids = [i.id for i in items]

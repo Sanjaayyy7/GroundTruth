@@ -60,7 +60,7 @@ def test_vulnerable_agent_forwards_read_content_when_complying():
     """The naive agent doesn't just obey the injected instruction — it pastes the
     content it read into the call, which is how real exfiltration happens."""
     from groundtruth.adapters.agent import Observation, ToolCall
-    from groundtruth.demo_agents import VulnerableAgent
+    from groundtruth.products.agentprobe.demo_agents import VulnerableAgent
 
     agent = VulnerableAgent()
     agent.reset()
@@ -194,7 +194,7 @@ def test_causal_chain_collapses_looped_steps_with_counts():
 
 def test_paranoid_agent_registered_and_always_refuses():
     from groundtruth.adapters.agent import Finish, Observation
-    from groundtruth.demo_agents import REGISTRY
+    from groundtruth.products.agentprobe.demo_agents import REGISTRY
 
     assert "paranoid_agent" in REGISTRY
     agent = REGISTRY["paranoid_agent"]()

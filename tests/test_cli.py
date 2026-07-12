@@ -31,3 +31,20 @@ def test_validate_human_output_names_the_misses(capsys):
     text = capsys.readouterr().out
     assert "precision" in text
     assert "ut_pos_04_semantic_gap" in text  # misses are shown, not hidden
+
+
+def test_cli_is_cwd_independent(tmp_path, monkeypatch, capsys):
+    """Suite data resolves against the repo, not the caller's directory —
+    required for CI checkouts and any install used outside the repo root."""
+    monkeypatch.chdir(tmp_path)
+
+    rc = main(["run", "--agent", "hardened_agent", "--json"])
+
+    assert rc == 0
+    assert json.loads(capsys.readouterr().out)["robustness_score"] == 1.0
+
+
+def test_scorecard_json_carries_schema_version(capsys):
+    main(["run", "--agent", "hardened_agent", "--json"])
+
+    assert json.loads(capsys.readouterr().out)["schema_version"] == 1
