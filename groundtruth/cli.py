@@ -69,6 +69,12 @@ def main(argv: list[str] | None = None) -> int:
     val.add_argument("--json", action="store_true", help="emit JSON report only")
     val.add_argument("--out", default=None, help="write report JSON to this path")
 
+    rep = sub.add_parser(
+        "report", help="render runs/ artifacts into one self-contained HTML report"
+    )
+    rep.add_argument("--runs", default=None, help="directory holding scorecard-*.json")
+    rep.add_argument("--out", default=None, help="output HTML path (default <runs>/report.html)")
+
     ci = sub.add_parser(
         "ci", help="fail (exit 1) when the subject regresses vs a stored baseline"
     )
@@ -84,6 +90,8 @@ def main(argv: list[str] | None = None) -> int:
         return _validate(args)
     if args.cmd == "ci":
         return _ci(args)
+    if args.cmd == "report":
+        return _report(args)
 
     suite = SUITES[args.suite]
     cases = load_cases(args.scenarios or suite["scenarios"])
@@ -168,6 +176,23 @@ def _ci(args: argparse.Namespace) -> int:
         print("  improvement vs baseline — consider refreshing it with --update")
     else:
         print("  no regression")
+    return 0
+
+
+def _report(args: argparse.Namespace) -> int:
+    from .core.report import render_html
+
+    runs_dir = Path(args.runs) if args.runs else _REPO_ROOT / "runs"
+    cards = [json.loads(p.read_text()) for p in sorted(runs_dir.glob("scorecard-*.json"))]
+    if not cards:
+        print(f"no scorecard-*.json artifacts in {runs_dir}", file=sys.stderr)
+        return 2
+    quality_path = runs_dir / "detector-quality.json"
+    quality = json.loads(quality_path.read_text()) if quality_path.exists() else None
+
+    out = Path(args.out) if args.out else runs_dir / "report.html"
+    out.write_text(render_html(cards, quality=quality))
+    print(f"report written: {out} ({len(cards)} subjects)")
     return 0
 
 
