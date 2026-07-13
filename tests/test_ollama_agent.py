@@ -83,6 +83,85 @@ def test_parse_garbage_becomes_finish_preserving_text():
     assert "read the email" in action.answer
 
 
+class _RecordingChat:
+    """Fake chat_fn (judge-style injection): records every message list it
+    receives and plays back scripted replies. Zero network."""
+
+    def __init__(self, replies: list[str]):
+        self.replies = list(replies)
+        self.calls: list[list[dict[str, str]]] = []
+
+    def __call__(self, messages: list[dict[str, str]]) -> str:
+        self.calls.append([dict(m) for m in messages])
+        return self.replies.pop(0)
+
+
+def _obs(last_result: str | None = None):
+    from groundtruth.adapters.agent import Observation
+
+    return Observation(
+        user_goal="Read my latest email and summarize it.",
+        available_tools=TOOLS,
+        last_tool_result=last_result,
+    )
+
+
+def test_stateless_default_never_accumulates_history():
+    """Pins the published v0.3 behavior: every step is built from the
+    Observation alone — system + one user message, regardless of step count."""
+    fake = _RecordingChat(
+        ['{"action": "tool", "tool": "read_email"}'] * 2
+    )
+    agent = OllamaAgent("m", chat_fn=fake)
+    agent.reset()
+
+    agent.step(_obs())
+    agent.step(_obs(last_result="From: teammate@company.com ..."))
+
+    assert [len(c) for c in fake.calls] == [2, 2]
+    assert all(c[0]["role"] == "system" for c in fake.calls)
+
+
+def test_stateful_variant_carries_full_history():
+    """The stall-confound instrument: the model must see its own prior
+    actions. Step 2's prompt contains the step-1 assistant reply and the
+    tool result — the prompt is no longer a fixed point."""
+    first_reply = '{"action": "tool", "tool": "read_email"}'
+    fake = _RecordingChat([first_reply, '{"action": "finish", "answer": "done"}'])
+    agent = OllamaAgent("m", stateful=True, chat_fn=fake)
+    agent.reset()
+
+    agent.step(_obs())
+    agent.step(_obs(last_result="From: teammate@company.com ..."))
+
+    second = fake.calls[1]
+    assert len(second) == 4  # system, task, assistant reply, tool result
+    assert second[2] == {"role": "assistant", "content": first_reply}
+    assert second[3]["role"] == "user"
+    assert "From: teammate@company.com" in second[3]["content"]
+
+
+def test_stateful_reset_clears_history_between_episodes():
+    fake = _RecordingChat(
+        ['{"action": "tool", "tool": "read_email"}'] * 2
+    )
+    agent = OllamaAgent("m", stateful=True, chat_fn=fake)
+
+    agent.reset()
+    agent.step(_obs())
+    agent.reset()
+    agent.step(_obs())
+
+    assert [len(c) for c in fake.calls] == [2, 2]  # no leak across episodes
+
+
+def test_stateful_subject_name_is_distinguishable():
+    """Traces are evidence artifacts; a stateful run must never be mistaken
+    for a published stateless run of the same model."""
+    assert OllamaAgent("m", stateful=True, chat_fn=lambda m: "").name == "ollama:m+stateful"
+    assert OllamaAgent("m", chat_fn=lambda m: "").name == "ollama:m"
+
+
 def _ollama_up() -> bool:
     try:
         urllib.request.urlopen("http://localhost:11434/api/tags", timeout=2)

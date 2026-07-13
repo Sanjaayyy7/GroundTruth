@@ -87,25 +87,55 @@ def parse_action(text: str, available_tools: list[str]) -> Action:
 
 
 class OllamaAgent:
-    """Wraps one Ollama chat model as an AgentProbe subject."""
+    """Wraps one Ollama chat model as an AgentProbe subject.
 
-    def __init__(self, model: str, host: str = _DEFAULT_HOST, timeout: int = 180):
+    Stateless by default (each step is built from the Observation alone) —
+    the exact configuration behind every published v0.3 number. `stateful=True`
+    carries the full message history across steps within one episode: the
+    model sees its own prior actions and their results. Built as the control
+    instrument for the stall-confound experiments (v0.4 gate, §8.2): under
+    temperature-0 decoding a stateless prompt is a fixed point once a tool
+    call repeats, so statelessness itself may manufacture the observed stalls.
+    """
+
+    def __init__(
+        self,
+        model: str,
+        host: str = _DEFAULT_HOST,
+        timeout: int = 180,
+        stateful: bool = False,
+        chat_fn=None,
+    ):
         self.model = model
         self.host = host.rstrip("/")
         self.timeout = timeout
-        self.name = f"ollama:{model}"
+        self.stateful = stateful
+        self.name = f"ollama:{model}+stateful" if stateful else f"ollama:{model}"
+        self._chat_fn = chat_fn or (
+            lambda messages: chat(model, messages, host=self.host, timeout=self.timeout)
+        )
+        self._history: list[dict[str, str]] = []
 
     def reset(self) -> None:
-        pass  # stateless: each step is built from the Observation alone
+        self._history = []
 
     def step(self, obs: Observation) -> Action:
-        user = f"Task: {obs.user_goal}\nAvailable tools: {', '.join(obs.available_tools)}"
-        if obs.last_tool_result is not None:
-            user += f"\n\nLast tool result:\n{obs.last_tool_result}"
-        reply = self._chat(
-            [{"role": "system", "content": _SYSTEM}, {"role": "user", "content": user}]
-        )
-        return parse_action(reply, obs.available_tools)
+        if not self.stateful:
+            user = f"Task: {obs.user_goal}\nAvailable tools: {', '.join(obs.available_tools)}"
+            if obs.last_tool_result is not None:
+                user += f"\n\nLast tool result:\n{obs.last_tool_result}"
+            reply = self._chat_fn(
+                [{"role": "system", "content": _SYSTEM}, {"role": "user", "content": user}]
+            )
+            return parse_action(reply, obs.available_tools)
 
-    def _chat(self, messages: list[dict[str, str]]) -> str:
-        return chat(self.model, messages, host=self.host, timeout=self.timeout)
+        if not self._history:
+            task = f"Task: {obs.user_goal}\nAvailable tools: {', '.join(obs.available_tools)}"
+            self._history.append({"role": "user", "content": task})
+        elif obs.last_tool_result is not None:
+            self._history.append(
+                {"role": "user", "content": f"Tool result:\n{obs.last_tool_result}"}
+            )
+        reply = self._chat_fn([{"role": "system", "content": _SYSTEM}] + self._history)
+        self._history.append({"role": "assistant", "content": reply})
+        return parse_action(reply, obs.available_tools)

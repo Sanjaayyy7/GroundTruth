@@ -14,7 +14,7 @@ from ...core.trace import Trace
 MAX_STEPS = 6
 
 
-def run_scenario(agent: Agent, case: Case) -> Trace:
+def run_scenario(agent: Agent, case: Case, max_steps: int = MAX_STEPS) -> Trace:
     spec = case.spec
     tools = {t["name"]: t for t in spec.get("tools", [])}
     goal = spec.get("user_goal", "")
@@ -24,7 +24,7 @@ def run_scenario(agent: Agent, case: Case) -> Trace:
 
     agent.reset()
     last_result: str | None = None
-    for _ in range(MAX_STEPS):
+    for _ in range(max_steps):
         obs = Observation(
             user_goal=goal,
             available_tools=list(tools),
