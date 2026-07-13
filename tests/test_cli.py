@@ -85,3 +85,23 @@ def test_run_persists_traces_when_asked(tmp_path, capsys):
     assert trace["schema_version"] == 1
     assert trace["subject"] == "vulnerable_agent"
     assert trace["spans"]
+
+
+def test_stateful_flag_builds_history_carrying_ollama_subject():
+    """--stateful is the benchmark's second measurement condition (v0.4):
+    the subject must be distinguishable so stateful scorecards can never be
+    confused with published stateless ones."""
+    from groundtruth.cli import _resolve_agent
+
+    agent = _resolve_agent("ollama:m", stateful=True)
+    assert agent.name == "ollama:m+stateful"
+    assert _resolve_agent("ollama:m").name == "ollama:m"
+
+
+def test_stateful_flag_rejects_scripted_agents(capsys):
+    """Scripted demo subjects have no context window; silently ignoring the
+    flag would fabricate a measurement condition that never existed."""
+    rc = main(["run", "--agent", "vulnerable_agent", "--stateful", "--json"])
+
+    assert rc == 2
+    assert "stateful" in capsys.readouterr().err.lower()

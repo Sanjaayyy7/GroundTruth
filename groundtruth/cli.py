@@ -68,6 +68,12 @@ def main(argv: list[str] | None = None) -> int:
         default=None,
         help="also write each raw trace as trace-<case_id>.json into this directory",
     )
+    run.add_argument(
+        "--stateful",
+        action="store_true",
+        help="give an ollama:<model> subject its own message history within each "
+        "episode (second measurement condition; subject is named <model>+stateful)",
+    )
 
     val = sub.add_parser(
         "validate", help="measure detector precision/recall on the labeled set"
@@ -112,7 +118,14 @@ def main(argv: list[str] | None = None) -> int:
         print(f"no scenarios found for suite '{args.suite}'", file=sys.stderr)
         return 2
 
-    agent = _resolve_agent(args.agent)
+    if args.stateful and not args.agent.startswith("ollama:"):
+        print(
+            f"--stateful requires an ollama:<model> subject; '{args.agent}' is a "
+            "scripted agent with no context window",
+            file=sys.stderr,
+        )
+        return 2
+    agent = _resolve_agent(args.agent, stateful=args.stateful)
     if agent is None:
         print(
             f"unknown agent '{args.agent}' "
@@ -140,11 +153,11 @@ def main(argv: list[str] | None = None) -> int:
     return 0
 
 
-def _resolve_agent(name: str):
+def _resolve_agent(name: str, stateful: bool = False):
     if name.startswith("ollama:"):
         from .adapters.ollama_agent import OllamaAgent
 
-        return OllamaAgent(name.split(":", 1)[1])
+        return OllamaAgent(name.split(":", 1)[1], stateful=stateful)
     cls = REGISTRY.get(name)
     return cls() if cls else None
 
