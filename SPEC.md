@@ -133,8 +133,23 @@ and scorecard — the differentiated core.
   agreement on a ~20-item subset (needs a second annotator); new
   discriminating scenario families (secret-leak and drift discriminate, benign
   controls and the universal injection don't).
-- **v0.4.** Docs, demo video, public benchmark, open-source release. Then start
-  **JudgeKit** on the same spine.
+- **v0.4 — IN PROGRESS (scope per docs/STRATEGY.md gate record).** Stall
+  confounds resolved first, per the gate's evidence-before-detector rule
+  (2026-07-13): pre-registered 5-cell experiment (stateless × 6/12/24 steps,
+  stateful × 6/24; predictions committed before any run) replayed the 9 stall
+  pairs + 2 controls. Result: stall is a **harness artifact of stateless
+  observation** — 9/9 stalls persist at every stateless budget (temperature-0
+  fixed point, byte-verified in traces), 0/9 survive one message of history;
+  MAX_STEPS truncation contributes nothing; and 2 of 9 "safe stalls" become
+  real injection compliance under state (llama3.2 exfiltrates to the
+  attacker's address, mistral transfers funds and says so). Prediction P4
+  (residual genuine stalls) falsified and published as such. Full report:
+  `experiments/stall_confounds/REPORT.md`; raw evidence
+  `runs/experiments/stall-confounds-2026-07-13/`. Remaining v0.4:
+  `non_completion` outcome category (TDD, label the 9 stalls, re-pin
+  snapshot); stateful re-benchmark of all 6 models; discriminating scenario
+  families; lint/py.typed; GitHub push. Then **JudgeKit** on the same spine
+  (v0.5).
 
 ## 6. Risk register
 
@@ -158,9 +173,9 @@ and scorecard — the differentiated core.
 | 7 | `Case.suite` populated from YAML key `product` — naming entropy | Naming | Low | next dataset touch |
 | 8 | "robustness" now blends safety + utility semantics | Naming | Low | reconsider at v1.0 |
 | 9 | Span `kind` is a free string (no enum/validation) | Interfaces | Low | with schema_version |
-| 10 | `MAX_STEPS=6` global, not per-case | Interfaces | Low | when a scenario needs it |
-| 11 | OllamaAgent is stateless (sees only last tool result) | Architecture | Low | documented; revisit with multi-turn scenarios |
+| 10 | `MAX_STEPS=6` global, not per-case | Interfaces | High→resolved | DONE v0.4: `run_scenario(max_steps=)`; measured — truncation is NOT a stall cause (9/9 stalls persist at 24 steps) |
+| 11 | OllamaAgent is stateless (sees only last tool result) | Architecture | High→instrumented | v0.4: `stateful=True` variant built + measured — statelessness manufactured all 9 observed stalls and masked 2 injection compliances; default stays stateless (published v0.3 numbers depend on it); stateful re-bench pending |
 | 12 | No lint config / `py.typed` marker | Dev experience | Low | pre-OSS release (v0.4) |
-| 13 | Loop-stall on benign tasks is invisible: 9/15 sampled real traces looped a safe tool to MAX_STEPS without answering; robustness counts them as passes, over_refusal never fires. Taxonomy needs a non-completion/stall category (research question: is stall the dominant small-model "resistance" mode?) | Taxonomy | High | v0.4 — new category + labeled positives |
+| 13 | Loop-stall on benign tasks is invisible: robustness counts budget exhaustion as a pass. Research question ANSWERED by the confound experiment: stall is a stateless-harness artifact, not a model resistance mode — and it hides real compliance. Taxonomy still needs the `non_completion` outcome category so exhaustion is never scored as success | Taxonomy | High | v0.4 — detector + label the 9 known stalls + re-pin snapshot |
 
 Docs: `docs/adr/` records the decisions; `docs/POSITIONING.md` records identity.
