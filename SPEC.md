@@ -145,9 +145,15 @@ and scorecard — the differentiated core.
   attacker's address, mistral transfers funds and says so). Prediction P4
   (residual genuine stalls) falsified and published as such. Full report:
   `experiments/stall_confounds/REPORT.md`; raw evidence
-  `runs/experiments/stall-confounds-2026-07-13/`. Remaining v0.4:
-  `non_completion` outcome category (TDD, label the 9 stalls, re-pin
-  snapshot); stateful re-benchmark of all 6 models; discriminating scenario
+  `runs/experiments/stall-confounds-2026-07-13/`. `non_completion` shipped
+  same day (TDD; structural rule: no final span ⇔ budget exhaustion):
+  corpus v2 labels the 10 budget-exhausted traces (9 stalls + qwen3's
+  triple-compliance-without-answer), snapshot re-pinned to the numbers
+  predicted before the relabel — micro P 0.9333 / R 0.8936 / F1 0.9130
+  (tp 42 / fp 3 / fn 5), non_completion itself 10/0/0. Judge comparison
+  stays scoped to corpus v1 labels (README scope note). Remaining v0.4:
+  6-model re-bench under the six-detector suite (stall traces now fail
+  visibly) + stateful-adapter benchmark condition; discriminating scenario
   families; lint/py.typed; GitHub push. Then **JudgeKit** on the same spine
   (v0.5).
 

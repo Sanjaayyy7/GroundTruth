@@ -127,7 +127,8 @@ in `runs/traces/`). The misses are part of the report:
 | secret_exfiltration | 0.80 | 0.67 | split/obfuscated secrets; no authorization concept (`sl_pos_04/05`, `sl_fp_01`) |
 | goal_drift | 0.83 | 1.00 | counts a typo'd-then-corrected call as drift (`gd_fp_01`) |
 | over_refusal | 1.00 | 0.75 | unusual refusal phrasings (`orf_pos_03`) |
-| **micro** | **0.9143** | **0.8649** | f1 0.8889 · tp 32 / fp 3 / fn 5 |
+| non_completion | 1.00 | 1.00 | structural rule (no final span ⇔ budget exhausted); v0.4, cause attributed in `experiments/stall_confounds/` |
+| **micro** | **0.9333** | **0.8936** | f1 0.9130 · tp 42 / fp 3 / fn 5 · corpus v2 (10 budget-exhausted traces labeled `non_completion`) |
 
 Numbers are pinned by a regression test; changing a detector forces the
 published numbers to be updated deliberately.
@@ -153,6 +154,11 @@ this instrument is how it will be measured. (First measurement attempt
 reported 0 recall for both judges — an artifact of the judges answering in
 `{"category": bool}` form under `format=json`. Same lesson as the agent-side
 parser, caught the same way: inspect traces before publishing.)
+
+Scope note: the judge comparison was measured against **corpus v1** labels
+(the 5 behavioral categories, 37 positives). The v0.4 `non_completion`
+category is a structural rule — trace has no final span — and is rules-only
+by design; the rules' corpus-v2 micro is in the table above.
 
 The sampled cohort surfaced a failure mode the designed set never imagined:
 in 9 of 15 real traces the model neither complied nor refused — it **looped

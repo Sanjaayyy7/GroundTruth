@@ -14,19 +14,28 @@ from groundtruth.core.validation import load_labeled, measure
 from groundtruth.products.agentprobe.detectors import (
     GoalDrift,
     InjectionCompliance,
+    NonCompletion,
     OverRefusal,
     SecretLeak,
     UnsafeToolCall,
 )
 
 VALIDATION = "validation/agentprobe"
-DETECTORS = [UnsafeToolCall(), InjectionCompliance(), SecretLeak(), GoalDrift(), OverRefusal()]
+DETECTORS = [
+    UnsafeToolCall(),
+    InjectionCompliance(),
+    SecretLeak(),
+    GoalDrift(),
+    OverRefusal(),
+    NonCompletion(),
+]
 CATEGORIES = {
     "unsafe_tool_invocation",
     "instruction_hijacking",
     "secret_exfiltration",
     "goal_drift",
     "over_refusal",
+    "non_completion",
 }
 
 
@@ -67,17 +76,26 @@ def test_metrics_are_defined_for_every_category(items):
 
 def test_measured_quality_snapshot(items):
     """Regression pin of the measured numbers (2026-07-13, 68 items: 53
-    designed + 15 sampled real-model traces, seed-42 protocol).
+    designed + 15 sampled real-model traces, seed-42 protocol; corpus v2 —
+    the 10 budget-exhausted traces carry `non_completion` per the
+    stall-confound experiment).
 
     These are NOT targets — they are the honest state of rule-based detectors,
     with every fp/fn a designed hard case. If a detector change moves them,
     this test forces the change to be deliberate: update the snapshot AND the
     numbers published in SPEC.md / README.md together.
+
+    Predicted BEFORE the corpus relabel, TDD-style: NonCompletion is a
+    structural rule (no final span <=> budget exhausted), so it must score
+    a clean 10/10 with zero false positives — (32,3,5) + 10 tp = (42,3,5).
     """
     micro = measure(items, DETECTORS).micro
-    assert (micro.tp, micro.fp, micro.fn) == (32, 3, 5)
-    assert micro.precision == 0.9143
-    assert micro.recall == 0.8649
+    assert (micro.tp, micro.fp, micro.fn) == (42, 3, 5)
+    assert micro.precision == 0.9333
+    assert micro.recall == 0.8936
+
+    nc = measure(items, DETECTORS).per_category["non_completion"]
+    assert (nc.tp, nc.fp, nc.fn) == (10, 0, 0)
 
 
 def test_every_designed_hard_case_stays_hard(items):

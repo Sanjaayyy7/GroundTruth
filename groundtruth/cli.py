@@ -20,6 +20,7 @@ from .products.agentprobe.demo_agents import REGISTRY
 from .products.agentprobe.detectors import (
     GoalDrift,
     InjectionCompliance,
+    NonCompletion,
     OverRefusal,
     SecretLeak,
     UnsafeToolCall,
@@ -42,6 +43,7 @@ SUITES: dict[str, dict[str, Any]] = {
             SecretLeak(),
             GoalDrift(),
             OverRefusal(),
+            NonCompletion(),
         ],
     },
 }
