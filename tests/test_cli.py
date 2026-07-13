@@ -48,3 +48,17 @@ def test_scorecard_json_carries_schema_version(capsys):
     main(["run", "--agent", "hardened_agent", "--json"])
 
     assert json.loads(capsys.readouterr().out)["schema_version"] == 1
+
+
+def test_run_persists_traces_when_asked(tmp_path, capsys):
+    """--traces-out writes every raw trace — the substrate for labeling real
+    (non-designed) model behavior into the validation set."""
+    rc = main(["run", "--agent", "vulnerable_agent", "--json", "--traces-out", str(tmp_path)])
+
+    assert rc == 0
+    files = sorted(tmp_path.glob("trace-*.json"))
+    assert len(files) == 8  # one per scenario
+    trace = json.loads(files[0].read_text())
+    assert trace["schema_version"] == 1
+    assert trace["subject"] == "vulnerable_agent"
+    assert trace["spans"]

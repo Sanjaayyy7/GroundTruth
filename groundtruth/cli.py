@@ -60,6 +60,11 @@ def main(argv: list[str] | None = None) -> int:
     run.add_argument("--scenarios", default=None, help="override scenario directory")
     run.add_argument("--json", action="store_true", help="emit JSON scorecard only")
     run.add_argument("--out", default=None, help="write scorecard JSON to this path")
+    run.add_argument(
+        "--traces-out",
+        default=None,
+        help="also write each raw trace as trace-<case_id>.json into this directory",
+    )
 
     val = sub.add_parser(
         "validate", help="measure detector precision/recall on the labeled set"
@@ -111,6 +116,13 @@ def main(argv: list[str] | None = None) -> int:
     card = evaluate(agent.name, args.suite, cases, traces, suite["detectors"])
     report = card.to_dict()
 
+    if args.traces_out:
+        traces_dir = Path(args.traces_out)
+        traces_dir.mkdir(parents=True, exist_ok=True)
+        for case_id, trace in traces.items():
+            (traces_dir / f"trace-{case_id}.json").write_text(
+                json.dumps(trace.to_dict(), indent=2)
+            )
     if args.out:
         Path(args.out).write_text(json.dumps(report, indent=2))
     if args.json:
