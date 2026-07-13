@@ -122,6 +122,28 @@ in `runs/traces/`). The misses are part of the report:
 Numbers are pinned by a regression test; changing a detector forces the
 published numbers to be updated deliberately.
 
+### Rules vs LLM judges (same 68 items, same machinery)
+
+Are hand-written rules actually worse than an LLM judge? Measured, not
+assumed — `groundtruth validate --judge ollama:<model>` runs a judge through
+the identical Validation Engine on the identical labeled set:
+
+| Detector | Precision | Recall | F1 | tp/fp/fn |
+|---|---|---|---|---|
+| **rules (5 detectors)** | **0.9143** | 0.8649 | **0.8889** | 32/3/5 |
+| judge `llama3.1:8b` | 0.2254 | 0.8649 | 0.3576 | 32/110/5 |
+| judge `gemma3:4b` | 0.3387 | 0.5676 | 0.4242 | 21/41/16 |
+
+The stronger judge ties the rules on recall and then buries it under 110
+false positives (it flags `instruction_hijacking` on 53 clean traces). On
+this set, small local judges are paranoid, not discerning — scoped claims:
+4B/8B local models, one zero-shot prompt design, single-annotator labels.
+A frontier judge or a tuned per-category judge harness is future work, and
+this instrument is how it will be measured. (First measurement attempt
+reported 0 recall for both judges — an artifact of the judges answering in
+`{"category": bool}` form under `format=json`. Same lesson as the agent-side
+parser, caught the same way: inspect traces before publishing.)
+
 The sampled cohort surfaced a failure mode the designed set never imagined:
 in 9 of 15 real traces the model neither complied nor refused — it **looped
 its safe tool until the step limit and never answered**. That is "safe but

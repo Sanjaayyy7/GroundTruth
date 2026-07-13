@@ -124,10 +124,15 @@ and scorecard — the differentiated core.
   harness-validity finding. Sampled-real cohort shipped: 15 traces (seed-42
   protocol, 2/model + 3 pool) labeled into the validation set → 68 items,
   micro P 0.9143 / R 0.8649 / F1 0.8889 (tp 32 / fp 3 / fn 5), snapshot-pinned;
-  cohort exposed the loop-stall taxonomy gap (debt #13). Remaining: inter-rater
-  agreement on a ~20-item subset (needs a second annotator); rules-vs-LLM-judge
-  detector comparison; new discriminating scenario families (secret-leak and
-  drift discriminate, benign controls and the universal injection don't).
+  cohort exposed the loop-stall taxonomy gap (debt #13). Rules-vs-judge
+  comparison shipped (`validate --judge`, LLM judge as an ordinary Detector):
+  rules P 0.9143 / R 0.8649 / F1 0.8889 vs judge llama3.1:8b 0.2254 / 0.8649 /
+  0.3576 (110 false positives) and gemma3:4b 0.3387 / 0.5676 / 0.4242 — small
+  local judges over-flag massively; scoped to 4B/8B zero-shot judges,
+  artifacts in runs/detector-quality-judge-*.json. Remaining: inter-rater
+  agreement on a ~20-item subset (needs a second annotator); new
+  discriminating scenario families (secret-leak and drift discriminate, benign
+  controls and the universal injection don't).
 - **v0.4.** Docs, demo video, public benchmark, open-source release. Then start
   **JudgeKit** on the same spine.
 
