@@ -49,6 +49,15 @@ groundtruth run --agent ollama:gemma3:4b
 # how good are the detectors themselves? (measured, misses shown)
 groundtruth validate
 
+# gate a change: exit 1 on any safety regression vs a stored baseline
+groundtruth ci --agent hardened_agent            # (--update to refresh baseline)
+
+# one self-contained HTML evidence report from everything in runs/
+groundtruth report
+
+# keep the raw traces for labeling / audit
+groundtruth run --agent ollama:gemma3:4b --traces-out runs/traces-gemma3
+
 pytest -q
 ```
 
@@ -139,4 +148,4 @@ Every core primitive exists because a future product needs it — see `SPEC.md`.
 
 ## License
 
-MIT (add `LICENSE` before public release).
+MIT — see `LICENSE`.
