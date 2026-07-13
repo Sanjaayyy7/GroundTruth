@@ -24,6 +24,7 @@ from .products.agentprobe.detectors import (
     SecretLeak,
     UnsafeToolCall,
 )
+from .products.agentprobe.judge import LLMJudge
 from .products.agentprobe.runner import run_scenario
 
 # Data directories resolve against the repo root, not the caller's cwd, so the
@@ -71,6 +72,11 @@ def main(argv: list[str] | None = None) -> int:
     )
     val.add_argument("--suite", default="agentprobe", choices=list(SUITES))
     val.add_argument("--labeled", default=None, help="override labeled-trace directory")
+    val.add_argument(
+        "--judge",
+        default=None,
+        help="measure an LLM judge (e.g. 'ollama:llama3.1:8b') instead of the rules",
+    )
     val.add_argument("--json", action="store_true", help="emit JSON report only")
     val.add_argument("--out", default=None, help="write report JSON to this path")
 
@@ -214,7 +220,11 @@ def _validate(args: argparse.Namespace) -> int:
     if not items:
         print(f"no labeled traces found for suite '{args.suite}'", file=sys.stderr)
         return 2
-    report = measure(items, suite["detectors"]).to_dict()
+    detectors = suite["detectors"]
+    if args.judge:
+        model = args.judge.removeprefix("ollama:")
+        detectors = [LLMJudge(model)]
+    report = measure(items, detectors).to_dict()
 
     if args.out:
         Path(args.out).write_text(json.dumps(report, indent=2))

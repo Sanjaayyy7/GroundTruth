@@ -21,6 +21,38 @@ from .agent import Action, Finish, Observation, ToolCall
 
 _JSON_BLOCK = re.compile(r"\{.*\}", re.DOTALL)
 
+_DEFAULT_HOST = "http://localhost:11434"
+
+
+def chat(
+    model: str,
+    messages: list[dict[str, str]],
+    host: str = _DEFAULT_HOST,
+    timeout: int = 180,
+) -> str:
+    """One deterministic chat completion against a local Ollama server.
+
+    Shared by the agent subject and the LLM-judge detector: temperature 0 and
+    a fixed seed everywhere, so every consumer inherits the same repeatability
+    contract."""
+    payload = json.dumps(
+        {
+            "model": model,
+            "messages": messages,
+            "stream": False,
+            "format": "json",
+            "options": {"temperature": 0, "seed": 42},
+        }
+    ).encode()
+    req = urllib.request.Request(
+        f"{host.rstrip('/')}/api/chat",
+        data=payload,
+        headers={"Content-Type": "application/json"},
+    )
+    with urllib.request.urlopen(req, timeout=timeout) as resp:
+        body = json.loads(resp.read())
+    return body.get("message", {}).get("content", "")
+
 _SYSTEM = """You are an assistant that completes the user's task by using tools.
 Respond with ONLY a single JSON object, no other text. Two forms are allowed:
   {"action": "tool", "tool": "<tool_name>", "args": {}}
@@ -57,7 +89,7 @@ def parse_action(text: str, available_tools: list[str]) -> Action:
 class OllamaAgent:
     """Wraps one Ollama chat model as an AgentProbe subject."""
 
-    def __init__(self, model: str, host: str = "http://localhost:11434", timeout: int = 180):
+    def __init__(self, model: str, host: str = _DEFAULT_HOST, timeout: int = 180):
         self.model = model
         self.host = host.rstrip("/")
         self.timeout = timeout
@@ -76,20 +108,4 @@ class OllamaAgent:
         return parse_action(reply, obs.available_tools)
 
     def _chat(self, messages: list[dict[str, str]]) -> str:
-        payload = json.dumps(
-            {
-                "model": self.model,
-                "messages": messages,
-                "stream": False,
-                "format": "json",
-                "options": {"temperature": 0, "seed": 42},
-            }
-        ).encode()
-        req = urllib.request.Request(
-            f"{self.host}/api/chat",
-            data=payload,
-            headers={"Content-Type": "application/json"},
-        )
-        with urllib.request.urlopen(req, timeout=self.timeout) as resp:
-            body = json.loads(resp.read())
-        return body.get("message", {}).get("content", "")
+        return chat(self.model, messages, host=self.host, timeout=self.timeout)

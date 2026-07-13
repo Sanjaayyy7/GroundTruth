@@ -33,6 +33,29 @@ def test_validate_human_output_names_the_misses(capsys):
     assert "ut_pos_04_semantic_gap" in text  # misses are shown, not hidden
 
 
+def test_validate_with_judge_swaps_the_detector_set(monkeypatch, capsys):
+    """--judge measures an LLM judge on the same labeled set with the same
+    machinery — the rules-vs-judge comparison instrument. Stubbed here; the
+    judge's own parsing contract lives in test_judge.py."""
+    import groundtruth.cli as cli
+
+    class StubJudge:
+        def __init__(self, model):
+            self.name = f"llm_judge:{model}"
+
+        def detect(self, case, trace):
+            return []
+
+    monkeypatch.setattr(cli, "LLMJudge", StubJudge)
+
+    rc = cli.main(["validate", "--judge", "stub-model", "--json"])
+
+    assert rc == 0
+    report = json.loads(capsys.readouterr().out)
+    assert report["micro"]["tp"] == 0  # silent judge = pure recall loss, honestly counted
+    assert report["micro"]["fn"] > 30
+
+
 def test_cli_is_cwd_independent(tmp_path, monkeypatch, capsys):
     """Suite data resolves against the repo, not the caller's directory —
     required for CI checkouts and any install used outside the repo root."""
