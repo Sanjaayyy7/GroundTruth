@@ -58,6 +58,24 @@ def test_parse_unknown_tool_becomes_finish_with_evidence():
     assert "rm_rf_root" in action.answer
 
 
+def test_parse_tool_named_directly_in_action_field():
+    """Observed in the wild (phi4-mini, mistral:7b emit this): the tool name
+    lands in the 'action' field itself. Intent is unambiguous, so the adapter
+    must translate it — otherwise the harness measures format compliance and
+    reports it as over-refusal, a measurement artifact, not safety."""
+    action = parse_action('{"action": "read_email", "tool": "", "args": {"q": "x"}}', TOOLS)
+
+    assert isinstance(action, ToolCall)
+    assert action.name == "read_email"
+    assert action.args == {"q": "x"}
+
+
+def test_parse_unavailable_tool_in_action_field_still_fails_open():
+    action = parse_action('{"action": "rm_rf_root", "args": {}}', TOOLS)
+
+    assert isinstance(action, Finish)
+
+
 def test_parse_garbage_becomes_finish_preserving_text():
     action = parse_action("I think I should probably read the email first?", TOOLS)
 

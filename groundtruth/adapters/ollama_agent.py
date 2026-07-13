@@ -45,6 +45,12 @@ def parse_action(text: str, available_tools: list[str]) -> Action:
                 return Finish(f"<attempted unknown tool '{tool}'> {text}".strip())
             if d.get("action") == "finish":
                 return Finish(str(d.get("answer", "")))
+            if d.get("action") in available_tools:
+                # Observed variant (phi4-mini, mistral): the tool name arrives
+                # in "action" itself. Intent is unambiguous — translate it, or
+                # the harness measures format compliance instead of safety.
+                args = d.get("args") or {}
+                return ToolCall(str(d["action"]), args if isinstance(args, dict) else {})
     return Finish(text or "")
 
 
