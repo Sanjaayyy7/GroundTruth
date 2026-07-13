@@ -114,10 +114,18 @@ and scorecard — the differentiated core.
   (baseline compare, exit 1 on regression with newly-failing cases named);
   GitHub Actions workflow — the repo gates itself; `schema_version` on all
   persisted artifacts; LICENSE; cwd-independent CLI; demo agents moved under
-  the product; label-vocabulary guard. Remaining: benchmark expansion (5+
-  local models, more scenario families, comparative table); inter-rater
-  agreement on a ~20-item label subset; static self-contained HTML report;
-  rules-vs-LLM-judge detector comparison on the same labeled set.
+  the product; label-vocabulary guard. Part 2 (2026-07-13): 6-model local
+  benchmark on one harness version (llama3.1/3.2, mistral:7b, gemma3:4b,
+  phi4-mini, qwen3:4b — indirect injection universal at 6/6; byte-identical
+  rerun on the fastest model; raw traces persisted via `run --traces-out`);
+  static self-contained HTML report (`groundtruth report`, escaped adversarial
+  content, misses published); adapter parse fix after the first benchmark pass
+  scored format non-compliance as over-refusal — documented in README as a
+  harness-validity finding. Remaining: label a sampled cohort of real traces
+  into the validation set; inter-rater agreement on a ~20-item subset (needs a
+  second annotator); rules-vs-LLM-judge detector comparison; new discriminating
+  scenario families (secret-leak and drift discriminate, benign controls and
+  the universal injection don't).
 - **v0.4.** Docs, demo video, public benchmark, open-source release. Then start
   **JudgeKit** on the same spine.
 
@@ -134,12 +142,12 @@ and scorecard — the differentiated core.
 
 | # | Item | Category | Rank | Timing |
 |---|---|---|---|---|
-| 1 | Repo has no CI running its own tests | Infrastructure | High | v0.3 day 1 — a reliability gate must gate itself |
-| 2 | LICENSE file missing (README claims MIT) | Documentation | High | v0.3 |
-| 3 | CLI scenario/validation paths are cwd-dependent | Interfaces | Medium | v0.3 — resolve package/repo-relative |
-| 4 | Validation loader: a label typo silently mints a new category | Validation | Medium | v0.3 — vocabulary guard |
-| 5 | `demo_agents.py` at package root; belongs under `products/agentprobe/` | Architecture | Medium | v0.3 |
-| 6 | No `schema_version` on persisted Trace/Scorecard JSON | Future-compat | Medium | v0.3, with stored CI baselines (first consumer) |
+| 1 | Repo has no CI running its own tests | Infrastructure | High | DONE v0.3p1 |
+| 2 | LICENSE file missing (README claims MIT) | Documentation | High | DONE v0.3p1 |
+| 3 | CLI scenario/validation paths are cwd-dependent | Interfaces | Medium | DONE v0.3p1 |
+| 4 | Validation loader: a label typo silently mints a new category | Validation | Medium | DONE v0.3p1 |
+| 5 | `demo_agents.py` at package root; belongs under `products/agentprobe/` | Architecture | Medium | DONE v0.3p1 |
+| 6 | No `schema_version` on persisted Trace/Scorecard JSON | Future-compat | Medium | DONE v0.3p1 |
 | 7 | `Case.suite` populated from YAML key `product` — naming entropy | Naming | Low | next dataset touch |
 | 8 | "robustness" now blends safety + utility semantics | Naming | Low | reconsider at v1.0 |
 | 9 | Span `kind` is a free string (no enum/validation) | Interfaces | Low | with schema_version |
