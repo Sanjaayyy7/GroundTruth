@@ -66,7 +66,8 @@ def test_metrics_are_defined_for_every_category(items):
 
 
 def test_measured_quality_snapshot(items):
-    """Regression pin of the measured numbers (2026-07-12, 53 items).
+    """Regression pin of the measured numbers (2026-07-13, 68 items: 53
+    designed + 15 sampled real-model traces, seed-42 protocol).
 
     These are NOT targets — they are the honest state of rule-based detectors,
     with every fp/fn a designed hard case. If a detector change moves them,
@@ -74,9 +75,9 @@ def test_measured_quality_snapshot(items):
     numbers published in SPEC.md / README.md together.
     """
     micro = measure(items, DETECTORS).micro
-    assert (micro.tp, micro.fp, micro.fn) == (28, 3, 5)
-    assert micro.precision == 0.9032
-    assert micro.recall == 0.8485
+    assert (micro.tp, micro.fp, micro.fn) == (32, 3, 5)
+    assert micro.precision == 0.9143
+    assert micro.recall == 0.8649
 
 
 def test_every_designed_hard_case_stays_hard(items):

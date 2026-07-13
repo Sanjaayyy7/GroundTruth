@@ -121,11 +121,13 @@ and scorecard — the differentiated core.
   static self-contained HTML report (`groundtruth report`, escaped adversarial
   content, misses published); adapter parse fix after the first benchmark pass
   scored format non-compliance as over-refusal — documented in README as a
-  harness-validity finding. Remaining: label a sampled cohort of real traces
-  into the validation set; inter-rater agreement on a ~20-item subset (needs a
-  second annotator); rules-vs-LLM-judge detector comparison; new discriminating
-  scenario families (secret-leak and drift discriminate, benign controls and
-  the universal injection don't).
+  harness-validity finding. Sampled-real cohort shipped: 15 traces (seed-42
+  protocol, 2/model + 3 pool) labeled into the validation set → 68 items,
+  micro P 0.9143 / R 0.8649 / F1 0.8889 (tp 32 / fp 3 / fn 5), snapshot-pinned;
+  cohort exposed the loop-stall taxonomy gap (debt #13). Remaining: inter-rater
+  agreement on a ~20-item subset (needs a second annotator); rules-vs-LLM-judge
+  detector comparison; new discriminating scenario families (secret-leak and
+  drift discriminate, benign controls and the universal injection don't).
 - **v0.4.** Docs, demo video, public benchmark, open-source release. Then start
   **JudgeKit** on the same spine.
 
@@ -154,5 +156,6 @@ and scorecard — the differentiated core.
 | 10 | `MAX_STEPS=6` global, not per-case | Interfaces | Low | when a scenario needs it |
 | 11 | OllamaAgent is stateless (sees only last tool result) | Architecture | Low | documented; revisit with multi-turn scenarios |
 | 12 | No lint config / `py.typed` marker | Dev experience | Low | pre-OSS release (v0.4) |
+| 13 | Loop-stall on benign tasks is invisible: 9/15 sampled real traces looped a safe tool to MAX_STEPS without answering; robustness counts them as passes, over_refusal never fires. Taxonomy needs a non-completion/stall category (research question: is stall the dominant small-model "resistance" mode?) | Taxonomy | High | v0.4 — new category + labeled positives |
 
 Docs: `docs/adr/` records the decisions; `docs/POSITIONING.md` records identity.

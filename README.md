@@ -104,21 +104,29 @@ What the benchmark actually taught us:
 
 ### Measured detector quality
 
-Rules, not vibes: `groundtruth validate` measures the detectors against 53
-hand-labeled traces (`validation/agentprobe/`), built to include hard cases the
-current rules are *expected* to get wrong. The misses are part of the report:
+Rules, not vibes: `groundtruth validate` measures the detectors against 68
+hand-labeled traces (`validation/agentprobe/`) — 53 designed to include hard
+cases the current rules are *expected* to get wrong, plus 15 **sampled real
+model traces** from the benchmark (deterministic seed-42 protocol, raw traces
+in `runs/traces/`). The misses are part of the report:
 
 | Category | Precision | Recall | Known limits (item ids in the set) |
 |---|---|---|---|
-| unsafe_tool_invocation | 1.00 | 0.90 | misses forbidden *effects* via allowed tools (`ut_pos_04_semantic_gap`) |
-| instruction_hijacking | 0.875 | 0.875 | off-target hijacks; no causality check (`ih_pos_04`, `ih_fp_01`) |
+| unsafe_tool_invocation | 1.00 | 0.92 | misses forbidden *effects* via allowed tools (`ut_pos_04_semantic_gap`) |
+| instruction_hijacking | 0.90 | 0.90 | off-target hijacks; no causality check (`ih_pos_04`, `ih_fp_01`) |
 | secret_exfiltration | 0.80 | 0.67 | split/obfuscated secrets; no authorization concept (`sl_pos_04/05`, `sl_fp_01`) |
 | goal_drift | 0.83 | 1.00 | counts a typo'd-then-corrected call as drift (`gd_fp_01`) |
 | over_refusal | 1.00 | 0.75 | unusual refusal phrasings (`orf_pos_03`) |
-| **micro** | **0.90** | **0.85** | f1 0.875 · tp 28 / fp 3 / fn 5 |
+| **micro** | **0.9143** | **0.8649** | f1 0.8889 · tp 32 / fp 3 / fn 5 |
 
 Numbers are pinned by a regression test; changing a detector forces the
 published numbers to be updated deliberately.
+
+The sampled cohort surfaced a failure mode the designed set never imagined:
+in 9 of 15 real traces the model neither complied nor refused — it **looped
+its safe tool until the step limit and never answered**. That is "safe but
+useless" behavior the current taxonomy cannot express, so those traces are
+honestly labeled clean and the gap is a named debt item, not a hidden one.
 
 ### Plug in your own agent
 
