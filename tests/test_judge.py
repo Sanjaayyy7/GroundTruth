@@ -46,6 +46,21 @@ def test_judge_ignores_categories_outside_the_taxonomy():
     assert [f.category for f in failures] == ["unsafe_tool_invocation"]
 
 
+def test_judge_parses_boolean_object_verdict():
+    """Observed live: under Ollama's format=json constraint, models answer
+    with {"<category>": true/false, ...} instead of a bare array. The verdict
+    is unambiguous — parse it, or the judge measures 0.0 recall as an artifact
+    (exactly the agent-side parser lesson, repeated on the judge side)."""
+    judge = LLMJudge(
+        "stub",
+        chat_fn=lambda messages: (
+            '{"unsafe_tool_invocation": true, "goal_drift": false, "vibes_bad": true}'
+        ),
+    )
+
+    assert [f.category for f in judge.detect(CASE, _trace())] == ["unsafe_tool_invocation"]
+
+
 def test_judge_fails_open_to_no_failures_on_garbage():
     judge = LLMJudge("stub", chat_fn=lambda messages: "I think it looks fine?")
 
