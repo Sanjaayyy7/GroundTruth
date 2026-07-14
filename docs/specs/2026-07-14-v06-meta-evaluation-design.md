@@ -6,11 +6,29 @@
 
 ## 1. Objective
 
-Convert the v0.5 evidence artifacts (claims.yaml, THREATS_TO_VALIDITY.md, detector-quality
-runs, reproduction log) into machine-derivable evaluation-quality infrastructure. One new
-subsystem: `groundtruth audit`. It reads evaluation evidence, verifies architectural
-contracts, and emits two derived artifacts — a quality manifest (JSON) and an assurance
-report (Markdown) — deterministically. It fails red on inconsistency and runs in CI.
+One new subsystem: `groundtruth audit`. It **constructs an auditable evidence model from
+evaluation artifacts and derives reproducible assessments from that model.** The engine's
+primary internal representation is the Evidence Graph — files (claims.yaml,
+threats.yaml, runs/, git) are persistence adapters, not the architecture. It verifies
+evaluation contracts over the graph and emits two sibling assessment products — a quality
+manifest (JSON) and an assurance report (Markdown) — deterministically. It fails red on
+inconsistency and runs in CI.
+
+Canonical internal model (ARB-mandated, treat as the standing architecture diagram):
+
+```
+Evaluation Artifacts
+        ↓
+Evidence Loader (YAML/filesystem/git — the one concrete adapter)
+        ↓
+Evidence Model (EvidenceNode and typed nodes; no I/O)
+        ↓
+Evidence Graph (primary internal representation)
+        ↓
+Evaluation Contracts (pure invariants over the graph)
+      ↙          ↘
+Quality Manifest   Assurance Report   (siblings; neither imports the other)
+```
 
 The audit **reads, never measures agents**. It is not part of the measurement harness, so
 immutable #8 (harness change → full re-bench) is not triggered. No published number changes.
@@ -62,23 +80,43 @@ same reasoning as per-scenario CIs at n=8. The manifest reports dimensions separ
 These two registers are the engine's *format contract*: any future evaluation that emits
 them can be audited by the same engine.
 
-## 5. Evidence Graph (`groundtruth/meta/graph.py`)
+## 5. Evidence Model and Evidence Graph
 
-Explicit internal representation of what the registers describe.
+**Evidence Model (`groundtruth/meta/model.py`)** — the ontology, admitted explicitly.
+One base primitive:
 
-- **Nodes:** Claim, Threat, EvidenceArtifact (repo path), Experiment, Version (git commit).
+- `EvidenceNode` — id, kind, provenance (source artifact + location), attributes.
+- Typed nodes: Claim, Threat, EvidenceArtifact, Experiment, Version. Plain dataclasses,
+  a `kind` discriminator, no inheritance ceremony, no polymorphism framework.
+- The model does **no I/O**. The loader resolves everything environmental — file
+  existence, git commit validity, version strings — into node attributes at load time.
+  Consequence: every downstream layer (graph, contracts, assessments) is a pure function
+  of the model, trivially testable with synthetic fixtures.
+
+**Evidence Graph (`groundtruth/meta/graph.py`)** — primary internal representation.
+
 - **Edges:** `supported_by` (claim → evidence), `threatened_by` (claim → threat),
   `mitigated_by` (threat → mitigation/evidence), `reproduced_by` (claim → command),
   `measured_at` (claim → version), `blocked_by` (threat → future experiment).
-- Built by the registry from the two registers plus filesystem/git resolution.
-- Plain dataclasses. Provenance question the graph answers: "Why do you claim X?" →
-  follow edges from claim to artifacts to version.
+- Built from the Evidence Model, never from raw YAML dicts.
+- Provenance question the graph answers: "Why do you claim X?" → follow edges from
+  claim to artifacts to version.
+
+**Evidence Loader (`groundtruth/meta/loader.py`)** — the one concrete adapter:
+YAML registers + filesystem resolution + git facts → Evidence Model.
+**Anti-over-engineering guardrail (ARB warning, binding):** exactly one loader. No
+abstract base classes, no plugin system, no loader registry, no extension API. The
+conceptual layering is enforced by import direction alone:
+`loader → model ← graph ← contracts ← {manifest, assurance}`. Room for future consumers
+lives in the model's independence from YAML, not in speculative interfaces (ADR-0001).
 
 ## 6. Evaluation Contracts (`groundtruth/meta/contracts.py`)
 
 Declarative invariants over the Evidence Graph. Each contract: ID, invariant statement,
 machine enforcement, findings emitted as explanatory objects (never scores) — deliberate
-symmetry with the detector philosophy (ADR-0002).
+symmetry with the detector philosophy (ADR-0002). Contracts are **pure functions of the
+graph**: all environmental facts (file existence, git validity) were already resolved
+into node attributes by the loader.
 
 | ID | Invariant |
 |---|---|
@@ -98,8 +136,10 @@ registers (loud parse error, `[audit]` prefix).
 
 ## 7. Quality Manifest (`groundtruth/meta/manifest.py` → `runs/quality-manifest.json`)
 
-Derived, versioned, machine-readable. Deterministic: sorted keys, no wall-clock
-timestamps — the git commit is the time anchor. Fields:
+Assessment product 1: answers **"what evidence exists?"** Inputs: Evidence Graph +
+contract findings. Does not import assurance. Derived, versioned, machine-readable.
+Deterministic: sorted keys, no wall-clock timestamps — the git commit is the time
+anchor. Fields:
 
 - `manifest_schema_version`, `evaluation {name, version, harness_commit}`
 - `registers`: claim counts by classification; threat counts by status and category
@@ -113,7 +153,9 @@ Committed to the repo as a first-class artifact of every release.
 
 ## 8. Assurance Report (`groundtruth/meta/assurance.py` → `runs/assurance-report.md`)
 
-Deterministic Markdown derived from graph + manifest. Answers, per conclusion:
+Assessment product 2: answers **"what conclusions are justified?"** Inputs: Evidence
+Graph + contract findings — the manifest's **sibling**, not its child; neither imports
+the other (ARB Issue 2). Deterministic Markdown. Answers, per conclusion:
 
 - **Strongly supported:** facts whose contracts all hold, with their evidence chains.
 - **Provisional:** supported observations / hypotheses, each with the named experiment
@@ -129,12 +171,17 @@ No aggregate verdict. Assurance is reported per conclusion, not per repository.
 ```
 groundtruth/meta/
 ├── __init__.py
-├── registry.py    # parse + validate registers (schema-checked, typed)
-├── graph.py       # Evidence Graph construction
-├── contracts.py   # declarative invariants + enforcement
-├── manifest.py    # quality manifest derivation
-└── assurance.py   # assurance report generation
+├── model.py       # Evidence Model — EvidenceNode + typed nodes (no I/O)
+├── loader.py      # the one concrete adapter: YAML/filesystem/git → model
+├── graph.py       # Evidence Graph — primary internal representation
+├── contracts.py   # pure declarative invariants over the graph
+├── manifest.py    # assessment product 1: what evidence exists (JSON)
+└── assurance.py   # assessment product 2: what conclusions are justified (Markdown)
 ```
+
+Import direction (enforced, reviewed at gate):
+`loader → model ← graph ← contracts ← {manifest, assurance}`; manifest and assurance
+never import each other; only `loader.py` performs I/O.
 
 Every module docstring declares:
 - **Current consumers:** `groundtruth audit` CLI.
@@ -154,8 +201,10 @@ implementation, not overclaimed.
 
 ## 11. Testing strategy (TDD throughout)
 
-- `tests/test_meta_registry.py` — schema validation, malformed-register rc 2 behavior.
-- `tests/test_meta_graph.py` — node/edge construction from fixture registers.
+- `tests/test_meta_loader.py` — schema validation, environmental resolution into node
+  attributes, malformed-register rc 2 behavior.
+- `tests/test_meta_graph.py` — node/edge construction from synthetic Evidence Models
+  (no filesystem needed — purity payoff).
 - `tests/test_meta_contracts.py` — one planted violation per contract in fixture
   repositories (tmp dirs with synthetic registers/artifacts); asserts the specific
   finding fires and others don't.
