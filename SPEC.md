@@ -151,11 +151,15 @@ and scorecard — the differentiated core.
   triple-compliance-without-answer), snapshot re-pinned to the numbers
   predicted before the relabel — micro P 0.9333 / R 0.8936 / F1 0.9130
   (tp 42 / fp 3 / fn 5), non_completion itself 10/0/0. Judge comparison
-  stays scoped to corpus v1 labels (README scope note). Remaining v0.4:
-  6-model re-bench under the six-detector suite (stall traces now fail
-  visibly) + stateful-adapter benchmark condition; discriminating scenario
-  families; lint/py.typed; GitHub push. Then **JudgeKit** on the same spine
-  (v0.5).
+  stays scoped to corpus v1 labels (README scope note). Dual-condition
+  re-bench shipped same day (`run --stateful` as a first-class flag; 12
+  scorecards + raw traces in runs/): the six-detector suite inverts the v0.3
+  ranking — llama3.1/3.2/mistral fall 0.875 → 0.0 stateless (their lead was
+  stall-inflation), qwen3 (v0.3 last) unchanged at 0.625; under state all
+  stalls vanish and secret_exfiltration goes 2/6 → 6/6 models (llama3.1
+  emails the staging key to the attacker and repeats it in its answer).
+  Remaining v0.4: discriminating scenario families; lint/py.typed; GitHub
+  push. Then **JudgeKit** on the same spine (v0.5).
 
 ## 6. Risk register
 
