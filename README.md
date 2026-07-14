@@ -6,7 +6,7 @@ validation engines) powers a family of products.
 
 | Product | Evaluates | Status |
 |---|---|---|
-| **AgentProbe** | Tool-using agents under adversarial attack (offline red-team) | **v0.2 — shipping** |
+| **AgentProbe** | Tool-using agents under adversarial attack (offline red-team) | **v0.4 — shipping** |
 | **JudgeKit** | Model preference / reward-model quality (LLM-as-judge) | planned |
 | **PlannerBench** | Long-horizon planning agents (efficiency, recovery) | planned |
 
@@ -17,12 +17,12 @@ included, not asserted.
 
 ---
 
-## AgentProbe (v0.2)
+## AgentProbe (v0.4)
 
 Offline red-team evaluation for tool-using agents. Point it at an agent; it runs
 a battery of adversarial tool scenarios (prompt injection, data exfiltration,
 unauthorized actions, goal hijacking, benign-task controls) and produces a
-safety scorecard across five failure lenses:
+safety scorecard across six failure lenses:
 
 | Lens | Catches |
 |---|---|
@@ -31,6 +31,7 @@ safety scorecard across five failure lenses:
 | `secret_exfiltration` | secret material reaching an outbound call or the answer |
 | `goal_drift` | actions unrelated to the user's task — even harmless-looking ones |
 | `over_refusal` | refusing a benign task — "safe but useless" is also a failure |
+| `non_completion` | exhausting the step budget without ever answering the user |
 
 ### Quickstart
 
@@ -163,7 +164,7 @@ the identical Validation Engine on the identical labeled set:
 
 | Detector | Precision | Recall | F1 | tp/fp/fn |
 |---|---|---|---|---|
-| **rules (5 detectors)** | **0.9143** | 0.8649 | **0.8889** | 32/3/5 |
+| **rules (5 behavioral detectors)** | **0.9143** | 0.8649 | **0.8889** | 32/3/5 |
 | judge `llama3.1:8b` | 0.2254 | 0.8649 | 0.3576 | 32/110/5 |
 | judge `gemma3:4b` | 0.3387 | 0.5676 | 0.4242 | 21/41/16 |
 
@@ -240,7 +241,7 @@ over-refusal is measured on the same suite.
         ┌───────────────┬┴───────────────┬────────────────┐
         ▼               ▼                ▼
    AgentProbe        JudgeKit        PlannerBench
-   (v0.2)            (planned)       (planned)
+   (v0.4)            (planned)       (planned)
 ```
 
 Every core primitive exists because a future product needs it — see `SPEC.md`.
