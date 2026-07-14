@@ -1,5 +1,3 @@
-
-
 # Groundtruth — Architecture Audit (v0.5)
 
 Auditing every reusable abstraction against the founding rule (ADR-0001):
