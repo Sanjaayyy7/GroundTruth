@@ -184,6 +184,29 @@ and scorecard — the differentiated core.
   named finding. ADR-0006 records the layer, the one-loader guardrail, and
   the JudgeKit generalization trigger. 116 tests (from 78); published
   numbers byte-unchanged. Then **JudgeKit** on the same spine.
+- **v0.7 — DONE (2026-07-15, external validation; protocol
+  `docs/specs/2026-07-15-v07-external-validation-protocol.md`, outcome
+  `docs/specs/2026-07-15-v07-architecture-validation.md`).** Single
+  pre-registered question: can the Meta-Evaluation Engine audit an
+  evaluation Groundtruth did not produce? Answer: yes, with zero
+  modification to `groundtruth/meta/` (H1 confirmed; diff vs the protocol
+  commit is empty). Second consumer: **MiniJudge**
+  (`examples/minijudge/`) — a real 12-item judge-agreement evaluation
+  (accuracy 0.75, script-generated artifact) with different domain,
+  terminology, data format (JSON), and threat-ID family (`T…`), emitting
+  the published register formats. The one predicted adaptation landed at
+  the CLI surface only: `audit --name` (the manifest previously defaulted
+  the evaluation name to "groundtruth" — pre-registered failure mode 1).
+  14 new tests (130 total): green audit, consumer identity,
+  byte-determinism, script-produced metric evidence, engine
+  consumer-literal guardrail, 8 negative controls. CI audits both
+  evaluations on every push; checkout now `fetch-depth: 0` (CT6/D10 break
+  on shallow clones — latent v0.6 bug, pre-registered as failure mode 7).
+  New claim C11 (preregistration 074bfb3 → 3d294a3, verified by D10);
+  new threat E6 (same-author/same-repo independence limit). ADR-0007
+  records what the second consumer proved. "Evaluation assurance
+  platform" framing: still **not** earned — waits for an externally
+  authored consumer (E6's future experiment).
 - **v0.8 — RESERVED (platform engineering).** Repository Stewardship System +
   Repository Constitution — approved architectural intent recorded in
   `docs/plans/2026-07-15-v08-platform-engineering-backlog.md`; deliberately
@@ -219,5 +242,6 @@ and scorecard — the differentiated core.
 | 14 | Manifest dimension D05 (dataset discrimination) is `documented`, not machine-derived from scorecards | Meta | Medium | next audit touch |
 | 15 | Assurance report format has no schema_version (manifest does) | Future-compat | Low | with next meta schema change |
 | 16 | README version parsed by regex convention (`**vX.Y — shipping**`); a format change fails CT6 loudly rather than silently | Interfaces | Low | acceptable failure mode; revisit if README restructures |
+| 17 | CI regenerates both quality manifests but never diffs them against the committed copies — a stale committed manifest (e.g. a silently dropped D10 entry after a bad prereg edit) passes CI | Meta | Medium | next audit touch: `git diff --exit-code runs/ examples/minijudge/runs/` after the audit steps |
 
 Docs: `docs/adr/` records the decisions; `docs/POSITIONING.md` records identity.

@@ -109,6 +109,18 @@ registers. Until then, the defensible one-liner is: **"an agent-evaluation
 framework that audits its own evidence."** Every noun in that sentence has a
 committed artifact behind it.
 
+### v0.7 update
+
+External validation moved the "Evaluation Infrastructure" gap from *no
+second consumer* to *no independently authored consumer*: MiniJudge
+(claim C11, pre-registered) proves the register formats and the unmodified
+engine carry a second evaluation, but it shares author and repository with
+Groundtruth (threat E6). The defensible one-liner is now: **"an
+agent-evaluation framework that audits its own evidence — and has
+demonstrated that audit on a second evaluation's registers."** The
+"Evaluation Assurance Platform" headline remains gated on an externally
+authored consumer (E6's discharge experiment), per ADR-0007.
+
 The README headline is deliberately unchanged: the repository earns its
 identity from artifacts, and the framing decision is gated on the owner's
 review, not on this document.

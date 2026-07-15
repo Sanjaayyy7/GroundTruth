@@ -6,7 +6,7 @@ validation engines) powers a family of products.
 
 | Product | Evaluates | Status |
 |---|---|---|
-| **AgentProbe** | Tool-using agents under adversarial attack (offline red-team) | **v0.6 — shipping** |
+| **AgentProbe** | Tool-using agents under adversarial attack (offline red-team) | **v0.7 — shipping** |
 | **JudgeKit** | Model preference / reward-model quality (LLM-as-judge) | planned |
 | **PlannerBench** | Long-horizon planning agents (efficiency, recovery) | planned |
 
@@ -37,6 +37,22 @@ derives two deterministic artifacts on every CI run:
 A drifted number, a dangling evidence path, or a stale version string fails
 the build with a named finding. See
 [docs/EVALUATION_QUALITY.md](docs/EVALUATION_QUALITY.md) for the model.
+
+## External validation (v0.7)
+
+The audit engine's reuse claim is now tested, not asserted. A second,
+independently authored evaluation —
+[MiniJudge](examples/minijudge/README.md), a 12-item judge-agreement
+evaluation with different domain, terminology, and data format — emits the
+same register formats, and the **unmodified** engine audits it green
+(`groundtruth audit --root examples/minijudge --name minijudge`, run in CI
+on every push). The result was
+[pre-registered](docs/specs/2026-07-15-v07-external-validation-protocol.md)
+before implementation; eight negative controls (planted metric lies, broken
+references, malformed registers) each fail with a named finding, so the
+green audit is not vacuous. Scope, honestly: same author, same repository —
+architectural reuse is validated, organizational independence is not
+(threat E6).
 
 ## AgentProbe (v0.6)
 

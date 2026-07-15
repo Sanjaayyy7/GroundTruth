@@ -24,6 +24,7 @@ threat lists its **current mitigation**, **remaining risk**, and the
 | E3 | One decoding config (temp 0, seed 42) | Chosen for reproducibility, disclosed | Stall fixed-point mechanism (C1) is specific to greedy decoding; temp>0 may differ | Repeat the stall experiment at temperature 0.7 |
 | E4 | Mocked deterministic tools, not real APIs | Deliberate — it is what makes runs $0 and reproducible | Real tools have latency, errors, richer outputs that change behavior | Out of scope by design (POSITIONING anti-goal: no live tracing); note the boundary explicitly |
 | E5 | 8 scenarios, one attack ontology | Info-gain argued per scenario | Attack space is far larger; coverage is a sample | Add multi-hop / delayed-instruction families (see DATASET_AUDIT) |
+| E6 | The second consumer (MiniJudge) shares author and host repository with Groundtruth | Declared in the pre-registered v0.7 protocol and in C11's scope; MiniJudge differs in domain, terminology, data format, and threat-ID family | Same-author registers may unconsciously fit the engine's expectations; organizational independence is unproven | Audit an evaluation authored outside this repository (JudgeKit proper or a third party) with no coordination beyond the published format docs |
 
 ## Construct validity — does it measure what it claims?
 

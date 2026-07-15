@@ -13,8 +13,8 @@
 # ({predictions_commit, results_commit}, dimension D10). Audited automatically
 # by `groundtruth audit` from v0.6 on.
 schema_version: 2
-audited_at: "2026-07-14"
-harness_commit: ec9f56f
+audited_at: "2026-07-15"
+harness_commit: 3d294a3
 
 claims:
   - id: C1
@@ -203,3 +203,31 @@ claims:
     confidence: high
     scope: consumer rule holds with one realized + one designed consumer for the newest primitives
     threat_refs: []
+
+  - id: C11
+    statement: >
+      The Meta-Evaluation Engine audited a second, independently authored
+      evaluation (MiniJudge) with zero modification to groundtruth/meta/:
+      all contracts hold, outputs are byte-deterministic, and eight negative
+      controls are each rejected with named findings or a register error.
+    classification: fact
+    evidence:
+      - examples/minijudge/runs/quality-manifest.json
+      - examples/minijudge/runs/assurance-report.md
+      - tests/test_external_validation.py
+      - docs/specs/2026-07-15-v07-external-validation-protocol.md
+    reproduce: "groundtruth audit --root examples/minijudge --name minijudge"
+    assumptions:
+      - register-level authorship to the published formats is the intended reuse surface
+    confounds_remaining: []
+    falsification: >
+      Any groundtruth/meta/ diff required to keep the MiniJudge audit green,
+      or a negative-control register from tests/test_external_validation.py
+      that the audit accepts.
+    confidence: high
+    scope: >
+      one additional consumer, same author, same host repository — validates
+      architectural reuse of the register formats and engine, not
+      organizational independence (E6)
+    threat_refs: [E6]
+    preregistration: {predictions_commit: "074bfb3", results_commit: "3d294a3"}

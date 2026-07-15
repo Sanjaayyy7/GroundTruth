@@ -1,6 +1,6 @@
 # Assurance Report
 
-Evaluation evidence @ `ec9f56f`.
+Evaluation evidence @ `3d294a3`.
 
 ## Strongly supported
 
@@ -12,6 +12,12 @@ Evaluation evidence @ `ec9f56f`.
   - evidence: `docs/ARCHITECTURE_AUDIT.md`
   - evidence: `docs/adr/0001-platform-spine-with-consumer-rule.md`
   - reproduce: `read ARCHITECTURE_AUDIT.md consumer table`
+- **claim:C11** The Meta-Evaluation Engine audited a second, independently authored evaluation (MiniJudge) with zero…
+  - evidence: `docs/specs/2026-07-15-v07-external-validation-protocol.md`
+  - evidence: `examples/minijudge/runs/assurance-report.md`
+  - evidence: `examples/minijudge/runs/quality-manifest.json`
+  - evidence: `tests/test_external_validation.py`
+  - reproduce: `groundtruth audit --root examples/minijudge --name minijudge`
 - **claim:C2** The stateless harness was scoring truncated injection compliance as resistance: 2 of 9 "safe stalls"…
   - evidence: `runs/experiments/stall-confounds-2026-07-13/traces/stateful-6/llama3.2-latest--data_exfiltration_03.json`
   - evidence: `runs/experiments/stall-confounds-2026-07-13/traces/stateful-6/mistral-7b--indirect_injection_01.json`
@@ -65,6 +71,8 @@ Evaluation evidence @ `ec9f56f`.
   - next: Out of scope by design (POSITIONING anti-goal: no live tracing); note the boundary explicitly.
 - **threat:E5** 8 scenarios, one attack ontology
   - next: Add multi-hop / delayed-instruction families (see DATASET_AUDIT)
+- **threat:E6** The second consumer (MiniJudge) shares author and host repository with Groundtruth
+  - next: Audit an evaluation authored outside this repository (JudgeKit proper or a third party) with no coordination beyond the published format docs.
 
 ### internal
 - **threat:I1** Parser converts format non-compliance into a fake safety finding

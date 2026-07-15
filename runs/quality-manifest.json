@@ -98,12 +98,12 @@
       "value": {
         "by_category": {
           "construct": 3,
-          "external": 5,
+          "external": 6,
           "internal": 5,
           "statistical": 4
         },
         "by_status": {
-          "mitigated": 16,
+          "mitigated": 17,
           "resolved": 1
         }
       }
@@ -146,38 +146,39 @@
     "D08_claim_traceability": {
       "status": "machine",
       "value": {
-        "total": 10,
-        "traced": 10
+        "total": 11,
+        "traced": 11
       }
     },
     "D09_version_stability": {
       "status": "machine",
       "value": {
         "exists_in_git": true,
-        "pyproject_version": "0.6.0",
-        "readme_version": "0.6"
+        "pyproject_version": "0.7.0",
+        "readme_version": "0.7"
       }
     },
     "D10_experimental_rigor": {
       "status": "machine",
       "value": [
+        "claim:C11",
         "claim:C3"
       ]
     }
   },
   "evaluation": {
-    "harness_commit": "ec9f56f",
+    "harness_commit": "3d294a3",
     "name": "groundtruth",
-    "version": "0.6.0"
+    "version": "0.7.0"
   },
   "graph": {
-    "edges": 63,
-    "nodes": 58,
+    "edges": 70,
+    "nodes": 65,
     "nodes_by_kind": {
-      "artifact": 20,
-      "claim": 10,
-      "experiment": 10,
-      "threat": 17,
+      "artifact": 24,
+      "claim": 11,
+      "experiment": 11,
+      "threat": 18,
       "version": 1
     }
   },
@@ -186,24 +187,24 @@
   "registers": {
     "claims": {
       "by_classification": {
-        "fact": 6,
+        "fact": 7,
         "retracted": 1,
         "supported_observation": 3
       },
-      "total": 10
+      "total": 11
     },
     "threats": {
       "by_category": {
         "construct": 3,
-        "external": 5,
+        "external": 6,
         "internal": 5,
         "statistical": 4
       },
       "by_status": {
-        "mitigated": 16,
+        "mitigated": 17,
         "resolved": 1
       },
-      "total": 17
+      "total": 18
     }
   },
   "unresolved_threats": [
@@ -212,6 +213,7 @@
     "E3",
     "E4",
     "E5",
+    "E6",
     "I1",
     "I3",
     "I4",

@@ -125,6 +125,22 @@ threats:
     claim_refs: [C4, C8]
     dimensions: [dataset_discrimination]
 
+  - id: E6
+    category: external
+    threat: "The second consumer (MiniJudge) shares author and host repository with Groundtruth"
+    mitigation: >
+      Declared in the pre-registered v0.7 protocol and in C11's scope;
+      MiniJudge differs in domain, terminology, data format, and threat-ID
+      family.
+    remaining_risk: >
+      Same-author registers may unconsciously fit the engine's expectations;
+      organizational independence is unproven.
+    future_experiment: >
+      Audit an evaluation authored outside this repository (JudgeKit proper
+      or a third party) with no coordination beyond the published format docs.
+    status: mitigated
+    claim_refs: [C11]
+
   - id: K1
     category: construct
     threat: "robustness blends safety and utility into one number"
