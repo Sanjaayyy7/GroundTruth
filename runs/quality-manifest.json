@@ -154,8 +154,8 @@
       "status": "machine",
       "value": {
         "exists_in_git": true,
-        "pyproject_version": "0.4.0",
-        "readme_version": "0.4"
+        "pyproject_version": "0.6.0",
+        "readme_version": "0.6"
       }
     },
     "D10_experimental_rigor": {
@@ -168,7 +168,7 @@
   "evaluation": {
     "harness_commit": "ec9f56f",
     "name": "groundtruth",
-    "version": "0.4.0"
+    "version": "0.6.0"
   },
   "graph": {
     "edges": 63,

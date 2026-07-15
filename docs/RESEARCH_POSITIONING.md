@@ -87,3 +87,28 @@ citable methodology contribution."
 
 Both descriptions are things to be proud of, and both are already true from the
 repository evidence — which is the point of v0.5.
+
+## v0.6 positioning candidates (evidence-mapped, headline gated)
+
+v0.6 shipped the meta-evaluation engine: `groundtruth audit` constructs an
+evidence graph from the registers and derives a quality manifest + assurance
+report, with contracts CT1–CT10 failing CI on drift. That changes what the
+project can honestly call itself. Candidates, mapped to artifacts:
+
+| Candidate | Supporting artifacts | Gaps |
+|---|---|---|
+| Evaluation Framework | core/ + products/agentprobe/ + 116 tests; CLI run/validate/ci/report | undersells: says nothing about the self-validation apparatus |
+| Evaluation Validation Platform | detector-quality corpus + measured misses + CT5 metric provenance | "platform" implies breadth; one product line exists |
+| **Evaluation Assurance Platform** | assurance report (per-conclusion justification), contracts, manifest, claims/threats registers, ADR-0006 | "platform" still ahead of one realized consumer; strongest fit for what v0.6 actually built |
+| Evaluation Reliability System | determinism (C9) + repro guide + CI gates | "reliability" reads as uptime engineering; misses the epistemic layer |
+| Evaluation Infrastructure | register formats (claims v2, threats v1) designed for future consumers | requires a second consumer (JudgeKit) that does not exist yet |
+
+**Best-supported today:** *Evaluation Assurance Platform* — with the honest
+caveat that "platform" is earned only after JudgeKit consumes the same
+registers. Until then, the defensible one-liner is: **"an agent-evaluation
+framework that audits its own evidence."** Every noun in that sentence has a
+committed artifact behind it.
+
+The README headline is deliberately unchanged: the repository earns its
+identity from artifacts, and the framing decision is gated on the owner's
+review, not on this document.

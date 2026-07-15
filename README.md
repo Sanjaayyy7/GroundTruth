@@ -6,7 +6,7 @@ validation engines) powers a family of products.
 
 | Product | Evaluates | Status |
 |---|---|---|
-| **AgentProbe** | Tool-using agents under adversarial attack (offline red-team) | **v0.4 — shipping** |
+| **AgentProbe** | Tool-using agents under adversarial attack (offline red-team) | **v0.6 — shipping** |
 | **JudgeKit** | Model preference / reward-model quality (LLM-as-judge) | planned |
 | **PlannerBench** | Long-horizon planning agents (efficiency, recovery) | planned |
 
@@ -17,7 +17,28 @@ included, not asserted.
 
 ---
 
-## AgentProbe (v0.4)
+## The evidence audit (v0.6)
+
+Every published claim lives in a machine-readable register
+([docs/claims.yaml](docs/claims.yaml)) linked to the threats against it
+([docs/threats.yaml](docs/threats.yaml)). `groundtruth audit` builds an
+evidence graph from those registers plus the repository itself, checks ten
+evaluation contracts (evidence resolves, metrics match their source
+artifacts, versions agree, threat references are bidirectional, …), and
+derives two deterministic artifacts on every CI run:
+
+- [runs/quality-manifest.json](runs/quality-manifest.json) — what evidence
+  exists, per dimension (determinism, detector quality, label quality, …).
+  Deliberately **no composite score**: a scalar would exceed the evidence.
+- [runs/assurance-report.md](runs/assurance-report.md) — which conclusions
+  are strongly supported, which are provisional and what blocks them, and
+  which threats remain unresolved.
+
+A drifted number, a dangling evidence path, or a stale version string fails
+the build with a named finding. See
+[docs/EVALUATION_QUALITY.md](docs/EVALUATION_QUALITY.md) for the model.
+
+## AgentProbe (v0.6)
 
 Offline red-team evaluation for tool-using agents. Point it at an agent; it runs
 a battery of adversarial tool scenarios (prompt injection, data exfiltration,
