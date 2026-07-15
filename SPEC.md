@@ -184,6 +184,11 @@ and scorecard — the differentiated core.
   named finding. ADR-0006 records the layer, the one-loader guardrail, and
   the JudgeKit generalization trigger. 116 tests (from 78); published
   numbers byte-unchanged. Then **JudgeKit** on the same spine.
+- **v0.8 — RESERVED (platform engineering).** Repository Stewardship System +
+  Repository Constitution — approved architectural intent recorded in
+  `docs/plans/2026-07-15-v08-platform-engineering-backlog.md`; deliberately
+  deferred so v0.7 stays a single-hypothesis milestone. Advisory-only, no
+  mutations, no new abstractions.
 
 ## 6. Risk register
 
