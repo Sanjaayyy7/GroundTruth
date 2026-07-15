@@ -11,6 +11,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          # Full history: the evidence audit verifies commit existence (CT6)
+          # and preregistration ancestry (D10); a shallow clone breaks both.
+          fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
@@ -28,3 +32,5 @@ jobs:
         run: groundtruth ci --agent hardened_agent
       - name: Evidence audit (contracts + quality manifest + assurance report)
         run: groundtruth audit
+      - name: Evidence audit of the second consumer (v0.7 external validation)
+        run: groundtruth audit --root examples/minijudge --name minijudge

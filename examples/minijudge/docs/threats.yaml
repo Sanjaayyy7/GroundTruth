@@ -1,0 +1,41 @@
+# MiniJudge threats register — machine-readable mirror of
+# THREATS_TO_VALIDITY.md, in the Groundtruth register format (threats.yaml
+# schema v1). Threat IDs use the T-family deliberately: the loader's prose
+# ID grammar accepts [IEKS]\d+ | T\d+, and Groundtruth itself only exercises
+# the first branch.
+schema_version: 1
+
+threats:
+  - id: T1
+    category: statistical
+    threat: "12 items cannot support generalization beyond this labeled set"
+    mitigation: "Every claim carries a scope sentence naming the 12-item limit"
+    remaining_risk: "Accuracy on any larger set is unknown"
+    future_experiment: >
+      Grow the labeled set past 50 items before quoting accuracy without
+      this caveat.
+    status: mitigated
+    claim_refs: [J1]
+    dimensions: [statistical_support]
+
+  - id: T2
+    category: statistical
+    threat: "Reference verdicts and judge share one author"
+    mitigation: "Disclosed in J1's scope; statements are elementary factual claims"
+    remaining_risk: "Author bias could align verdicts with the heuristic"
+    future_experiment: "Independent second annotator over all 12 items"
+    status: mitigated
+    claim_refs: [J1]
+    dimensions: [label_quality]
+    attrs:
+      annotators: 1
+      kappa: blocked_on_second_annotator
+
+  - id: T3
+    category: construct
+    threat: "Negation keywords are a proxy for semantic refutation"
+    mitigation: "J2 documents the proxy's failure pattern explicitly"
+    remaining_risk: "True negated statements are systematically misjudged"
+    future_experiment: "Add a negation-aware baseline and compare error classes"
+    status: mitigated
+    claim_refs: [J2]

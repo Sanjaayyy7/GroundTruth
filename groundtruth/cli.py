@@ -109,6 +109,12 @@ def main(argv: list[str] | None = None) -> int:
         help="audit evaluation evidence: contracts, quality manifest, assurance report",
     )
     aud.add_argument("--root", default=None, help="evaluation root (default: this repo)")
+    aud.add_argument(
+        "--name",
+        default="groundtruth",
+        help="evaluation name recorded in the manifest (set this when "
+        "auditing another evaluation's registers via --root)",
+    )
     aud.add_argument("--claims", default=None, help="claims register path")
     aud.add_argument("--threats", default=None, help="threats register path")
     aud.add_argument(
@@ -268,7 +274,7 @@ def _audit(args: argparse.Namespace) -> int:
 
     graph = build_graph(nodes)
     findings = run_contracts(graph)
-    manifest = build_manifest(graph, findings)
+    manifest = build_manifest(graph, findings, evaluation_name=args.name)
 
     out = Path(args.out) if args.out else root / "runs/quality-manifest.json"
     report = Path(args.report) if args.report else root / "runs/assurance-report.md"

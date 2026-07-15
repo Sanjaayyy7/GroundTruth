@@ -1,0 +1,148 @@
+{
+  "contracts": {
+    "definitions": {
+      "CT1": "every claim's evidence resolves in-repo or is marked external with why",
+      "CT10": "audit outputs are byte-identical across runs at the same commit (enforced by tests/test_meta_manifest.py and tests/test_meta_assurance.py)",
+      "CT2": "every non-retracted claim declares falsification and scope",
+      "CT3": "classification in vocabulary; facts have evidence + working reproduce",
+      "CT4": "claim<->threat references are bidirectional and resolve",
+      "CT5": "every quoted metric matches its source artifact",
+      "CT6": "harness commit exists; pyproject/README/manifest versions agree",
+      "CT7": "threats carry mitigation + future experiment; resolved needs evidence",
+      "CT8": "prose and register threat ID sets are identical",
+      "CT9": "claims carry confidence; non-facts name their remaining confound"
+    },
+    "findings": [],
+    "holds": true
+  },
+  "dimensions": {
+    "D01_determinism": {
+      "note": "no register entry tags this dimension",
+      "status": "gap",
+      "value": null
+    },
+    "D02_reproducibility": {
+      "note": "no register entry tags this dimension",
+      "status": "gap",
+      "value": null
+    },
+    "D03_detector_quality": {
+      "status": "machine",
+      "value": [
+        {
+          "classification": "fact",
+          "confidence": "high",
+          "id": "claim:J1",
+          "metrics": [
+            {
+              "actual": 0.75,
+              "name": "accuracy",
+              "source": "runs/agreement.json",
+              "value": 0.75
+            }
+          ]
+        }
+      ]
+    },
+    "D04_label_quality": {
+      "status": "machine",
+      "value": [
+        {
+          "attrs": {
+            "annotators": 1,
+            "kappa": "blocked_on_second_annotator"
+          },
+          "id": "threat:T2",
+          "status": "mitigated"
+        }
+      ]
+    },
+    "D05_dataset_discrimination": {
+      "note": "no register entry tags this dimension",
+      "status": "gap",
+      "value": null
+    },
+    "D06_threat_coverage": {
+      "status": "machine",
+      "value": {
+        "by_category": {
+          "construct": 1,
+          "statistical": 2
+        },
+        "by_status": {
+          "mitigated": 3
+        }
+      }
+    },
+    "D07_statistical_support": {
+      "status": "documented",
+      "value": [
+        {
+          "id": "threat:T1",
+          "status": "mitigated"
+        }
+      ]
+    },
+    "D08_claim_traceability": {
+      "status": "machine",
+      "value": {
+        "total": 2,
+        "traced": 2
+      }
+    },
+    "D09_version_stability": {
+      "status": "machine",
+      "value": {
+        "exists_in_git": true,
+        "pyproject_version": "0.1.0",
+        "readme_version": "0.1"
+      }
+    },
+    "D10_experimental_rigor": {
+      "status": "machine",
+      "value": []
+    }
+  },
+  "evaluation": {
+    "harness_commit": "074bfb3",
+    "name": "minijudge",
+    "version": "0.1.0"
+  },
+  "graph": {
+    "edges": 11,
+    "nodes": 11,
+    "nodes_by_kind": {
+      "artifact": 3,
+      "claim": 2,
+      "experiment": 2,
+      "threat": 3,
+      "version": 1
+    }
+  },
+  "manifest_schema_version": 1,
+  "no_composite_score": "deliberate \u2014 a scalar would exceed the evidence (see docs/EVALUATION_QUALITY.md)",
+  "registers": {
+    "claims": {
+      "by_classification": {
+        "fact": 1,
+        "supported_observation": 1
+      },
+      "total": 2
+    },
+    "threats": {
+      "by_category": {
+        "construct": 1,
+        "statistical": 2
+      },
+      "by_status": {
+        "mitigated": 3
+      },
+      "total": 3
+    }
+  },
+  "unresolved_threats": [
+    "T1",
+    "T2",
+    "T3"
+  ]
+}

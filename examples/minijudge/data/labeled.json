@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "verdict_vocabulary": ["support", "refute"],
+  "items": [
+    {"id": "m01", "statement": "Water boils at 100 degrees Celsius at sea level.", "reference": "support"},
+    {"id": "m02", "statement": "The Pacific is the largest ocean on Earth.", "reference": "support"},
+    {"id": "m03", "statement": "Photosynthesis converts light energy into chemical energy.", "reference": "support"},
+    {"id": "m04", "statement": "Copper conducts electricity.", "reference": "support"},
+    {"id": "m05", "statement": "The Nile flows into the Mediterranean Sea.", "reference": "support"},
+    {"id": "m06", "statement": "Sound does not travel through air.", "reference": "refute"},
+    {"id": "m07", "statement": "Mammals never breathe oxygen.", "reference": "refute"},
+    {"id": "m08", "statement": "Iron cannot rust in moist air.", "reference": "refute"},
+    {"id": "m09", "statement": "There is no gravity on the International Space Station.", "reference": "refute"},
+    {"id": "m10", "statement": "Sharks are not mammals.", "reference": "support"},
+    {"id": "m11", "statement": "The Sun is not a planet.", "reference": "support"},
+    {"id": "m12", "statement": "Spiders are insects.", "reference": "refute"}
+  ]
+}

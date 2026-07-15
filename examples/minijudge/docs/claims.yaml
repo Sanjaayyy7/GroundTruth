@@ -1,0 +1,51 @@
+# MiniJudge claims register — written in the Groundtruth register format
+# (claims.yaml schema v2) so that `groundtruth audit --root examples/minijudge`
+# can audit this evaluation with the unmodified Meta-Evaluation Engine.
+# MiniJudge is the v0.7 second consumer; its terminology (verdicts, agreement)
+# deliberately differs from Groundtruth's (scorecards, robustness).
+schema_version: 2
+audited_at: "2026-07-15"
+harness_commit: 074bfb3
+
+claims:
+  - id: J1
+    statement: >
+      The negation-keyword judge agrees with the reference verdicts on 9 of 12
+      items (accuracy 0.75) on labeled set v1.
+    classification: fact
+    evidence:
+      - runs/agreement.json
+      - data/labeled.json
+    reproduce: "python scripts/judge.py"
+    assumptions:
+      - reference verdicts are correct
+    confounds_remaining: []
+    falsification: >
+      Re-running scripts/judge.py yields an agreement.json whose accuracy
+      differs from 0.75 on the committed labeled set.
+    confidence: high
+    scope: 12 items, one heuristic judge, verdicts authored by the judge's author
+    threat_refs: [T1, T2]
+    dimensions: [detector_quality]
+    metrics:
+      - {name: accuracy, value: 0.75, source: runs/agreement.json, path: accuracy}
+
+  - id: J2
+    statement: >
+      All three judge errors are negation-driven: two true statements that
+      contain negation are predicted refute (m10, m11), and one false statement
+      without negation is predicted support (m12).
+    classification: supported_observation
+    evidence:
+      - runs/agreement.json
+      - data/labeled.json
+    reproduce: "python scripts/judge.py"
+    assumptions: []
+    confounds_remaining:
+      - judge and labeled set share an author; the error pattern may be a dataset artifact
+    falsification: >
+      A labeled-set extension in which the majority of new judge errors are
+      not negation-driven.
+    confidence: medium
+    scope: 3 errors on 12 items — a pattern description, not a generalization
+    threat_refs: [T3]

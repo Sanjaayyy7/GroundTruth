@@ -1,0 +1,16 @@
+{
+  "accuracy": 0.75,
+  "confusion": {
+    "refute_as_refute": 4,
+    "refute_as_support": 1,
+    "support_as_refute": 2,
+    "support_as_support": 5
+  },
+  "errors": [
+    "m10",
+    "m11",
+    "m12"
+  ],
+  "n_items": 12,
+  "schema_version": 1
+}
