@@ -1,0 +1,203 @@
+# Groundtruth threats register — machine-readable mirror of THREATS_TO_VALIDITY.md.
+# The markdown keeps the prose and reasoning; this register is the machine source.
+# Contract CT8 keeps the two ID sets identical; CT4 keeps claim_refs bidirectional
+# with claims.yaml threat_refs.
+# Status vocabulary:
+#   open      — no mitigation in place
+#   mitigated — partial mitigation in place; remaining risk is real
+#   resolved  — risk eliminated; requires an evidence reference
+schema_version: 1
+
+threats:
+  - id: I1
+    category: internal
+    threat: "Parser converts format non-compliance into a fake safety finding"
+    mitigation: >
+      Caught once (v0.3 agent parser) and once (judge parser); adapter now
+      translates the unambiguous action-field variant; fail-open only for
+      genuine garbage.
+    remaining_risk: "A third parseable-but-unhandled reply shape could still misscore"
+    future_experiment: >
+      Parser fuzzing over recorded real replies; assert no silent Finish on
+      well-formed tool JSON.
+    status: mitigated
+    claim_refs: []
+
+  - id: I2
+    category: internal
+    threat: "Stall was itself an instrumentation artifact (the whole C1 finding)"
+    mitigation: >
+      Resolved: pre-registered confound experiment proved it and the fix
+      (non_completion + stateful variant) is in the suite.
+    remaining_risk: >
+      The stateful adapter uses one prompt format; a different memory encoding
+      might behave differently.
+    future_experiment: >
+      Test 2-3 memory encodings (tool-role messages, summarized history) as
+      adapter variants.
+    status: resolved
+    evidence:
+      - experiments/stall_confounds/REPORT.md
+    claim_refs: [C1]
+
+  - id: I3
+    category: internal
+    threat: "Detector logic bug inflates precision/recall"
+    mitigation: "78 tests, snapshot pinned, every fp/fn is a named designed-hard case"
+    remaining_risk: "A detector could be 'right for the wrong reason' on this corpus"
+    future_experiment: "Mutation testing on detectors; adversarial label review"
+    status: mitigated
+    claim_refs: [C6]
+
+  - id: I4
+    category: internal
+    threat: "non_completion fires on legitimately long tasks"
+    mitigation: >
+      Structural rule keyed on absence of a final span, not step count; all
+      scenarios are single-answer tasks.
+    remaining_risk: "On a genuinely multi-step task, budget exhaustion != failure"
+    future_experiment: >
+      Add a multi-step-completion scenario; confirm the detector's scope is
+      documented, not assumed.
+    status: mitigated
+    claim_refs: [C4]
+
+  - id: I5
+    category: internal
+    threat: "Determinism assumption is false for LLM subjects"
+    mitigation: >
+      Measured byte-identical for llama3.2 across both conditions from a
+      fresh venv (C9).
+    remaining_risk: "Other five models verified equal-scored, not byte-diffed this milestone"
+    future_experiment: "Byte-diff all six across two runs; record any drift as a caveat"
+    status: mitigated
+    claim_refs: [C9]
+
+  - id: E1
+    category: external
+    threat: "All subjects are <=8B local models"
+    mitigation: "Disclosed in every claim's scope"
+    remaining_risk: "Findings may not hold for frontier models"
+    future_experiment: >
+      Run the suite against one API frontier model (adapter already supports it).
+    status: mitigated
+    claim_refs: [C1, C2, C4, C5, C7, C8]
+
+  - id: E2
+    category: external
+    threat: "One prompting style / system prompt"
+    mitigation: "Single fixed system prompt documented in the adapter"
+    remaining_risk: "Injection susceptibility is prompt-sensitive"
+    future_experiment: "Prompt-sensitivity sweep: 2-3 system prompts, same scenarios"
+    status: mitigated
+    claim_refs: [C5, C8]
+
+  - id: E3
+    category: external
+    threat: "One decoding config (temp 0, seed 42)"
+    mitigation: "Chosen for reproducibility, disclosed"
+    remaining_risk: >
+      Stall fixed-point mechanism (C1) is specific to greedy decoding; temp>0
+      may differ.
+    future_experiment: "Repeat the stall experiment at temperature 0.7"
+    status: mitigated
+    claim_refs: [C1]
+
+  - id: E4
+    category: external
+    threat: "Mocked deterministic tools, not real APIs"
+    mitigation: "Deliberate — it is what makes runs $0 and reproducible"
+    remaining_risk: >
+      Real tools have latency, errors, richer outputs that change behavior.
+    future_experiment: >
+      Out of scope by design (POSITIONING anti-goal: no live tracing); note
+      the boundary explicitly.
+    status: mitigated
+    claim_refs: []
+
+  - id: E5
+    category: external
+    threat: "8 scenarios, one attack ontology"
+    mitigation: "Info-gain argued per scenario"
+    remaining_risk: "Attack space is far larger; coverage is a sample"
+    future_experiment: "Add multi-hop / delayed-instruction families (see DATASET_AUDIT)"
+    status: mitigated
+    claim_refs: [C4, C8]
+
+  - id: K1
+    category: construct
+    threat: "robustness blends safety and utility into one number"
+    mitigation: "Documented as debt #8; existence-proof framing; never the headline"
+    remaining_risk: "A reader may treat it as a pure safety score"
+    future_experiment: >
+      Split into safety-rate and completion-rate at v1.0; keep the composite
+      only as a summary.
+    status: mitigated
+    claim_refs: [C4]
+
+  - id: K2
+    category: construct
+    threat: "'Injection compliance' is proxied by 'called the target tool'"
+    mitigation: "Direct, low-proxy: the forbidden call is the harm"
+    remaining_risk: "A model could call the tool for a benign reason"
+    future_experiment: >
+      Already partly covered by the ih_fp_01_causality designed case; add a
+      benign-call-of-target control.
+    status: mitigated
+    claim_refs: [C8]
+
+  - id: K3
+    category: construct
+    threat: "Detector categories are the author's ontology"
+    mitigation: >
+      6 lenses, each with a distinct question; overlap is intentional and
+      documented.
+    remaining_risk: >
+      The ontology could miss a failure class (as it missed stall until v0.4).
+    future_experiment: >
+      Every sampled-real cohort is expected to break the taxonomy — that is
+      the corpus's job (immutable #11).
+    status: mitigated
+    claim_refs: []
+
+  - id: S1
+    category: statistical
+    threat: "n=8 scenarios cannot support ordinal rankings"
+    mitigation: "Existence-proof framing enforced repo-wide (C4)"
+    remaining_risk: "A reader may still infer a leaderboard"
+    future_experiment: >
+      Keep the scope sentence load-bearing; no per-scenario CI (would be theater).
+    status: mitigated
+    claim_refs: [C4]
+
+  - id: S2
+    category: statistical
+    threat: "Detector P/R rests on 68 single-annotator items"
+    mitigation: >
+      Bootstrap 95% CI published (C6): P [0.845, 1.000], R [0.790, 0.978].
+    remaining_risk: "Wide intervals; single labeler"
+    future_experiment: >
+      Inter-rater kappa on a ~20-item subset (blocked on a second annotator).
+    status: mitigated
+    claim_refs: [C6]
+    attrs:
+      annotators: 1
+      kappa: blocked_on_second_annotator
+
+  - id: S3
+    category: statistical
+    threat: "Class imbalance in the corpus"
+    mitigation: "Per-category counts reported, not just micro"
+    remaining_risk: "Micro can be dominated by frequent categories"
+    future_experiment: "Report macro alongside micro (cheap; add at next validate touch)"
+    status: mitigated
+    claim_refs: [C6]
+
+  - id: S4
+    category: statistical
+    threat: "Selection bias in the sampled-real cohort"
+    mitigation: "Seed-42 protocol documented (2/model + 3 pool)"
+    remaining_risk: "15 traces is a small draw"
+    future_experiment: "Grow the sampled-real cohort each benchmark cycle"
+    status: mitigated
+    claim_refs: [C1, C2]

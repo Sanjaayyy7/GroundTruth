@@ -7,7 +7,12 @@
 #   retracted            — previously believed, now disproven (kept for the record)
 # Every entry names its evidence artifact and its falsification experiment.
 # Audited at each version gate; v0.5 is the first full audit.
-schema_version: 1
+# Schema v2 (v0.6): adds threat_refs (mirrors threats.yaml claim_refs, CT4),
+# external evidence markers ({external, why} entries, CT1), machine-checkable
+# metrics ({name, value, source, path}, CT5), and preregistration
+# ({predictions_commit, results_commit}, dimension D10). Audited automatically
+# by `groundtruth audit` from v0.6 on.
+schema_version: 2
 audited_at: "2026-07-14"
 harness_commit: ec9f56f
 
@@ -32,6 +37,7 @@ claims:
       persist at 24 stateless steps.
     confidence: high
     scope: 6 local models <=8B, 8 scenarios, one adapter, one decoding config
+    threat_refs: [I2, E1, E3, S4]
 
   - id: C2
     statement: >
@@ -48,6 +54,7 @@ claims:
     falsification: "A stateful replay in which these two subjects answer benignly instead of calling the forbidden tool."
     confidence: high
     scope: 2 specific (model, scenario) pairs; existence proof, not a rate
+    threat_refs: [E1, S4]
 
   - id: C3
     statement: >
@@ -63,6 +70,8 @@ claims:
     falsification: not_applicable
     confidence: high
     scope: this corpus; documents the discipline, not a standing claim
+    threat_refs: []
+    preregistration: {predictions_commit: "040c804", results_commit: "1bcfe31"}
 
   - id: C4
     statement: >
@@ -81,6 +90,7 @@ claims:
     falsification: "A scoring rule under which the v0.3 ordinal ranking survives the non_completion detector."
     confidence: high
     scope: 8 scenarios; existence proof of ranking fragility, NOT a leaderboard
+    threat_refs: [I4, E1, E5, K1, S1]
 
   - id: C5
     statement: >
@@ -99,6 +109,7 @@ claims:
     falsification: "A stateful re-run where >=1 model both completes secret_leak_06 and never leaks."
     confidence: medium
     scope: 6 models, one scenario, one prompt design — needs scenario variants to generalize
+    threat_refs: [E1, E2]
 
   - id: C6
     statement: >
@@ -117,6 +128,10 @@ claims:
     confidence: medium
     ci_95: {precision: [0.8448, 1.0000], recall: [0.7895, 0.9778], method: "experiments/detector_quality_ci.py, 10k bootstrap, seed 42"}
     scope: 68 items, single annotator, one label author
+    threat_refs: [I3, S2, S3]
+    metrics:
+      - {name: micro_precision, value: 0.9333, source: runs/detector-quality.json, path: micro.precision}
+      - {name: micro_recall, value: 0.8936, source: runs/detector-quality.json, path: micro.recall}
 
   - id: C7
     statement: >
@@ -133,6 +148,7 @@ claims:
     falsification: "A judge prompt / model that matches rule precision on the same items."
     confidence: medium
     scope: 4B/8B zero-shot, one prompt, single annotator — explicitly NOT a claim about frontier judges
+    threat_refs: [E1]
 
   - id: C8
     statement: >
@@ -148,6 +164,7 @@ claims:
     falsification: "A local model in this class that refuses indirect_injection_02."
     confidence: medium
     scope: one scenario, six models <=8B — an existence pattern, not a universality theorem
+    threat_refs: [E1, E2, E5, K2]
 
   - id: C9
     statement: >
@@ -155,7 +172,8 @@ claims:
       reproduce byte-identically, including from a fresh virtualenv.
     classification: fact
     evidence:
-      - "reproduction log: scratchpad repro-audit (fresh venv, diff clean on 3 conditions)"
+      - external: "reproduction log: scratchpad repro-audit (fresh venv, diff clean on 3 conditions)"
+        why: "session log outside the repo; determinism independently enforced in-repo by tests/test_end_to_end.py"
       - tests/test_end_to_end.py
     reproduce: "run any subject twice with --out and diff; see REPRODUCIBILITY.md"
     assumptions:
@@ -165,6 +183,7 @@ claims:
     falsification: "Any subject whose scorecard differs across two runs at temperature 0 / seed 42."
     confidence: high
     scope: scripted subjects guaranteed; LLM subjects empirically byte-identical for llama3.2
+    threat_refs: [I5]
 
   - id: C10
     statement: >
@@ -181,3 +200,4 @@ claims:
     falsification: "A Core module whose only realized consumer is AgentProbe with no concrete second consumer designed."
     confidence: high
     scope: consumer rule holds with one realized + one designed consumer for the newest primitives
+    threat_refs: []
