@@ -1,0 +1,227 @@
+{
+  "contracts": {
+    "definitions": {
+      "CT1": "every claim's evidence resolves in-repo or is marked external with why",
+      "CT10": "audit outputs are byte-identical across runs at the same commit (enforced by tests/test_meta_manifest.py and tests/test_meta_assurance.py)",
+      "CT2": "every non-retracted claim declares falsification and scope",
+      "CT3": "classification in vocabulary; facts have evidence + working reproduce",
+      "CT4": "claim<->threat references are bidirectional and resolve",
+      "CT5": "every quoted metric matches its source artifact",
+      "CT6": "harness commit exists; pyproject/README/manifest versions agree",
+      "CT7": "threats carry mitigation + future experiment; resolved needs evidence",
+      "CT8": "prose and register threat ID sets are identical",
+      "CT9": "claims carry confidence; non-facts name their remaining confound"
+    },
+    "findings": [],
+    "holds": true
+  },
+  "dimensions": {
+    "D01_determinism": {
+      "status": "documented",
+      "value": [
+        {
+          "classification": "fact",
+          "confidence": "high",
+          "id": "claim:C9"
+        }
+      ]
+    },
+    "D02_reproducibility": {
+      "status": "documented",
+      "value": [
+        {
+          "classification": "fact",
+          "confidence": "high",
+          "id": "claim:C9"
+        }
+      ]
+    },
+    "D03_detector_quality": {
+      "status": "machine",
+      "value": [
+        {
+          "ci_95": {
+            "method": "experiments/detector_quality_ci.py, 10k bootstrap, seed 42",
+            "precision": [
+              0.8448,
+              1.0
+            ],
+            "recall": [
+              0.7895,
+              0.9778
+            ]
+          },
+          "classification": "fact",
+          "confidence": "medium",
+          "id": "claim:C6",
+          "metrics": [
+            {
+              "actual": 0.9333,
+              "name": "micro_precision",
+              "source": "runs/detector-quality.json",
+              "value": 0.9333
+            },
+            {
+              "actual": 0.8936,
+              "name": "micro_recall",
+              "source": "runs/detector-quality.json",
+              "value": 0.8936
+            }
+          ]
+        }
+      ]
+    },
+    "D04_label_quality": {
+      "status": "machine",
+      "value": [
+        {
+          "attrs": {
+            "annotators": 1,
+            "kappa": "blocked_on_second_annotator"
+          },
+          "id": "threat:S2",
+          "status": "mitigated"
+        }
+      ]
+    },
+    "D05_dataset_discrimination": {
+      "status": "documented",
+      "value": [
+        {
+          "id": "threat:E5",
+          "status": "mitigated"
+        }
+      ]
+    },
+    "D06_threat_coverage": {
+      "status": "machine",
+      "value": {
+        "by_category": {
+          "construct": 3,
+          "external": 5,
+          "internal": 5,
+          "statistical": 4
+        },
+        "by_status": {
+          "mitigated": 16,
+          "resolved": 1
+        }
+      }
+    },
+    "D07_statistical_support": {
+      "status": "machine",
+      "value": [
+        {
+          "ci_95": {
+            "method": "experiments/detector_quality_ci.py, 10k bootstrap, seed 42",
+            "precision": [
+              0.8448,
+              1.0
+            ],
+            "recall": [
+              0.7895,
+              0.9778
+            ]
+          },
+          "classification": "fact",
+          "confidence": "medium",
+          "id": "claim:C6",
+          "metrics": [
+            {
+              "actual": 0.9333,
+              "name": "micro_precision",
+              "source": "runs/detector-quality.json",
+              "value": 0.9333
+            },
+            {
+              "actual": 0.8936,
+              "name": "micro_recall",
+              "source": "runs/detector-quality.json",
+              "value": 0.8936
+            }
+          ]
+        }
+      ]
+    },
+    "D08_claim_traceability": {
+      "status": "machine",
+      "value": {
+        "total": 10,
+        "traced": 10
+      }
+    },
+    "D09_version_stability": {
+      "status": "machine",
+      "value": {
+        "exists_in_git": true,
+        "pyproject_version": "0.4.0",
+        "readme_version": "0.4"
+      }
+    },
+    "D10_experimental_rigor": {
+      "status": "machine",
+      "value": [
+        "claim:C3"
+      ]
+    }
+  },
+  "evaluation": {
+    "harness_commit": "ec9f56f",
+    "name": "groundtruth",
+    "version": "0.4.0"
+  },
+  "graph": {
+    "edges": 63,
+    "nodes": 58,
+    "nodes_by_kind": {
+      "artifact": 20,
+      "claim": 10,
+      "experiment": 10,
+      "threat": 17,
+      "version": 1
+    }
+  },
+  "manifest_schema_version": 1,
+  "no_composite_score": "deliberate \u2014 a scalar would exceed the evidence (see docs/EVALUATION_QUALITY.md)",
+  "registers": {
+    "claims": {
+      "by_classification": {
+        "fact": 6,
+        "retracted": 1,
+        "supported_observation": 3
+      },
+      "total": 10
+    },
+    "threats": {
+      "by_category": {
+        "construct": 3,
+        "external": 5,
+        "internal": 5,
+        "statistical": 4
+      },
+      "by_status": {
+        "mitigated": 16,
+        "resolved": 1
+      },
+      "total": 17
+    }
+  },
+  "unresolved_threats": [
+    "E1",
+    "E2",
+    "E3",
+    "E4",
+    "E5",
+    "I1",
+    "I3",
+    "I4",
+    "I5",
+    "K1",
+    "K2",
+    "K3",
+    "S1",
+    "S2",
+    "S3",
+    "S4"
+  ]
+}

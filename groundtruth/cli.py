@@ -104,6 +104,23 @@ def main(argv: list[str] | None = None) -> int:
         "--update", action="store_true", help="write the current scorecard as the baseline"
     )
 
+    aud = sub.add_parser(
+        "audit",
+        help="audit evaluation evidence: contracts, quality manifest, assurance report",
+    )
+    aud.add_argument("--root", default=None, help="evaluation root (default: this repo)")
+    aud.add_argument("--claims", default=None, help="claims register path")
+    aud.add_argument("--threats", default=None, help="threats register path")
+    aud.add_argument(
+        "--out", default=None, help="manifest path (default <root>/runs/quality-manifest.json)"
+    )
+    aud.add_argument(
+        "--report",
+        default=None,
+        help="assurance report path (default <root>/runs/assurance-report.md)",
+    )
+    aud.add_argument("--json", action="store_true", help="print the manifest JSON to stdout")
+
     args = parser.parse_args(argv)
     if args.cmd == "validate":
         return _validate(args)
@@ -111,6 +128,8 @@ def main(argv: list[str] | None = None) -> int:
         return _ci(args)
     if args.cmd == "report":
         return _report(args)
+    if args.cmd == "audit":
+        return _audit(args)
 
     suite = SUITES[args.suite]
     cases = load_cases(args.scenarios or suite["scenarios"])
@@ -227,6 +246,54 @@ def _report(args: argparse.Namespace) -> int:
     out.write_text(render_html(cards, quality=quality))
     print(f"report written: {out} ({len(cards)} subjects)")
     return 0
+
+
+def _audit(args: argparse.Namespace) -> int:
+    from .meta.assurance import render_assurance
+    from .meta.contracts import run_contracts
+    from .meta.graph import build_graph
+    from .meta.loader import RegisterError, load_evidence
+    from .meta.manifest import build_manifest, render_manifest
+
+    root = Path(args.root) if args.root else _REPO_ROOT
+    try:
+        nodes = load_evidence(
+            root,
+            claims_path=Path(args.claims) if args.claims else None,
+            threats_path=Path(args.threats) if args.threats else None,
+        )
+    except RegisterError as exc:
+        print(f"[audit] {exc}", file=sys.stderr)
+        return 2
+
+    graph = build_graph(nodes)
+    findings = run_contracts(graph)
+    manifest = build_manifest(graph, findings)
+
+    out = Path(args.out) if args.out else root / "runs/quality-manifest.json"
+    report = Path(args.report) if args.report else root / "runs/assurance-report.md"
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(render_manifest(manifest))
+    report.parent.mkdir(parents=True, exist_ok=True)
+    report.write_text(render_assurance(graph, findings))
+
+    if args.json:
+        print(render_manifest(manifest), end="")
+    else:
+        n = manifest["graph"]
+        print(
+            f"\n  Groundtruth audit · {manifest['evaluation']['name']}"
+            f" @ {manifest['evaluation']['harness_commit']}"
+        )
+        print(f"  evidence graph: {n['nodes']} nodes / {n['edges']} edges")
+        if findings:
+            print(f"  CONTRACT FINDINGS ({len(findings)}):")
+            for f in findings:
+                print(f"    x [{f.contract_id}] {f.node_id}: {f.summary}")
+        else:
+            print("  all contracts hold")
+        print(f"  manifest: {out}\n  assurance: {report}\n")
+    return 1 if findings else 0
 
 
 def _validate(args: argparse.Namespace) -> int:

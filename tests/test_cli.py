@@ -105,3 +105,82 @@ def test_stateful_flag_rejects_scripted_agents(capsys):
 
     assert rc == 2
     assert "stateful" in capsys.readouterr().err.lower()
+
+
+# --- audit ------------------------------------------------------------------
+
+def _write_green_evaluation(root):
+    """A minimal on-disk evaluation whose audit passes every contract."""
+    import subprocess
+
+    (root / "docs").mkdir()
+    (root / "data").mkdir()
+    (root / "scripts").mkdir()
+    subprocess.run(["git", "init", "-q"], cwd=root, check=True)
+    subprocess.run(["git", "-c", "user.email=t@t", "-c", "user.name=t",
+                    "commit", "-q", "--allow-empty", "-m", "x"], cwd=root, check=True)
+    sha = subprocess.run(["git", "rev-parse", "HEAD"], cwd=root,
+                         capture_output=True, text=True, check=True).stdout.strip()
+    (root / "docs/claims.yaml").write_text(f"""\
+schema_version: 2
+harness_commit: {sha}
+claims:
+  - id: C1
+    statement: "example claim"
+    classification: fact
+    evidence:
+      - data/real.txt
+    reproduce: "python scripts/run.py"
+    falsification: "counterexample"
+    confidence: high
+    scope: "fixture"
+    threat_refs: [T1]
+""")
+    (root / "docs/threats.yaml").write_text("""\
+schema_version: 1
+threats:
+  - id: T1
+    category: internal
+    threat: "example threat"
+    mitigation: "documented"
+    remaining_risk: "some"
+    future_experiment: "run more"
+    status: mitigated
+    claim_refs: [C1]
+""")
+    (root / "docs/THREATS_TO_VALIDITY.md").write_text("| T1 | x |\n")
+    (root / "data/real.txt").write_text("evidence")
+    (root / "scripts/run.py").write_text("pass")
+    (root / "pyproject.toml").write_text('[project]\nversion = "0.6.0"\n')
+    (root / "README.md").write_text("| X | y | **v0.6 — shipping** |\n")
+
+
+def test_audit_green_on_fixture(tmp_path, capsys):
+    _write_green_evaluation(tmp_path)
+
+    rc = main(["audit", "--root", str(tmp_path),
+               "--out", str(tmp_path / "m.json"), "--report", str(tmp_path / "a.md")])
+
+    assert rc == 0
+    assert (tmp_path / "m.json").exists() and (tmp_path / "a.md").exists()
+    assert "all contracts hold" in capsys.readouterr().out
+
+
+def test_audit_finding_returns_1(tmp_path):
+    _write_green_evaluation(tmp_path)
+    (tmp_path / "data/real.txt").unlink()  # break CT1
+
+    rc = main(["audit", "--root", str(tmp_path),
+               "--out", str(tmp_path / "m.json"), "--report", str(tmp_path / "a.md")])
+
+    assert rc == 1
+
+
+def test_audit_malformed_register_returns_2(tmp_path, capsys):
+    _write_green_evaluation(tmp_path)
+    (tmp_path / "docs/claims.yaml").write_text("claims: 3\n")
+
+    rc = main(["audit", "--root", str(tmp_path)])
+
+    assert rc == 2
+    assert "claims.yaml" in capsys.readouterr().err

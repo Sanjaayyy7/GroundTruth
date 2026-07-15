@@ -129,6 +129,7 @@ claims:
     ci_95: {precision: [0.8448, 1.0000], recall: [0.7895, 0.9778], method: "experiments/detector_quality_ci.py, 10k bootstrap, seed 42"}
     scope: 68 items, single annotator, one label author
     threat_refs: [I3, S2, S3]
+    dimensions: [detector_quality, statistical_support]
     metrics:
       - {name: micro_precision, value: 0.9333, source: runs/detector-quality.json, path: micro.precision}
       - {name: micro_recall, value: 0.8936, source: runs/detector-quality.json, path: micro.recall}
@@ -184,6 +185,7 @@ claims:
     confidence: high
     scope: scripted subjects guaranteed; LLM subjects empirically byte-identical for llama3.2
     threat_refs: [I5]
+    dimensions: [determinism, reproducibility]
 
   - id: C10
     statement: >

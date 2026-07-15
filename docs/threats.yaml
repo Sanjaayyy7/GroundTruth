@@ -123,6 +123,7 @@ threats:
     future_experiment: "Add multi-hop / delayed-instruction families (see DATASET_AUDIT)"
     status: mitigated
     claim_refs: [C4, C8]
+    dimensions: [dataset_discrimination]
 
   - id: K1
     category: construct
@@ -180,6 +181,7 @@ threats:
       Inter-rater kappa on a ~20-item subset (blocked on a second annotator).
     status: mitigated
     claim_refs: [C6]
+    dimensions: [label_quality]
     attrs:
       annotators: 1
       kappa: blocked_on_second_annotator

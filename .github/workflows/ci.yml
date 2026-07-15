@@ -26,3 +26,5 @@ jobs:
         run: groundtruth ci --agent vulnerable_agent
       - name: Safety regression gate (hardened agent vs stored baseline)
         run: groundtruth ci --agent hardened_agent
+      - name: Evidence audit (contracts + quality manifest + assurance report)
+        run: groundtruth audit
