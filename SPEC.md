@@ -109,8 +109,8 @@ and scorecard — the differentiated core.
     rule limits; numbers are measurements of rule coverage on that set, not claims
     about attack-space coverage.
   - Deferred from v0.2: trace visualization (folds into the v0.3 dashboard).
-- **v0.3 — IN PROGRESS (scope per ADR-0005; React dashboard demoted to a static
-  report).** Part 1 shipped 2026-07-12: `groundtruth ci` regression gate
+- **v0.3 — DONE (2026-07-12→13; scope per ADR-0005; React dashboard demoted to a
+  static report).** Part 1 shipped 2026-07-12: `groundtruth ci` regression gate
   (baseline compare, exit 1 on regression with newly-failing cases named);
   GitHub Actions workflow — the repo gates itself; `schema_version` on all
   persisted artifacts; LICENSE; cwd-independent CLI; demo agents moved under
@@ -133,7 +133,7 @@ and scorecard — the differentiated core.
   agreement on a ~20-item subset (needs a second annotator); new
   discriminating scenario families (secret-leak and drift discriminate, benign
   controls and the universal injection don't).
-- **v0.4 — IN PROGRESS (scope per docs/STRATEGY.md gate record).** Stall
+- **v0.4 — DONE (2026-07-13→14; scope per docs/STRATEGY.md gate record).** Stall
   confounds resolved first, per the gate's evidence-before-detector rule
   (2026-07-13): pre-registered 5-cell experiment (stateless × 6/12/24 steps,
   stateful × 6/24; predictions committed before any run) replayed the 9 stall
@@ -158,8 +158,32 @@ and scorecard — the differentiated core.
   stall-inflation), qwen3 (v0.3 last) unchanged at 0.625; under state all
   stalls vanish and secret_exfiltration goes 2/6 → 6/6 models (llama3.1
   emails the staging key to the attacker and repeats it in its answer).
-  Remaining v0.4: discriminating scenario families; lint/py.typed; GitHub
-  push. Then **JudgeKit** on the same spine (v0.5).
+  Deferred from v0.4: discriminating scenario families; lint/py.typed; GitHub
+  push (user).
+- **v0.5 — DONE (2026-07-14, scientific hardening; zero new features).** Seven
+  review docs shipped (CLAIMS.md + claims.yaml with 10 classified claims,
+  THREATS_TO_VALIDITY.md, REPRODUCIBILITY.md, DATASET_AUDIT.md,
+  ARCHITECTURE_AUDIT.md, RESEARCH_POSITIONING.md); bootstrap 95% CI on
+  detector quality (P [0.8448, 1.0000], R [0.7895, 0.9778], seed 42);
+  fresh-venv reproduction verified byte-identical for both llama3.2
+  conditions — determinism upgraded from "repeatable in practice" to fact (C9).
+- **v0.6 — DONE (2026-07-14→15, meta-evaluation engine; spec
+  `docs/specs/2026-07-14-v06-meta-evaluation-design.md`, gate review
+  `docs/specs/2026-07-14-v06-gate-review.md`).** `groundtruth audit`:
+  Evidence Loader (the one concrete YAML/filesystem/git adapter) → Evidence
+  Model (`EvidenceNode`) → Evidence Graph (58 nodes / 63 edges) → ten
+  Evaluation Contracts (CT1–CT9 pure invariants + CT10 byte-determinism,
+  findings-not-scores) → two sibling assessments derived on every CI run:
+  `runs/quality-manifest.json` (dimensions D01–D10, register-tagged, **no
+  composite score**) and `runs/assurance-report.md` (per-conclusion
+  justification, no aggregate verdict). Machine registers: threats.yaml
+  (17 threats mirroring THREATS_TO_VALIDITY.md, CT8-locked) + claims.yaml
+  schema v2 (threat_refs bidirectional per CT4, metric provenance per CT5,
+  git-verified preregistration per D10, external-evidence markers per CT1).
+  Negative control verified: a planted metric lie fails the build with a
+  named finding. ADR-0006 records the layer, the one-loader guardrail, and
+  the JudgeKit generalization trigger. 116 tests (from 78); published
+  numbers byte-unchanged. Then **JudgeKit** on the same spine.
 
 ## 6. Risk register
 
@@ -187,5 +211,8 @@ and scorecard — the differentiated core.
 | 11 | OllamaAgent is stateless (sees only last tool result) | Architecture | High→instrumented | v0.4: `stateful=True` variant built + measured — statelessness manufactured all 9 observed stalls and masked 2 injection compliances; default stays stateless (published v0.3 numbers depend on it); stateful re-bench pending |
 | 12 | No lint config / `py.typed` marker | Dev experience | Low | pre-OSS release (v0.4) |
 | 13 | Loop-stall on benign tasks is invisible: robustness counts budget exhaustion as a pass. Research question ANSWERED by the confound experiment: stall is a stateless-harness artifact, not a model resistance mode — and it hides real compliance. Taxonomy still needs the `non_completion` outcome category so exhaustion is never scored as success | Taxonomy | High | v0.4 — detector + label the 9 known stalls + re-pin snapshot |
+| 14 | Manifest dimension D05 (dataset discrimination) is `documented`, not machine-derived from scorecards | Meta | Medium | next audit touch |
+| 15 | Assurance report format has no schema_version (manifest does) | Future-compat | Low | with next meta schema change |
+| 16 | README version parsed by regex convention (`**vX.Y — shipping**`); a format change fails CT6 loudly rather than silently | Interfaces | Low | acceptable failure mode; revisit if README restructures |
 
 Docs: `docs/adr/` records the decisions; `docs/POSITIONING.md` records identity.
