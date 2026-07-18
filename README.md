@@ -307,6 +307,9 @@ over-refusal is measured on the same suite.
 ```
 
 Every core primitive exists because a future product needs it — see `SPEC.md`.
+How the design got here — the reversals, rejected directions, and the
+evidence that forced each decision — is recorded in
+[docs/EVOLUTION.md](docs/EVOLUTION.md).
 
 ## License
 
