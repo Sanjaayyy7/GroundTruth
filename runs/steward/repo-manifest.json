@@ -25,7 +25,7 @@
       "role": "doc"
     },
     {
-      "bytes": 16148,
+      "bytes": 16116,
       "lifecycle": "living",
       "path": "SPEC.md",
       "role": "doc"
@@ -1822,7 +1822,7 @@
       "files": 15
     },
     "doc": {
-      "bytes": 93534,
+      "bytes": 93502,
       "files": 11
     },
     "evidence": {
@@ -1859,7 +1859,7 @@
     }
   },
   "total": {
-    "bytes": 1176586,
+    "bytes": 1176554,
     "files": 299
   }
 }

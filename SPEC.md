@@ -240,7 +240,7 @@ nowhere in-repo):
 | v0.5 | fa68ede |
 | v0.6 | d6b3ba4 |
 | v0.7 | a68c1c7 |
-| v0.8 | in progress — recorded at gate review |
+| v0.8 | f4fbb6e |
 
 ## 6. Risk register
 
