@@ -217,6 +217,12 @@
       "role": "spec"
     },
     {
+      "bytes": 4863,
+      "lifecycle": "historical",
+      "path": "docs/specs/2026-07-18-p10-external-validation-protocol.md",
+      "role": "spec"
+    },
+    {
       "bytes": 9521,
       "lifecycle": "historical",
       "path": "docs/specs/2026-07-18-v08-steward-validation-report.md",
@@ -961,7 +967,7 @@
       "role": "evidence"
     },
     {
-      "bytes": 48267,
+      "bytes": 48430,
       "lifecycle": "derived",
       "path": "runs/steward/repo-manifest.json",
       "role": "evidence"
@@ -1826,7 +1832,7 @@
       "files": 11
     },
     "evidence": {
-      "bytes": 543395,
+      "bytes": 543558,
       "files": 174
     },
     "experiment": {
@@ -1850,8 +1856,8 @@
       "files": 3
     },
     "spec": {
-      "bytes": 112659,
-      "files": 10
+      "bytes": 117522,
+      "files": 11
     },
     "test": {
       "bytes": 85739,
@@ -1859,7 +1865,7 @@
     }
   },
   "total": {
-    "bytes": 1176554,
-    "files": 299
+    "bytes": 1181580,
+    "files": 300
   }
 }
