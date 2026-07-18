@@ -235,6 +235,12 @@
       "role": "spec"
     },
     {
+      "bytes": 4275,
+      "lifecycle": "historical",
+      "path": "docs/specs/2026-07-18-p11-public-baseline-report.md",
+      "role": "spec"
+    },
+    {
       "bytes": 8197,
       "lifecycle": "historical",
       "path": "docs/specs/2026-07-18-public-release-readiness.md",
@@ -985,7 +991,7 @@
       "role": "evidence"
     },
     {
-      "bytes": 48864,
+      "bytes": 49021,
       "lifecycle": "derived",
       "path": "runs/steward/repo-manifest.json",
       "role": "evidence"
@@ -1850,7 +1856,7 @@
       "files": 12
     },
     "evidence": {
-      "bytes": 543991,
+      "bytes": 544148,
       "files": 174
     },
     "experiment": {
@@ -1874,8 +1880,8 @@
       "files": 3
     },
     "spec": {
-      "bytes": 138717,
-      "files": 14
+      "bytes": 142992,
+      "files": 15
     },
     "test": {
       "bytes": 86789,
@@ -1883,7 +1889,7 @@
     }
   },
   "total": {
-    "bytes": 1141047,
-    "files": 303
+    "bytes": 1145479,
+    "files": 304
   }
 }
