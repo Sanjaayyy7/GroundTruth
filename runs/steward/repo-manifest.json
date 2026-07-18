@@ -1,7 +1,7 @@
 {
   "files": [
     {
-      "bytes": 1419,
+      "bytes": 1693,
       "lifecycle": "living",
       "path": ".github/workflows/ci.yml",
       "role": "ci"
@@ -145,7 +145,7 @@
       "role": "register"
     },
     {
-      "bytes": 4751,
+      "bytes": 4815,
       "lifecycle": "living",
       "path": "docs/debt.yaml",
       "role": "register"
@@ -1796,7 +1796,7 @@
       "files": 8
     },
     "ci": {
-      "bytes": 1419,
+      "bytes": 1693,
       "files": 1
     },
     "code": {
@@ -1840,7 +1840,7 @@
       "files": 2
     },
     "register": {
-      "bytes": 24522,
+      "bytes": 24586,
       "files": 3
     },
     "spec": {
@@ -1853,7 +1853,7 @@
     }
   },
   "total": {
-    "bytes": 1163473,
+    "bytes": 1163811,
     "files": 298
   }
 }

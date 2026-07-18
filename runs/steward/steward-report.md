@@ -22,7 +22,7 @@ review trigger: >=5 active exemptions, or any exemption older than
 | role | files | bytes |
 |---|---|---|
 | adr | 8 | 20273 |
-| ci | 1 | 1419 |
+| ci | 1 | 1693 |
 | code | 31 | 116609 |
 | config | 2 | 581 |
 | consumer | 10 | 14403 |
@@ -33,8 +33,8 @@ review trigger: >=5 active exemptions, or any exemption older than
 | law | 1 | 8059 |
 | legal | 1 | 1063 |
 | plan | 2 | 74845 |
-| register | 3 | 24522 |
+| register | 3 | 24586 |
 | spec | 9 | 103138 |
 | test | 26 | 85739 |
 
-total: 298 files, 1163473 bytes
+total: 298 files, 1163811 bytes

@@ -34,3 +34,7 @@ jobs:
         run: groundtruth audit
       - name: Evidence audit of the second consumer (v0.7 external validation)
         run: groundtruth audit --root examples/minijudge --name minijudge
+      - name: Repository steward (Constitution RC1-RC8; blocking, Law 10 exits only)
+        run: groundtruth steward
+      - name: Committed evidence is byte-fresh (debt 17 — a stale manifest fails loudly)
+        run: git diff --exit-code runs/ examples/minijudge/runs/
