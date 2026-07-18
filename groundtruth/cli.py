@@ -127,7 +127,19 @@ def main(argv: list[str] | None = None) -> int:
     )
     aud.add_argument("--json", action="store_true", help="print the manifest JSON to stdout")
 
+    ste = sub.add_parser(
+        "steward",
+        help="audit the repository against the Constitution (RC1-RC8, advisory)",
+    )
+    ste.add_argument("--root", default=None, help="repository root (default: this repo)")
+    ste.add_argument(
+        "--out", default=None, help="artifact directory (default <root>/runs/steward)"
+    )
+    ste.add_argument("--json", action="store_true", help="print the manifest JSON to stdout")
+
     args = parser.parse_args(argv)
+    if args.cmd == "steward":
+        return _steward(args)
     if args.cmd == "validate":
         return _validate(args)
     if args.cmd == "ci":
@@ -300,6 +312,57 @@ def _audit(args: argparse.Namespace) -> int:
             print("  all contracts hold")
         print(f"  manifest: {out}\n  assurance: {report}\n")
     return 1 if findings else 0
+
+
+def _steward(args: argparse.Namespace) -> int:
+    from .steward.checks import run_checks
+    from .steward.inventory import build_inventory
+    from .steward.loader import (
+        DeclarationError,
+        git_blob_sizes,
+        git_index,
+        load_constitution,
+        load_debt,
+    )
+    from .steward.report import render_manifest, render_report
+
+    root = Path(args.root) if args.root else _REPO_ROOT
+    try:
+        decls = load_constitution(root / "docs/CONSTITUTION.md")
+        debt = load_debt(root / "docs/debt.yaml")
+        index = git_index(root)
+        sizes = git_blob_sizes(root)
+    except DeclarationError as exc:
+        print(f"[steward] {exc}", file=sys.stderr)
+        return 2
+
+    inventory = build_inventory(index, decls.roles, sizes)
+    active, exempted = run_checks(root, decls, debt, index)
+
+    out_dir = Path(args.out) if args.out else root / "runs/steward"
+    out_dir.mkdir(parents=True, exist_ok=True)
+    (out_dir / "repo-manifest.json").write_text(render_manifest(inventory))
+    (out_dir / "steward-report.md").write_text(
+        render_report(active, exempted, decls, inventory)
+    )
+
+    if args.json:
+        print(render_manifest(inventory), end="")
+    else:
+        total = inventory["total"]
+        print(f"\n  Groundtruth steward · {total['files']} tracked files")
+        if active:
+            print(f"  REPOSITORY FINDINGS ({len(active)}):")
+            for f in active:
+                loc = f"{f.path}:{f.line}" if f.line else f.path
+                print(f"    x [{f.check_id}] {loc}: {f.summary}")
+        else:
+            print("  all repository contracts hold")
+        if decls.exemptions:
+            print(f"  active exemptions: {len(decls.exemptions)} ({len(exempted)} findings exempted)")
+        print(f"  manifest: {out_dir / 'repo-manifest.json'}")
+        print(f"  report: {out_dir / 'steward-report.md'}\n")
+    return 1 if active else 0
 
 
 def _validate(args: argparse.Namespace) -> int:

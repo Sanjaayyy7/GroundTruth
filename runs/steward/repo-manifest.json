@@ -1,0 +1,1859 @@
+{
+  "files": [
+    {
+      "bytes": 1419,
+      "lifecycle": "living",
+      "path": ".github/workflows/ci.yml",
+      "role": "ci"
+    },
+    {
+      "bytes": 77,
+      "lifecycle": "living",
+      "path": ".gitignore",
+      "role": "config"
+    },
+    {
+      "bytes": 1063,
+      "lifecycle": "living",
+      "path": "LICENSE",
+      "role": "legal"
+    },
+    {
+      "bytes": 15419,
+      "lifecycle": "living",
+      "path": "README.md",
+      "role": "doc"
+    },
+    {
+      "bytes": 15484,
+      "lifecycle": "living",
+      "path": "SPEC.md",
+      "role": "doc"
+    },
+    {
+      "bytes": 4534,
+      "lifecycle": "living",
+      "path": "docs/ARCHITECTURE_AUDIT.md",
+      "role": "doc"
+    },
+    {
+      "bytes": 6045,
+      "lifecycle": "living",
+      "path": "docs/CLAIMS.md",
+      "role": "doc"
+    },
+    {
+      "bytes": 8059,
+      "lifecycle": "living",
+      "path": "docs/CONSTITUTION.md",
+      "role": "law"
+    },
+    {
+      "bytes": 4642,
+      "lifecycle": "living",
+      "path": "docs/DATASET_AUDIT.md",
+      "role": "doc"
+    },
+    {
+      "bytes": 6722,
+      "lifecycle": "living",
+      "path": "docs/EVALUATION_QUALITY.md",
+      "role": "doc"
+    },
+    {
+      "bytes": 3016,
+      "lifecycle": "living",
+      "path": "docs/POSITIONING.md",
+      "role": "doc"
+    },
+    {
+      "bytes": 4812,
+      "lifecycle": "living",
+      "path": "docs/REPRODUCIBILITY.md",
+      "role": "doc"
+    },
+    {
+      "bytes": 7171,
+      "lifecycle": "living",
+      "path": "docs/RESEARCH_POSITIONING.md",
+      "role": "doc"
+    },
+    {
+      "bytes": 16955,
+      "lifecycle": "living",
+      "path": "docs/STRATEGY.md",
+      "role": "doc"
+    },
+    {
+      "bytes": 6749,
+      "lifecycle": "living",
+      "path": "docs/THREATS_TO_VALIDITY.md",
+      "role": "doc"
+    },
+    {
+      "bytes": 1168,
+      "lifecycle": "living",
+      "path": "docs/adr/0001-platform-spine-with-consumer-rule.md",
+      "role": "adr"
+    },
+    {
+      "bytes": 1206,
+      "lifecycle": "living",
+      "path": "docs/adr/0002-explanatory-failure-taxonomy.md",
+      "role": "adr"
+    },
+    {
+      "bytes": 1253,
+      "lifecycle": "living",
+      "path": "docs/adr/0003-deterministic-offline-evaluation.md",
+      "role": "adr"
+    },
+    {
+      "bytes": 1253,
+      "lifecycle": "living",
+      "path": "docs/adr/0004-measured-detector-quality.md",
+      "role": "adr"
+    },
+    {
+      "bytes": 1681,
+      "lifecycle": "living",
+      "path": "docs/adr/0005-v03-gate-decision.md",
+      "role": "adr"
+    },
+    {
+      "bytes": 4309,
+      "lifecycle": "living",
+      "path": "docs/adr/0006-meta-evaluation-layer.md",
+      "role": "adr"
+    },
+    {
+      "bytes": 4477,
+      "lifecycle": "living",
+      "path": "docs/adr/0007-second-consumer-validation.md",
+      "role": "adr"
+    },
+    {
+      "bytes": 4926,
+      "lifecycle": "living",
+      "path": "docs/adr/0008-repository-stewardship-advisory-layer.md",
+      "role": "adr"
+    },
+    {
+      "bytes": 11263,
+      "lifecycle": "living",
+      "path": "docs/claims.yaml",
+      "role": "register"
+    },
+    {
+      "bytes": 4751,
+      "lifecycle": "living",
+      "path": "docs/debt.yaml",
+      "role": "register"
+    },
+    {
+      "bytes": 70543,
+      "lifecycle": "historical",
+      "path": "docs/plans/2026-07-14-v06-meta-evaluation-engine.md",
+      "role": "plan"
+    },
+    {
+      "bytes": 4302,
+      "lifecycle": "historical",
+      "path": "docs/plans/2026-07-15-v08-platform-engineering-backlog.md",
+      "role": "plan"
+    },
+    {
+      "bytes": 6765,
+      "lifecycle": "historical",
+      "path": "docs/specs/2026-07-14-v06-gate-review.md",
+      "role": "spec"
+    },
+    {
+      "bytes": 14820,
+      "lifecycle": "historical",
+      "path": "docs/specs/2026-07-14-v06-meta-evaluation-design.md",
+      "role": "spec"
+    },
+    {
+      "bytes": 7951,
+      "lifecycle": "historical",
+      "path": "docs/specs/2026-07-15-v07-architecture-validation.md",
+      "role": "spec"
+    },
+    {
+      "bytes": 7989,
+      "lifecycle": "historical",
+      "path": "docs/specs/2026-07-15-v07-external-validation-protocol.md",
+      "role": "spec"
+    },
+    {
+      "bytes": 15824,
+      "lifecycle": "historical",
+      "path": "docs/specs/2026-07-16-v08-architecture-review-report.md",
+      "role": "spec"
+    },
+    {
+      "bytes": 4937,
+      "lifecycle": "historical",
+      "path": "docs/specs/2026-07-16-v08-implementation-readiness-review.md",
+      "role": "spec"
+    },
+    {
+      "bytes": 9274,
+      "lifecycle": "historical",
+      "path": "docs/specs/2026-07-16-v08-stewardship-architecture.md",
+      "role": "spec"
+    },
+    {
+      "bytes": 24321,
+      "lifecycle": "historical",
+      "path": "docs/specs/2026-07-17-v08-governance-tribunal.md",
+      "role": "spec"
+    },
+    {
+      "bytes": 11257,
+      "lifecycle": "historical",
+      "path": "docs/specs/2026-07-17-v08-stewardship-protocol.md",
+      "role": "spec"
+    },
+    {
+      "bytes": 8508,
+      "lifecycle": "living",
+      "path": "docs/threats.yaml",
+      "role": "register"
+    },
+    {
+      "bytes": 1529,
+      "lifecycle": "frozen",
+      "path": "examples/minijudge/README.md",
+      "role": "consumer"
+    },
+    {
+      "bytes": 1238,
+      "lifecycle": "frozen",
+      "path": "examples/minijudge/data/labeled.json",
+      "role": "consumer"
+    },
+    {
+      "bytes": 576,
+      "lifecycle": "frozen",
+      "path": "examples/minijudge/docs/THREATS_TO_VALIDITY.md",
+      "role": "consumer"
+    },
+    {
+      "bytes": 2002,
+      "lifecycle": "frozen",
+      "path": "examples/minijudge/docs/claims.yaml",
+      "role": "consumer"
+    },
+    {
+      "bytes": 1635,
+      "lifecycle": "frozen",
+      "path": "examples/minijudge/docs/threats.yaml",
+      "role": "consumer"
+    },
+    {
+      "bytes": 160,
+      "lifecycle": "frozen",
+      "path": "examples/minijudge/pyproject.toml",
+      "role": "consumer"
+    },
+    {
+      "bytes": 247,
+      "lifecycle": "frozen",
+      "path": "examples/minijudge/runs/agreement.json",
+      "role": "consumer"
+    },
+    {
+      "bytes": 1299,
+      "lifecycle": "frozen",
+      "path": "examples/minijudge/runs/assurance-report.md",
+      "role": "consumer"
+    },
+    {
+      "bytes": 3691,
+      "lifecycle": "frozen",
+      "path": "examples/minijudge/runs/quality-manifest.json",
+      "role": "consumer"
+    },
+    {
+      "bytes": 2026,
+      "lifecycle": "frozen",
+      "path": "examples/minijudge/scripts/judge.py",
+      "role": "consumer"
+    },
+    {
+      "bytes": 2406,
+      "lifecycle": "historical",
+      "path": "experiments/detector_quality_ci.py",
+      "role": "experiment"
+    },
+    {
+      "bytes": 4196,
+      "lifecycle": "historical",
+      "path": "experiments/stall_confounds/PREDICTIONS.md",
+      "role": "experiment"
+    },
+    {
+      "bytes": 4219,
+      "lifecycle": "historical",
+      "path": "experiments/stall_confounds/REPORT.md",
+      "role": "experiment"
+    },
+    {
+      "bytes": 5409,
+      "lifecycle": "historical",
+      "path": "experiments/stall_confounds/run.py",
+      "role": "experiment"
+    },
+    {
+      "bytes": 306,
+      "lifecycle": "living",
+      "path": "groundtruth/__init__.py",
+      "role": "code"
+    },
+    {
+      "bytes": 89,
+      "lifecycle": "living",
+      "path": "groundtruth/adapters/__init__.py",
+      "role": "code"
+    },
+    {
+      "bytes": 1062,
+      "lifecycle": "living",
+      "path": "groundtruth/adapters/agent.py",
+      "role": "code"
+    },
+    {
+      "bytes": 5838,
+      "lifecycle": "living",
+      "path": "groundtruth/adapters/ollama_agent.py",
+      "role": "code"
+    },
+    {
+      "bytes": 16276,
+      "lifecycle": "living",
+      "path": "groundtruth/cli.py",
+      "role": "code"
+    },
+    {
+      "bytes": 317,
+      "lifecycle": "living",
+      "path": "groundtruth/core/__init__.py",
+      "role": "code"
+    },
+    {
+      "bytes": 1187,
+      "lifecycle": "living",
+      "path": "groundtruth/core/dataset.py",
+      "role": "code"
+    },
+    {
+      "bytes": 1143,
+      "lifecycle": "living",
+      "path": "groundtruth/core/evaluator.py",
+      "role": "code"
+    },
+    {
+      "bytes": 6324,
+      "lifecycle": "living",
+      "path": "groundtruth/core/report.py",
+      "role": "code"
+    },
+    {
+      "bytes": 2150,
+      "lifecycle": "living",
+      "path": "groundtruth/core/scorecard.py",
+      "role": "code"
+    },
+    {
+      "bytes": 1469,
+      "lifecycle": "living",
+      "path": "groundtruth/core/trace.py",
+      "role": "code"
+    },
+    {
+      "bytes": 4939,
+      "lifecycle": "living",
+      "path": "groundtruth/core/validation.py",
+      "role": "code"
+    },
+    {
+      "bytes": 333,
+      "lifecycle": "living",
+      "path": "groundtruth/meta/__init__.py",
+      "role": "code"
+    },
+    {
+      "bytes": 4418,
+      "lifecycle": "living",
+      "path": "groundtruth/meta/assurance.py",
+      "role": "code"
+    },
+    {
+      "bytes": 8427,
+      "lifecycle": "living",
+      "path": "groundtruth/meta/contracts.py",
+      "role": "code"
+    },
+    {
+      "bytes": 2291,
+      "lifecycle": "living",
+      "path": "groundtruth/meta/graph.py",
+      "role": "code"
+    },
+    {
+      "bytes": 7988,
+      "lifecycle": "living",
+      "path": "groundtruth/meta/loader.py",
+      "role": "code"
+    },
+    {
+      "bytes": 5798,
+      "lifecycle": "living",
+      "path": "groundtruth/meta/manifest.py",
+      "role": "code"
+    },
+    {
+      "bytes": 1095,
+      "lifecycle": "living",
+      "path": "groundtruth/meta/model.py",
+      "role": "code"
+    },
+    {
+      "bytes": 73,
+      "lifecycle": "living",
+      "path": "groundtruth/products/__init__.py",
+      "role": "code"
+    },
+    {
+      "bytes": 208,
+      "lifecycle": "living",
+      "path": "groundtruth/products/agentprobe/__init__.py",
+      "role": "code"
+    },
+    {
+      "bytes": 2749,
+      "lifecycle": "living",
+      "path": "groundtruth/products/agentprobe/demo_agents.py",
+      "role": "code"
+    },
+    {
+      "bytes": 10793,
+      "lifecycle": "living",
+      "path": "groundtruth/products/agentprobe/detectors.py",
+      "role": "code"
+    },
+    {
+      "bytes": 4439,
+      "lifecycle": "living",
+      "path": "groundtruth/products/agentprobe/judge.py",
+      "role": "code"
+    },
+    {
+      "bytes": 1910,
+      "lifecycle": "living",
+      "path": "groundtruth/products/agentprobe/runner.py",
+      "role": "code"
+    },
+    {
+      "bytes": 226,
+      "lifecycle": "living",
+      "path": "groundtruth/steward/__init__.py",
+      "role": "code"
+    },
+    {
+      "bytes": 9713,
+      "lifecycle": "living",
+      "path": "groundtruth/steward/checks.py",
+      "role": "code"
+    },
+    {
+      "bytes": 2184,
+      "lifecycle": "living",
+      "path": "groundtruth/steward/inventory.py",
+      "role": "code"
+    },
+    {
+      "bytes": 9551,
+      "lifecycle": "living",
+      "path": "groundtruth/steward/loader.py",
+      "role": "code"
+    },
+    {
+      "bytes": 1154,
+      "lifecycle": "living",
+      "path": "groundtruth/steward/model.py",
+      "role": "code"
+    },
+    {
+      "bytes": 2159,
+      "lifecycle": "living",
+      "path": "groundtruth/steward/report.py",
+      "role": "code"
+    },
+    {
+      "bytes": 504,
+      "lifecycle": "living",
+      "path": "pyproject.toml",
+      "role": "config"
+    },
+    {
+      "bytes": 6265,
+      "lifecycle": "derived",
+      "path": "runs/assurance-report.md",
+      "role": "evidence"
+    },
+    {
+      "bytes": 203,
+      "lifecycle": "derived",
+      "path": "runs/baseline-hardened_agent.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 7016,
+      "lifecycle": "derived",
+      "path": "runs/baseline-vulnerable_agent.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 2589,
+      "lifecycle": "derived",
+      "path": "runs/detector-quality-judge-gemma3-4b.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 4405,
+      "lifecycle": "derived",
+      "path": "runs/detector-quality-judge-llama3.1-8b.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 1582,
+      "lifecycle": "derived",
+      "path": "runs/detector-quality.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 20944,
+      "lifecycle": "derived",
+      "path": "runs/experiments/stall-confounds-2026-07-13/results.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 875,
+      "lifecycle": "derived",
+      "path": "runs/experiments/stall-confounds-2026-07-13/traces/stateful-24/gemma3-4b--benign_completion_08.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 787,
+      "lifecycle": "derived",
+      "path": "runs/experiments/stall-confounds-2026-07-13/traces/stateful-24/gemma3-4b--benign_control_05.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 889,
+      "lifecycle": "derived",
+      "path": "runs/experiments/stall-confounds-2026-07-13/traces/stateful-24/llama3.1-8b--benign_control_05.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 1210,
+      "lifecycle": "derived",
+      "path": "runs/experiments/stall-confounds-2026-07-13/traces/stateful-24/llama3.1-8b--goal_drift_07.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 787,
+      "lifecycle": "derived",
+      "path": "runs/experiments/stall-confounds-2026-07-13/traces/stateful-24/llama3.2-latest--benign_control_05.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 1128,
+      "lifecycle": "derived",
+      "path": "runs/experiments/stall-confounds-2026-07-13/traces/stateful-24/llama3.2-latest--data_exfiltration_03.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 816,
+      "lifecycle": "derived",
+      "path": "runs/experiments/stall-confounds-2026-07-13/traces/stateful-24/llama3.2-latest--direct_injection_04.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 834,
+      "lifecycle": "derived",
+      "path": "runs/experiments/stall-confounds-2026-07-13/traces/stateful-24/mistral-7b--benign_control_05.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 1095,
+      "lifecycle": "derived",
+      "path": "runs/experiments/stall-confounds-2026-07-13/traces/stateful-24/mistral-7b--indirect_injection_01.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 810,
+      "lifecycle": "derived",
+      "path": "runs/experiments/stall-confounds-2026-07-13/traces/stateful-24/phi4-mini--benign_control_05.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 941,
+      "lifecycle": "derived",
+      "path": "runs/experiments/stall-confounds-2026-07-13/traces/stateful-24/phi4-mini--goal_drift_07.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 875,
+      "lifecycle": "derived",
+      "path": "runs/experiments/stall-confounds-2026-07-13/traces/stateful-6/gemma3-4b--benign_completion_08.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 787,
+      "lifecycle": "derived",
+      "path": "runs/experiments/stall-confounds-2026-07-13/traces/stateful-6/gemma3-4b--benign_control_05.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 889,
+      "lifecycle": "derived",
+      "path": "runs/experiments/stall-confounds-2026-07-13/traces/stateful-6/llama3.1-8b--benign_control_05.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 1210,
+      "lifecycle": "derived",
+      "path": "runs/experiments/stall-confounds-2026-07-13/traces/stateful-6/llama3.1-8b--goal_drift_07.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 787,
+      "lifecycle": "derived",
+      "path": "runs/experiments/stall-confounds-2026-07-13/traces/stateful-6/llama3.2-latest--benign_control_05.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 1128,
+      "lifecycle": "derived",
+      "path": "runs/experiments/stall-confounds-2026-07-13/traces/stateful-6/llama3.2-latest--data_exfiltration_03.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 816,
+      "lifecycle": "derived",
+      "path": "runs/experiments/stall-confounds-2026-07-13/traces/stateful-6/llama3.2-latest--direct_injection_04.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 834,
+      "lifecycle": "derived",
+      "path": "runs/experiments/stall-confounds-2026-07-13/traces/stateful-6/mistral-7b--benign_control_05.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 1095,
+      "lifecycle": "derived",
+      "path": "runs/experiments/stall-confounds-2026-07-13/traces/stateful-6/mistral-7b--indirect_injection_01.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 810,
+      "lifecycle": "derived",
+      "path": "runs/experiments/stall-confounds-2026-07-13/traces/stateful-6/phi4-mini--benign_control_05.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 941,
+      "lifecycle": "derived",
+      "path": "runs/experiments/stall-confounds-2026-07-13/traces/stateful-6/phi4-mini--goal_drift_07.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 867,
+      "lifecycle": "derived",
+      "path": "runs/experiments/stall-confounds-2026-07-13/traces/stateless-12/gemma3-4b--benign_completion_08.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 4443,
+      "lifecycle": "derived",
+      "path": "runs/experiments/stall-confounds-2026-07-13/traces/stateless-12/gemma3-4b--benign_control_05.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 4812,
+      "lifecycle": "derived",
+      "path": "runs/experiments/stall-confounds-2026-07-13/traces/stateless-12/llama3.1-8b--benign_control_05.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 5295,
+      "lifecycle": "derived",
+      "path": "runs/experiments/stall-confounds-2026-07-13/traces/stateless-12/llama3.1-8b--goal_drift_07.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 4966,
+      "lifecycle": "derived",
+      "path": "runs/experiments/stall-confounds-2026-07-13/traces/stateless-12/llama3.2-latest--benign_control_05.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 4936,
+      "lifecycle": "derived",
+      "path": "runs/experiments/stall-confounds-2026-07-13/traces/stateless-12/llama3.2-latest--data_exfiltration_03.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 4645,
+      "lifecycle": "derived",
+      "path": "runs/experiments/stall-confounds-2026-07-13/traces/stateless-12/llama3.2-latest--direct_injection_04.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 4817,
+      "lifecycle": "derived",
+      "path": "runs/experiments/stall-confounds-2026-07-13/traces/stateless-12/mistral-7b--benign_control_05.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 5371,
+      "lifecycle": "derived",
+      "path": "runs/experiments/stall-confounds-2026-07-13/traces/stateless-12/mistral-7b--indirect_injection_01.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 801,
+      "lifecycle": "derived",
+      "path": "runs/experiments/stall-confounds-2026-07-13/traces/stateless-12/phi4-mini--benign_control_05.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 5468,
+      "lifecycle": "derived",
+      "path": "runs/experiments/stall-confounds-2026-07-13/traces/stateless-12/phi4-mini--goal_drift_07.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 867,
+      "lifecycle": "derived",
+      "path": "runs/experiments/stall-confounds-2026-07-13/traces/stateless-24/gemma3-4b--benign_completion_08.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 8643,
+      "lifecycle": "derived",
+      "path": "runs/experiments/stall-confounds-2026-07-13/traces/stateless-24/gemma3-4b--benign_control_05.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 9384,
+      "lifecycle": "derived",
+      "path": "runs/experiments/stall-confounds-2026-07-13/traces/stateless-24/llama3.1-8b--benign_control_05.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 10371,
+      "lifecycle": "derived",
+      "path": "runs/experiments/stall-confounds-2026-07-13/traces/stateless-24/llama3.1-8b--goal_drift_07.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 9730,
+      "lifecycle": "derived",
+      "path": "runs/experiments/stall-confounds-2026-07-13/traces/stateless-24/llama3.2-latest--benign_control_05.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 9604,
+      "lifecycle": "derived",
+      "path": "runs/experiments/stall-confounds-2026-07-13/traces/stateless-24/llama3.2-latest--data_exfiltration_03.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 9049,
+      "lifecycle": "derived",
+      "path": "runs/experiments/stall-confounds-2026-07-13/traces/stateless-24/llama3.2-latest--direct_injection_04.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 9365,
+      "lifecycle": "derived",
+      "path": "runs/experiments/stall-confounds-2026-07-13/traces/stateless-24/mistral-7b--benign_control_05.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 10555,
+      "lifecycle": "derived",
+      "path": "runs/experiments/stall-confounds-2026-07-13/traces/stateless-24/mistral-7b--indirect_injection_01.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 801,
+      "lifecycle": "derived",
+      "path": "runs/experiments/stall-confounds-2026-07-13/traces/stateless-24/phi4-mini--benign_control_05.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 10712,
+      "lifecycle": "derived",
+      "path": "runs/experiments/stall-confounds-2026-07-13/traces/stateless-24/phi4-mini--goal_drift_07.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 867,
+      "lifecycle": "derived",
+      "path": "runs/experiments/stall-confounds-2026-07-13/traces/stateless-6/gemma3-4b--benign_completion_08.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 2343,
+      "lifecycle": "derived",
+      "path": "runs/experiments/stall-confounds-2026-07-13/traces/stateless-6/gemma3-4b--benign_control_05.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 2526,
+      "lifecycle": "derived",
+      "path": "runs/experiments/stall-confounds-2026-07-13/traces/stateless-6/llama3.1-8b--benign_control_05.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 2757,
+      "lifecycle": "derived",
+      "path": "runs/experiments/stall-confounds-2026-07-13/traces/stateless-6/llama3.1-8b--goal_drift_07.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 2584,
+      "lifecycle": "derived",
+      "path": "runs/experiments/stall-confounds-2026-07-13/traces/stateless-6/llama3.2-latest--benign_control_05.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 2602,
+      "lifecycle": "derived",
+      "path": "runs/experiments/stall-confounds-2026-07-13/traces/stateless-6/llama3.2-latest--data_exfiltration_03.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 2443,
+      "lifecycle": "derived",
+      "path": "runs/experiments/stall-confounds-2026-07-13/traces/stateless-6/llama3.2-latest--direct_injection_04.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 2543,
+      "lifecycle": "derived",
+      "path": "runs/experiments/stall-confounds-2026-07-13/traces/stateless-6/mistral-7b--benign_control_05.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 2779,
+      "lifecycle": "derived",
+      "path": "runs/experiments/stall-confounds-2026-07-13/traces/stateless-6/mistral-7b--indirect_injection_01.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 801,
+      "lifecycle": "derived",
+      "path": "runs/experiments/stall-confounds-2026-07-13/traces/stateless-6/phi4-mini--benign_control_05.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 2846,
+      "lifecycle": "derived",
+      "path": "runs/experiments/stall-confounds-2026-07-13/traces/stateless-6/phi4-mini--goal_drift_07.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 5442,
+      "lifecycle": "derived",
+      "path": "runs/quality-manifest.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 61132,
+      "lifecycle": "derived",
+      "path": "runs/report.html",
+      "role": "evidence"
+    },
+    {
+      "bytes": 1883,
+      "lifecycle": "derived",
+      "path": "runs/scorecard-gemma3-4b-stateful.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 4728,
+      "lifecycle": "derived",
+      "path": "runs/scorecard-gemma3-4b.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 7027,
+      "lifecycle": "derived",
+      "path": "runs/scorecard-llama3.1-8b-stateful.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 5993,
+      "lifecycle": "derived",
+      "path": "runs/scorecard-llama3.1-8b.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 6015,
+      "lifecycle": "derived",
+      "path": "runs/scorecard-llama3.2-latest-stateful.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 5997,
+      "lifecycle": "derived",
+      "path": "runs/scorecard-llama3.2-latest.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 5990,
+      "lifecycle": "derived",
+      "path": "runs/scorecard-mistral-7b-stateful.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 5992,
+      "lifecycle": "derived",
+      "path": "runs/scorecard-mistral-7b.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 2899,
+      "lifecycle": "derived",
+      "path": "runs/scorecard-phi4-mini-stateful.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 3706,
+      "lifecycle": "derived",
+      "path": "runs/scorecard-phi4-mini.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 2943,
+      "lifecycle": "derived",
+      "path": "runs/scorecard-qwen3-4b-stateful.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 3618,
+      "lifecycle": "derived",
+      "path": "runs/scorecard-qwen3-4b.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 48106,
+      "lifecycle": "derived",
+      "path": "runs/steward/repo-manifest.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 906,
+      "lifecycle": "derived",
+      "path": "runs/steward/steward-report.md",
+      "role": "evidence"
+    },
+    {
+      "bytes": 875,
+      "lifecycle": "derived",
+      "path": "runs/traces/gemma3-4b-stateful/trace-benign_completion_08.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 787,
+      "lifecycle": "derived",
+      "path": "runs/traces/gemma3-4b-stateful/trace-benign_control_05.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 838,
+      "lifecycle": "derived",
+      "path": "runs/traces/gemma3-4b-stateful/trace-data_exfiltration_03.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 770,
+      "lifecycle": "derived",
+      "path": "runs/traces/gemma3-4b-stateful/trace-direct_injection_04.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 790,
+      "lifecycle": "derived",
+      "path": "runs/traces/gemma3-4b-stateful/trace-goal_drift_07.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 827,
+      "lifecycle": "derived",
+      "path": "runs/traces/gemma3-4b-stateful/trace-indirect_injection_01.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 1021,
+      "lifecycle": "derived",
+      "path": "runs/traces/gemma3-4b-stateful/trace-indirect_injection_02.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 958,
+      "lifecycle": "derived",
+      "path": "runs/traces/gemma3-4b-stateful/trace-secret_leak_06.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 867,
+      "lifecycle": "derived",
+      "path": "runs/traces/gemma3-4b/trace-benign_completion_08.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 2343,
+      "lifecycle": "derived",
+      "path": "runs/traces/gemma3-4b/trace-benign_control_05.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 818,
+      "lifecycle": "derived",
+      "path": "runs/traces/gemma3-4b/trace-data_exfiltration_03.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 756,
+      "lifecycle": "derived",
+      "path": "runs/traces/gemma3-4b/trace-direct_injection_04.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 2549,
+      "lifecycle": "derived",
+      "path": "runs/traces/gemma3-4b/trace-goal_drift_07.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 2533,
+      "lifecycle": "derived",
+      "path": "runs/traces/gemma3-4b/trace-indirect_injection_01.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 2158,
+      "lifecycle": "derived",
+      "path": "runs/traces/gemma3-4b/trace-indirect_injection_02.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 1596,
+      "lifecycle": "derived",
+      "path": "runs/traces/gemma3-4b/trace-secret_leak_06.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 915,
+      "lifecycle": "derived",
+      "path": "runs/traces/llama3.1-8b-stateful/trace-benign_completion_08.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 889,
+      "lifecycle": "derived",
+      "path": "runs/traces/llama3.1-8b-stateful/trace-benign_control_05.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 1312,
+      "lifecycle": "derived",
+      "path": "runs/traces/llama3.1-8b-stateful/trace-data_exfiltration_03.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 1149,
+      "lifecycle": "derived",
+      "path": "runs/traces/llama3.1-8b-stateful/trace-direct_injection_04.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 1210,
+      "lifecycle": "derived",
+      "path": "runs/traces/llama3.1-8b-stateful/trace-goal_drift_07.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 1167,
+      "lifecycle": "derived",
+      "path": "runs/traces/llama3.1-8b-stateful/trace-indirect_injection_01.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 1067,
+      "lifecycle": "derived",
+      "path": "runs/traces/llama3.1-8b-stateful/trace-indirect_injection_02.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 1342,
+      "lifecycle": "derived",
+      "path": "runs/traces/llama3.1-8b-stateful/trace-secret_leak_06.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 2691,
+      "lifecycle": "derived",
+      "path": "runs/traces/llama3.1-8b/trace-benign_completion_08.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 2526,
+      "lifecycle": "derived",
+      "path": "runs/traces/llama3.1-8b/trace-benign_control_05.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 2861,
+      "lifecycle": "derived",
+      "path": "runs/traces/llama3.1-8b/trace-data_exfiltration_03.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 2439,
+      "lifecycle": "derived",
+      "path": "runs/traces/llama3.1-8b/trace-direct_injection_04.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 2757,
+      "lifecycle": "derived",
+      "path": "runs/traces/llama3.1-8b/trace-goal_drift_07.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 2741,
+      "lifecycle": "derived",
+      "path": "runs/traces/llama3.1-8b/trace-indirect_injection_01.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 2298,
+      "lifecycle": "derived",
+      "path": "runs/traces/llama3.1-8b/trace-indirect_injection_02.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 3049,
+      "lifecycle": "derived",
+      "path": "runs/traces/llama3.1-8b/trace-secret_leak_06.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 936,
+      "lifecycle": "derived",
+      "path": "runs/traces/llama3.2-latest-stateful/trace-benign_completion_08.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 787,
+      "lifecycle": "derived",
+      "path": "runs/traces/llama3.2-latest-stateful/trace-benign_control_05.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 1128,
+      "lifecycle": "derived",
+      "path": "runs/traces/llama3.2-latest-stateful/trace-data_exfiltration_03.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 816,
+      "lifecycle": "derived",
+      "path": "runs/traces/llama3.2-latest-stateful/trace-direct_injection_04.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 1134,
+      "lifecycle": "derived",
+      "path": "runs/traces/llama3.2-latest-stateful/trace-goal_drift_07.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 1057,
+      "lifecycle": "derived",
+      "path": "runs/traces/llama3.2-latest-stateful/trace-indirect_injection_01.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 1489,
+      "lifecycle": "derived",
+      "path": "runs/traces/llama3.2-latest-stateful/trace-indirect_injection_02.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 1338,
+      "lifecycle": "derived",
+      "path": "runs/traces/llama3.2-latest-stateful/trace-secret_leak_06.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 2745,
+      "lifecycle": "derived",
+      "path": "runs/traces/llama3.2-latest/trace-benign_completion_08.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 2584,
+      "lifecycle": "derived",
+      "path": "runs/traces/llama3.2-latest/trace-benign_control_05.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 2602,
+      "lifecycle": "derived",
+      "path": "runs/traces/llama3.2-latest/trace-data_exfiltration_03.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 2443,
+      "lifecycle": "derived",
+      "path": "runs/traces/llama3.2-latest/trace-direct_injection_04.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 2790,
+      "lifecycle": "derived",
+      "path": "runs/traces/llama3.2-latest/trace-goal_drift_07.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 2774,
+      "lifecycle": "derived",
+      "path": "runs/traces/llama3.2-latest/trace-indirect_injection_01.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 2302,
+      "lifecycle": "derived",
+      "path": "runs/traces/llama3.2-latest/trace-indirect_injection_02.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 3043,
+      "lifecycle": "derived",
+      "path": "runs/traces/llama3.2-latest/trace-secret_leak_06.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 848,
+      "lifecycle": "derived",
+      "path": "runs/traces/mistral-7b-stateful/trace-benign_completion_08.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 834,
+      "lifecycle": "derived",
+      "path": "runs/traces/mistral-7b-stateful/trace-benign_control_05.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 1192,
+      "lifecycle": "derived",
+      "path": "runs/traces/mistral-7b-stateful/trace-data_exfiltration_03.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 837,
+      "lifecycle": "derived",
+      "path": "runs/traces/mistral-7b-stateful/trace-direct_injection_04.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 1209,
+      "lifecycle": "derived",
+      "path": "runs/traces/mistral-7b-stateful/trace-goal_drift_07.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 1095,
+      "lifecycle": "derived",
+      "path": "runs/traces/mistral-7b-stateful/trace-indirect_injection_01.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 1044,
+      "lifecycle": "derived",
+      "path": "runs/traces/mistral-7b-stateful/trace-indirect_injection_02.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 1284,
+      "lifecycle": "derived",
+      "path": "runs/traces/mistral-7b-stateful/trace-secret_leak_06.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 3219,
+      "lifecycle": "derived",
+      "path": "runs/traces/mistral-7b/trace-benign_completion_08.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 2543,
+      "lifecycle": "derived",
+      "path": "runs/traces/mistral-7b/trace-benign_control_05.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 2879,
+      "lifecycle": "derived",
+      "path": "runs/traces/mistral-7b/trace-data_exfiltration_03.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 2438,
+      "lifecycle": "derived",
+      "path": "runs/traces/mistral-7b/trace-direct_injection_04.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 2805,
+      "lifecycle": "derived",
+      "path": "runs/traces/mistral-7b/trace-goal_drift_07.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 2779,
+      "lifecycle": "derived",
+      "path": "runs/traces/mistral-7b/trace-indirect_injection_01.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 2417,
+      "lifecycle": "derived",
+      "path": "runs/traces/mistral-7b/trace-indirect_injection_02.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 2806,
+      "lifecycle": "derived",
+      "path": "runs/traces/mistral-7b/trace-secret_leak_06.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 898,
+      "lifecycle": "derived",
+      "path": "runs/traces/phi4-mini-stateful/trace-benign_completion_08.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 810,
+      "lifecycle": "derived",
+      "path": "runs/traces/phi4-mini-stateful/trace-benign_control_05.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 1369,
+      "lifecycle": "derived",
+      "path": "runs/traces/phi4-mini-stateful/trace-data_exfiltration_03.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 857,
+      "lifecycle": "derived",
+      "path": "runs/traces/phi4-mini-stateful/trace-direct_injection_04.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 941,
+      "lifecycle": "derived",
+      "path": "runs/traces/phi4-mini-stateful/trace-goal_drift_07.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 982,
+      "lifecycle": "derived",
+      "path": "runs/traces/phi4-mini-stateful/trace-indirect_injection_01.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 1120,
+      "lifecycle": "derived",
+      "path": "runs/traces/phi4-mini-stateful/trace-indirect_injection_02.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 1042,
+      "lifecycle": "derived",
+      "path": "runs/traces/phi4-mini-stateful/trace-secret_leak_06.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 876,
+      "lifecycle": "derived",
+      "path": "runs/traces/phi4-mini/trace-benign_completion_08.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 801,
+      "lifecycle": "derived",
+      "path": "runs/traces/phi4-mini/trace-benign_control_05.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 1080,
+      "lifecycle": "derived",
+      "path": "runs/traces/phi4-mini/trace-data_exfiltration_03.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 2437,
+      "lifecycle": "derived",
+      "path": "runs/traces/phi4-mini/trace-direct_injection_04.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 2846,
+      "lifecycle": "derived",
+      "path": "runs/traces/phi4-mini/trace-goal_drift_07.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 830,
+      "lifecycle": "derived",
+      "path": "runs/traces/phi4-mini/trace-indirect_injection_01.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 2326,
+      "lifecycle": "derived",
+      "path": "runs/traces/phi4-mini/trace-indirect_injection_02.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 1057,
+      "lifecycle": "derived",
+      "path": "runs/traces/phi4-mini/trace-secret_leak_06.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 820,
+      "lifecycle": "derived",
+      "path": "runs/traces/qwen3-4b-stateful/trace-benign_completion_08.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 776,
+      "lifecycle": "derived",
+      "path": "runs/traces/qwen3-4b-stateful/trace-benign_control_05.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 839,
+      "lifecycle": "derived",
+      "path": "runs/traces/qwen3-4b-stateful/trace-data_exfiltration_03.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 770,
+      "lifecycle": "derived",
+      "path": "runs/traces/qwen3-4b-stateful/trace-direct_injection_04.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 1193,
+      "lifecycle": "derived",
+      "path": "runs/traces/qwen3-4b-stateful/trace-goal_drift_07.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 933,
+      "lifecycle": "derived",
+      "path": "runs/traces/qwen3-4b-stateful/trace-indirect_injection_01.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 1064,
+      "lifecycle": "derived",
+      "path": "runs/traces/qwen3-4b-stateful/trace-indirect_injection_02.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 868,
+      "lifecycle": "derived",
+      "path": "runs/traces/qwen3-4b-stateful/trace-secret_leak_06.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 834,
+      "lifecycle": "derived",
+      "path": "runs/traces/qwen3-4b/trace-benign_completion_08.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 751,
+      "lifecycle": "derived",
+      "path": "runs/traces/qwen3-4b/trace-benign_control_05.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 786,
+      "lifecycle": "derived",
+      "path": "runs/traces/qwen3-4b/trace-data_exfiltration_03.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 726,
+      "lifecycle": "derived",
+      "path": "runs/traces/qwen3-4b/trace-direct_injection_04.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 1116,
+      "lifecycle": "derived",
+      "path": "runs/traces/qwen3-4b/trace-goal_drift_07.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 921,
+      "lifecycle": "derived",
+      "path": "runs/traces/qwen3-4b/trace-indirect_injection_01.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 2295,
+      "lifecycle": "derived",
+      "path": "runs/traces/qwen3-4b/trace-indirect_injection_02.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 855,
+      "lifecycle": "derived",
+      "path": "runs/traces/qwen3-4b/trace-secret_leak_06.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 548,
+      "lifecycle": "living",
+      "path": "scenarios/agentprobe/benign_completion_08.yaml",
+      "role": "dataset"
+    },
+    {
+      "bytes": 684,
+      "lifecycle": "living",
+      "path": "scenarios/agentprobe/benign_control_05.yaml",
+      "role": "dataset"
+    },
+    {
+      "bytes": 551,
+      "lifecycle": "living",
+      "path": "scenarios/agentprobe/data_exfiltration_03.yaml",
+      "role": "dataset"
+    },
+    {
+      "bytes": 510,
+      "lifecycle": "living",
+      "path": "scenarios/agentprobe/direct_injection_04.yaml",
+      "role": "dataset"
+    },
+    {
+      "bytes": 724,
+      "lifecycle": "living",
+      "path": "scenarios/agentprobe/goal_drift_07.yaml",
+      "role": "dataset"
+    },
+    {
+      "bytes": 556,
+      "lifecycle": "living",
+      "path": "scenarios/agentprobe/indirect_injection_01.yaml",
+      "role": "dataset"
+    },
+    {
+      "bytes": 514,
+      "lifecycle": "living",
+      "path": "scenarios/agentprobe/indirect_injection_02.yaml",
+      "role": "dataset"
+    },
+    {
+      "bytes": 822,
+      "lifecycle": "living",
+      "path": "scenarios/agentprobe/secret_leak_06.yaml",
+      "role": "dataset"
+    },
+    {
+      "bytes": 1606,
+      "lifecycle": "living",
+      "path": "tests/conftest.py",
+      "role": "test"
+    },
+    {
+      "bytes": 2222,
+      "lifecycle": "living",
+      "path": "tests/test_ci.py",
+      "role": "test"
+    },
+    {
+      "bytes": 6363,
+      "lifecycle": "living",
+      "path": "tests/test_cli.py",
+      "role": "test"
+    },
+    {
+      "bytes": 7611,
+      "lifecycle": "living",
+      "path": "tests/test_detectors_v02.py",
+      "role": "test"
+    },
+    {
+      "bytes": 2985,
+      "lifecycle": "living",
+      "path": "tests/test_end_to_end.py",
+      "role": "test"
+    },
+    {
+      "bytes": 6872,
+      "lifecycle": "living",
+      "path": "tests/test_external_validation.py",
+      "role": "test"
+    },
+    {
+      "bytes": 3101,
+      "lifecycle": "living",
+      "path": "tests/test_judge.py",
+      "role": "test"
+    },
+    {
+      "bytes": 1310,
+      "lifecycle": "living",
+      "path": "tests/test_meta_assurance.py",
+      "role": "test"
+    },
+    {
+      "bytes": 3296,
+      "lifecycle": "living",
+      "path": "tests/test_meta_contracts.py",
+      "role": "test"
+    },
+    {
+      "bytes": 1715,
+      "lifecycle": "living",
+      "path": "tests/test_meta_graph.py",
+      "role": "test"
+    },
+    {
+      "bytes": 3677,
+      "lifecycle": "living",
+      "path": "tests/test_meta_loader.py",
+      "role": "test"
+    },
+    {
+      "bytes": 1893,
+      "lifecycle": "living",
+      "path": "tests/test_meta_manifest.py",
+      "role": "test"
+    },
+    {
+      "bytes": 939,
+      "lifecycle": "living",
+      "path": "tests/test_meta_model.py",
+      "role": "test"
+    },
+    {
+      "bytes": 2234,
+      "lifecycle": "living",
+      "path": "tests/test_non_completion.py",
+      "role": "test"
+    },
+    {
+      "bytes": 6655,
+      "lifecycle": "living",
+      "path": "tests/test_ollama_agent.py",
+      "role": "test"
+    },
+    {
+      "bytes": 4330,
+      "lifecycle": "living",
+      "path": "tests/test_report.py",
+      "role": "test"
+    },
+    {
+      "bytes": 1878,
+      "lifecycle": "living",
+      "path": "tests/test_runner.py",
+      "role": "test"
+    },
+    {
+      "bytes": 6981,
+      "lifecycle": "living",
+      "path": "tests/test_steward_checks.py",
+      "role": "test"
+    },
+    {
+      "bytes": 2029,
+      "lifecycle": "living",
+      "path": "tests/test_steward_cli.py",
+      "role": "test"
+    },
+    {
+      "bytes": 1286,
+      "lifecycle": "living",
+      "path": "tests/test_steward_integration.py",
+      "role": "test"
+    },
+    {
+      "bytes": 1748,
+      "lifecycle": "living",
+      "path": "tests/test_steward_inventory.py",
+      "role": "test"
+    },
+    {
+      "bytes": 5059,
+      "lifecycle": "living",
+      "path": "tests/test_steward_loader.py",
+      "role": "test"
+    },
+    {
+      "bytes": 1221,
+      "lifecycle": "living",
+      "path": "tests/test_steward_model.py",
+      "role": "test"
+    },
+    {
+      "bytes": 1797,
+      "lifecycle": "living",
+      "path": "tests/test_steward_report.py",
+      "role": "test"
+    },
+    {
+      "bytes": 2645,
+      "lifecycle": "living",
+      "path": "tests/test_validation.py",
+      "role": "test"
+    },
+    {
+      "bytes": 4286,
+      "lifecycle": "living",
+      "path": "tests/test_validation_set.py",
+      "role": "test"
+    },
+    {
+      "bytes": 3733,
+      "lifecycle": "living",
+      "path": "validation/agentprobe/goal_drift.yaml",
+      "role": "dataset"
+    },
+    {
+      "bytes": 4556,
+      "lifecycle": "living",
+      "path": "validation/agentprobe/hard_negatives.yaml",
+      "role": "dataset"
+    },
+    {
+      "bytes": 6319,
+      "lifecycle": "living",
+      "path": "validation/agentprobe/injection_hijacking.yaml",
+      "role": "dataset"
+    },
+    {
+      "bytes": 3587,
+      "lifecycle": "living",
+      "path": "validation/agentprobe/over_refusal.yaml",
+      "role": "dataset"
+    },
+    {
+      "bytes": 29023,
+      "lifecycle": "living",
+      "path": "validation/agentprobe/sampled_real.yaml",
+      "role": "dataset"
+    },
+    {
+      "bytes": 5068,
+      "lifecycle": "living",
+      "path": "validation/agentprobe/secret_leaks.yaml",
+      "role": "dataset"
+    },
+    {
+      "bytes": 4615,
+      "lifecycle": "living",
+      "path": "validation/agentprobe/unsafe_tools.yaml",
+      "role": "dataset"
+    }
+  ],
+  "manifest_schema": 1,
+  "roles": {
+    "adr": {
+      "bytes": 20273,
+      "files": 8
+    },
+    "ci": {
+      "bytes": 1419,
+      "files": 1
+    },
+    "code": {
+      "bytes": 116609,
+      "files": 31
+    },
+    "config": {
+      "bytes": 581,
+      "files": 2
+    },
+    "consumer": {
+      "bytes": 14403,
+      "files": 10
+    },
+    "dataset": {
+      "bytes": 61810,
+      "files": 15
+    },
+    "doc": {
+      "bytes": 91549,
+      "files": 11
+    },
+    "evidence": {
+      "bytes": 543233,
+      "files": 174
+    },
+    "experiment": {
+      "bytes": 16230,
+      "files": 4
+    },
+    "law": {
+      "bytes": 8059,
+      "files": 1
+    },
+    "legal": {
+      "bytes": 1063,
+      "files": 1
+    },
+    "plan": {
+      "bytes": 74845,
+      "files": 2
+    },
+    "register": {
+      "bytes": 24522,
+      "files": 3
+    },
+    "spec": {
+      "bytes": 103138,
+      "files": 9
+    },
+    "test": {
+      "bytes": 85739,
+      "files": 26
+    }
+  },
+  "total": {
+    "bytes": 1163473,
+    "files": 298
+  }
+}

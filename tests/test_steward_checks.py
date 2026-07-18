@@ -61,27 +61,30 @@ def _git(root, *args):
     subprocess.run(["git", *args], cwd=root, check=True, capture_output=True)
 
 
-@pytest.fixture()
-def repo(tmp_path):
+def make_repo(root):
+    """Miniature constitution-governed repo (shared with the CLI tests)."""
     for rel, content in FILES.items():
-        p = tmp_path / rel
+        p = root / rel
         p.parent.mkdir(parents=True, exist_ok=True)
         p.write_text(content)
-    (tmp_path / "docs/CONSTITUTION.md").write_text(CONSTITUTION)
-    _git(tmp_path, "init", "-q")
-    _git(tmp_path, "config", "user.email", "t@t")
-    _git(tmp_path, "config", "user.name", "t")
-    _git(tmp_path, "add", "-A")
-    _git(tmp_path, "commit", "-q", "-m", "freeze")
+    (root / "docs/CONSTITUTION.md").write_text(CONSTITUTION)
+    _git(root, "init", "-q")
+    _git(root, "config", "user.email", "t@t")
+    _git(root, "config", "user.name", "t")
+    _git(root, "add", "-A")
+    _git(root, "commit", "-q", "-m", "freeze")
     sha = subprocess.run(
-        ["git", "rev-parse", "HEAD"], cwd=tmp_path, capture_output=True, text=True
+        ["git", "rev-parse", "HEAD"], cwd=root, capture_output=True, text=True
     ).stdout.strip()
-    (tmp_path / "docs/CONSTITUTION.md").write_text(
-        CONSTITUTION.replace("@FREEZE@", sha)
-    )
-    _git(tmp_path, "add", "-A")
-    _git(tmp_path, "commit", "-q", "-m", "declare freeze")
-    return tmp_path
+    (root / "docs/CONSTITUTION.md").write_text(CONSTITUTION.replace("@FREEZE@", sha))
+    _git(root, "add", "-A")
+    _git(root, "commit", "-q", "-m", "declare freeze")
+    return root
+
+
+@pytest.fixture()
+def repo(tmp_path):
+    return make_repo(tmp_path)
 
 
 def run(root):
