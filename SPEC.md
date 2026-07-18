@@ -207,16 +207,25 @@ and scorecard — the differentiated core.
   records what the second consumer proved. "Evaluation assurance
   platform" framing: still **not** earned — waits for an externally
   authored consumer (E6's future experiment).
-- **v0.8 — IN PROGRESS (repository stewardship).** Convergence
-  (`docs/specs/2026-07-16-v08-architecture-review-report.md`, 13 proposals →
-  one advisory steward), governance tribunal
-  (`docs/specs/2026-07-17-v08-governance-tribunal.md`, PROCEED WITH TARGETED
-  REVISIONS R1–R7), pre-registered protocol
-  (`docs/specs/2026-07-17-v08-stewardship-protocol.md`), then TDD:
-  `groundtruth/steward/` (RC1–RC8, stdlib-only, read-only), this
-  Constitution (`docs/CONSTITUTION.md`), `docs/debt.yaml` migration,
-  `groundtruth steward` CLI verb, blocking CI step + debt #17 diff.
-  Advisory-only, no mutations, no new abstractions.
+- **v0.8 — DONE (2026-07-16→18, repository stewardship; protocol
+  `docs/specs/2026-07-17-v08-stewardship-protocol.md`, validation
+  `docs/specs/2026-07-18-v08-steward-validation-report.md`).** Convergence
+  (`docs/specs/2026-07-16-v08-architecture-review-report.md`: 13 proposals
+  → one advisory steward, 8 rejections evidence-cited) and governance
+  tribunal (`docs/specs/2026-07-17-v08-governance-tribunal.md`: PROCEED
+  WITH TARGETED REVISIONS R1–R7) preceded any code; the protocol was
+  committed before implementation, v0.7 discipline. Shipped:
+  `docs/CONSTITUTION.md` (13 laws — 9 ENFORCED with full
+  law→test→CI→evidence chains, 4 JUDGMENT; declarations schema v1),
+  `groundtruth/steward/` (RC1–RC8; stdlib-only, read-only enumerated git
+  surface, byte-deterministic; 1,185 lines incl. tests under the
+  1,496-line budget law), `groundtruth steward` CLI verb (rc 0/1/2),
+  committed evidence in `runs/steward/`, debt migration to
+  `docs/debt.yaml` (three pre-registered stale-state corrections
+  confirmed; #17 closed by the CI diff step; #18–21 added by the
+  scientific debt audit), blocking CI step after both audits. H1
+  confirmed; honest zero at HEAD; 168 tests (from 130); ADR-0001's
+  layering law mechanically enforced for the first time in 8 milestones.
 
 Milestone → ship-commit lineage (tribunal R6; the archaeology gap — git log
 carries every milestone string, but the mapping was previously tabulated

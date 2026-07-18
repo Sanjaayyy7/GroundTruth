@@ -6,7 +6,7 @@ validation engines) powers a family of products.
 
 | Product | Evaluates | Status |
 |---|---|---|
-| **AgentProbe** | Tool-using agents under adversarial attack (offline red-team) | **v0.7 — shipping** |
+| **AgentProbe** | Tool-using agents under adversarial attack (offline red-team) | **v0.8 — shipping** |
 | **JudgeKit** | Model preference / reward-model quality (LLM-as-judge) | planned |
 | **PlannerBench** | Long-horizon planning agents (efficiency, recovery) | planned |
 
@@ -54,6 +54,27 @@ green audit is not vacuous. Scope, honestly: same author, same repository —
 architectural reuse is validated, organizational independence is not
 (threat E6).
 
+## Repository stewardship (v0.8)
+
+The platform audits its own repository with the same mechanics it applies
+to evaluations. [docs/CONSTITUTION.md](docs/CONSTITUTION.md) declares
+thirteen laws — a role for every tracked file, reference integrity in
+living documents, version-anchor agreement, derived-artifact freshness,
+import layering, ADR review triggers, evidence-backed debt in
+[docs/debt.yaml](docs/debt.yaml), and the MiniJudge freeze. `groundtruth
+steward` checks eight repository contracts (RC1–RC8), read-only and
+stdlib-only, and derives two byte-deterministic committed artifacts —
+[runs/steward/repo-manifest.json](runs/steward/repo-manifest.json) and
+[runs/steward/steward-report.md](runs/steward/steward-report.md) — which
+CI regenerates and diffs on every push, so a stale committed artifact
+fails loudly. The milestone was
+[pre-registered](docs/specs/2026-07-17-v08-stewardship-protocol.md) before
+implementation and closed by a
+[validation report](docs/specs/2026-07-18-v08-steward-validation-report.md);
+eight negative controls each fail with a named finding. Live demo: append
+one byte inside the frozen `examples/minijudge/` tree and the build fails
+with a named RC8 finding; revert and it is green again.
+
 ## AgentProbe (v0.6)
 
 Offline red-team evaluation for tool-using agents. Point it at an agent; it runs
@@ -92,6 +113,9 @@ groundtruth ci --agent hardened_agent            # (--update to refresh baseline
 
 # one self-contained HTML evidence report from everything in runs/
 groundtruth report
+
+# audit the repository itself against its Constitution (RC1-RC8)
+groundtruth steward
 
 # keep the raw traces for labeling / audit
 groundtruth run --agent ollama:gemma3:4b --traces-out runs/traces-gemma3

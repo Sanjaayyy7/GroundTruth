@@ -19,13 +19,13 @@
       "role": "legal"
     },
     {
-      "bytes": 15419,
+      "bytes": 16740,
       "lifecycle": "living",
       "path": "README.md",
       "role": "doc"
     },
     {
-      "bytes": 15484,
+      "bytes": 16148,
       "lifecycle": "living",
       "path": "SPEC.md",
       "role": "doc"
@@ -1822,7 +1822,7 @@
       "files": 15
     },
     "doc": {
-      "bytes": 91549,
+      "bytes": 93534,
       "files": 11
     },
     "evidence": {
@@ -1859,7 +1859,7 @@
     }
   },
   "total": {
-    "bytes": 1174601,
+    "bytes": 1176586,
     "files": 299
   }
 }
