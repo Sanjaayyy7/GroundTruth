@@ -22,13 +22,12 @@ def test_first_match_wins_in_declaration_order():
     assert match_role("docs/STRATEGY.md", ROLES)["role"] == "doc"
 
 
-def test_build_inventory_totals_files_and_bytes_per_role(tmp_path):
-    (tmp_path / "docs" / "adr").mkdir(parents=True)
-    (tmp_path / "docs" / "adr" / "0001-a.md").write_text("12345")
-    (tmp_path / "docs" / "notes.md").write_text("1234567")
-    (tmp_path / "orphan.bin").write_text("xx")
+def test_build_inventory_totals_files_and_bytes_per_role():
+    # sizes come from git index blobs, not the working tree — the manifest
+    # lists itself, and stat-based sizes would have no byte fixed point
+    sizes = {"docs/adr/0001-a.md": 5, "docs/notes.md": 7, "orphan.bin": 2}
     inv = build_inventory(
-        tmp_path, ("docs/adr/0001-a.md", "docs/notes.md", "orphan.bin"), ROLES
+        ("docs/adr/0001-a.md", "docs/notes.md", "orphan.bin"), ROLES, sizes
     )
     assert inv["manifest_schema"] == 1
     assert inv["roles"]["adr"] == {"files": 1, "bytes": 5}

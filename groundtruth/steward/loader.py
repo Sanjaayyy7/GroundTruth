@@ -205,6 +205,30 @@ def git_index(root: Path) -> tuple[str, ...]:
     return tuple(sorted(p for p in proc.stdout.split("\0") if p))
 
 
+def git_blob_sizes(root: Path) -> dict[str, int]:
+    """Byte size per tracked path, from index blobs — not the working tree:
+    the manifest lists itself, and stat-based sizes would have no fixed
+    point. (ls-files -s for object ids, one cat-file --batch-check for sizes.)"""
+    proc = _git(root, "ls-files", "-z", "-s")
+    if proc.returncode != 0:
+        raise DeclarationError(f"git ls-files -s failed: {proc.stderr.strip()}")
+    entries = []
+    for record in proc.stdout.split("\0"):
+        if record:
+            meta, path = record.split("\t", 1)
+            entries.append((path, meta.split()[1]))
+    batch = subprocess.run(
+        ["git", "-c", "core.quotePath=false", "cat-file", "--batch-check=%(objectsize)"],
+        cwd=root, capture_output=True, text=True,
+        env=dict(os.environ, LC_ALL="C"),
+        input="".join(sha + "\n" for _, sha in entries),
+    )
+    if batch.returncode != 0:
+        raise DeclarationError(f"git cat-file --batch-check failed: {batch.stderr.strip()}")
+    sizes = batch.stdout.split()
+    return {path: int(size) for (path, _), size in zip(entries, sizes)}
+
+
 def git_diff_names(root: Path, commit: str, path: str) -> tuple[str, ...]:
     proc = _git(root, "diff", "--name-only", "-z", commit, "--", path)
     if proc.returncode != 0:

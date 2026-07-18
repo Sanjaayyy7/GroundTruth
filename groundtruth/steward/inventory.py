@@ -9,7 +9,6 @@ from __future__ import annotations
 
 import re
 from functools import lru_cache
-from pathlib import Path
 
 
 @lru_cache(maxsize=None)
@@ -39,14 +38,17 @@ def match_role(path: str, roles: tuple) -> dict | None:
     return None
 
 
-def build_inventory(root: Path, index: tuple, roles: tuple) -> dict:
+def build_inventory(index: tuple, roles: tuple, sizes: dict) -> dict:
+    """sizes maps path -> byte size of the *index blob* (loader.git_blob_sizes);
+    working-tree sizes are forbidden here — the manifest lists itself and
+    stat-based sizes would deny the artifact a byte fixed point."""
     files = []
     totals: dict[str, dict[str, int]] = {}
     for path in sorted(index):
         rule = match_role(path, roles)
         role = rule["role"] if rule else None
         lifecycle = rule["lifecycle"] if rule else None
-        size = (Path(root) / path).stat().st_size if (Path(root) / path).exists() else 0
+        size = int(sizes.get(path, 0))
         files.append({"path": path, "role": role, "lifecycle": lifecycle, "bytes": size})
         if role is not None:
             bucket = totals.setdefault(role, {"files": 0, "bytes": 0})

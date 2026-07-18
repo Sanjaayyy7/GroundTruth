@@ -127,6 +127,14 @@ def test_git_index_is_sorted_and_complete(repo):
     assert git_index(root) == ("a.txt", "b.txt")
 
 
+def test_git_blob_sizes_reads_the_index_not_the_working_tree(repo):
+    root, _ = repo
+    (root / "a.txt").write_text("working tree is much longer now\n")  # not staged
+    from groundtruth.steward.loader import git_blob_sizes
+
+    assert git_blob_sizes(root) == {"a.txt": 4}  # committed blob "one\n"
+
+
 def test_git_diff_names_sees_working_tree_edits_and_object_exists(repo):
     root, sha = repo
     assert git_diff_names(root, sha, "a.txt") == ()
