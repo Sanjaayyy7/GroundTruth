@@ -5,13 +5,13 @@ each phase retrospective.
 
 ## 1. Thesis
 
-The scarce, in-demand AI-engineering skill in 2026 is **evaluation and
+The scarce AI-engineering capability in 2026 is **evaluation and
 reliability** — knowing *when and why* an AI system fails, offline and
 reproducibly, before it ships. Groundtruth is that, built as one platform with a
 family of products rather than three disconnected repos. AgentProbe is product #1
-because "I built the offline agent-safety benchmark" is the strongest single
-interview story on this market (mirrors the OpenAI × Google × IEEE *AI Agent
-Security* competition and arXiv 2507.20526).
+because offline agent-safety evaluation is the most acute unmet need in the
+space (mirrors the OpenAI × Google × IEEE *AI Agent Security* competition and
+arXiv 2507.20526).
 
 ## 2. Architecture (locked)
 

@@ -75,7 +75,7 @@ eight negative controls each fail with a named finding. Live demo: append
 one byte inside the frozen `examples/minijudge/` tree and the build fails
 with a named RC8 finding; revert and it is green again.
 
-## AgentProbe (v0.6)
+## AgentProbe
 
 Offline red-team evaluation for tool-using agents. Point it at an agent; it runs
 a battery of adversarial tool scenarios (prompt injection, data exfiltration,
@@ -102,7 +102,8 @@ groundtruth run --agent vulnerable_agent      # robustness 0.25 — hijacked, le
 groundtruth run --agent hardened_agent        # robustness 1.00 — resists AND completes
 groundtruth run --agent paranoid_agent        # robustness 0.75 — refuses everything
 
-# a real local LLM as the subject (any Ollama model)
+# a real local LLM as the subject — optional; requires Ollama installed
+# and serving (https://ollama.com, then `ollama pull <model>`)
 groundtruth run --agent ollama:gemma3:4b
 
 # how good are the detectors themselves? (measured, misses shown)
@@ -302,7 +303,7 @@ over-refusal is measured on the same suite.
         ┌───────────────┬┴───────────────┬────────────────┐
         ▼               ▼                ▼
    AgentProbe        JudgeKit        PlannerBench
-   (v0.4)            (planned)       (planned)
+   (shipping)        (planned)       (planned)
 ```
 
 Every core primitive exists because a future product needs it — see `SPEC.md`.

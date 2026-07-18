@@ -27,7 +27,7 @@ review trigger: >=5 active exemptions, or any exemption older than
 | config | 2 | 581 |
 | consumer | 10 | 14403 |
 | dataset | 15 | 61810 |
-| doc | 11 | 93502 |
+| doc | 11 | 93547 |
 | evidence | 174 | 543714 |
 | experiment | 4 | 16230 |
 | law | 1 | 8059 |
@@ -37,4 +37,4 @@ review trigger: >=5 active exemptions, or any exemption older than
 | spec | 13 | 134188 |
 | test | 26 | 86789 |
 
-total: 301 files, 1129875 bytes
+total: 301 files, 1129920 bytes
