@@ -145,7 +145,7 @@
       "role": "register"
     },
     {
-      "bytes": 4815,
+      "bytes": 5922,
       "lifecycle": "living",
       "path": "docs/debt.yaml",
       "role": "register"
@@ -214,6 +214,12 @@
       "bytes": 11257,
       "lifecycle": "historical",
       "path": "docs/specs/2026-07-17-v08-stewardship-protocol.md",
+      "role": "spec"
+    },
+    {
+      "bytes": 9521,
+      "lifecycle": "historical",
+      "path": "docs/specs/2026-07-18-v08-steward-validation-report.md",
       "role": "spec"
     },
     {
@@ -955,13 +961,13 @@
       "role": "evidence"
     },
     {
-      "bytes": 48106,
+      "bytes": 48267,
       "lifecycle": "derived",
       "path": "runs/steward/repo-manifest.json",
       "role": "evidence"
     },
     {
-      "bytes": 906,
+      "bytes": 907,
       "lifecycle": "derived",
       "path": "runs/steward/steward-report.md",
       "role": "evidence"
@@ -1820,7 +1826,7 @@
       "files": 11
     },
     "evidence": {
-      "bytes": 543233,
+      "bytes": 543395,
       "files": 174
     },
     "experiment": {
@@ -1840,12 +1846,12 @@
       "files": 2
     },
     "register": {
-      "bytes": 24586,
+      "bytes": 25693,
       "files": 3
     },
     "spec": {
-      "bytes": 103138,
-      "files": 9
+      "bytes": 112659,
+      "files": 10
     },
     "test": {
       "bytes": 85739,
@@ -1853,7 +1859,7 @@
     }
   },
   "total": {
-    "bytes": 1163811,
-    "files": 298
+    "bytes": 1174601,
+    "files": 299
   }
 }
