@@ -53,7 +53,7 @@ def _rc2(root: Path, decls: RepoDeclarations, index: tuple) -> list[Finding]:
                     candidates.append(target)
             for m in _TICK.finditer(line):
                 cand = m.group(1)
-                if any(c in cand for c in "*?…{} \t"):
+                if any(c in cand for c in "*?…{}<> \t"):
                     continue  # patterns/templates/commands, not concrete paths
                 if match_role(cand, decls.roles) is not None:
                     candidates.append(cand)

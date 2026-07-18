@@ -108,6 +108,16 @@ def test_rc1_control_unmatched_tracked_file(repo):
     assert [(f.check_id, f.path) for f in active] == [("RC1", "zzz.bin")]
 
 
+def test_rc2_skips_template_placeholders_in_backticks(repo):
+    # discovered live: docs/REPRODUCIBILITY.md cites `runs/experiments/...-<date>/`
+    _edit(
+        repo, "docs/GUIDE.md",
+        "`runs/m.json`", "`runs/m.json` and `runs/exp-<date>/out.json`",
+    )
+    active, _ = run(repo)
+    assert active == ()
+
+
 def test_rc2_control_broken_living_doc_link(repo):
     _edit(repo, "docs/GUIDE.md", "adr/0001-x.md", "adr/0009-missing.md")
     active, _ = run(repo)

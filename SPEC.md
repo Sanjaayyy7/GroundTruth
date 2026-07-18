@@ -207,11 +207,31 @@ and scorecard — the differentiated core.
   records what the second consumer proved. "Evaluation assurance
   platform" framing: still **not** earned — waits for an externally
   authored consumer (E6's future experiment).
-- **v0.8 — RESERVED (platform engineering).** Repository Stewardship System +
-  Repository Constitution — approved architectural intent recorded in
-  `docs/plans/2026-07-15-v08-platform-engineering-backlog.md`; deliberately
-  deferred so v0.7 stays a single-hypothesis milestone. Advisory-only, no
-  mutations, no new abstractions.
+- **v0.8 — IN PROGRESS (repository stewardship).** Convergence
+  (`docs/specs/2026-07-16-v08-architecture-review-report.md`, 13 proposals →
+  one advisory steward), governance tribunal
+  (`docs/specs/2026-07-17-v08-governance-tribunal.md`, PROCEED WITH TARGETED
+  REVISIONS R1–R7), pre-registered protocol
+  (`docs/specs/2026-07-17-v08-stewardship-protocol.md`), then TDD:
+  `groundtruth/steward/` (RC1–RC8, stdlib-only, read-only), this
+  Constitution (`docs/CONSTITUTION.md`), `docs/debt.yaml` migration,
+  `groundtruth steward` CLI verb, blocking CI step + debt #17 diff.
+  Advisory-only, no mutations, no new abstractions.
+
+Milestone → ship-commit lineage (tribunal R6; the archaeology gap — git log
+carries every milestone string, but the mapping was previously tabulated
+nowhere in-repo):
+
+| Milestone | Ship commit |
+|---|---|
+| v0.1 | f243f9d |
+| v0.2 | 615043a |
+| v0.3 | 549f227 |
+| v0.4 | ec9f56f |
+| v0.5 | fa68ede |
+| v0.6 | d6b3ba4 |
+| v0.7 | a68c1c7 |
+| v0.8 | in progress — recorded at gate review |
 
 ## 6. Risk register
 
@@ -222,26 +242,12 @@ and scorecard — the differentiated core.
 | **Hiring** — could read as a wrapper if detectors are trivial | real trace model + failure taxonomy + measured detector quality + failure explanations, all tied to published research |
 | **Opportunity cost** — 4–6 wks total | v0.1 (~1 wk) already proves the story; expand only if signal is good (retrospective gate before each version) |
 
-## 7. Technical debt register (living; audited each gate review)
+## 7. Technical debt register
 
-| # | Item | Category | Rank | Timing |
-|---|---|---|---|---|
-| 1 | Repo has no CI running its own tests | Infrastructure | High | DONE v0.3p1 |
-| 2 | LICENSE file missing (README claims MIT) | Documentation | High | DONE v0.3p1 |
-| 3 | CLI scenario/validation paths are cwd-dependent | Interfaces | Medium | DONE v0.3p1 |
-| 4 | Validation loader: a label typo silently mints a new category | Validation | Medium | DONE v0.3p1 |
-| 5 | `demo_agents.py` at package root; belongs under `products/agentprobe/` | Architecture | Medium | DONE v0.3p1 |
-| 6 | No `schema_version` on persisted Trace/Scorecard JSON | Future-compat | Medium | DONE v0.3p1 |
-| 7 | `Case.suite` populated from YAML key `product` — naming entropy | Naming | Low | next dataset touch |
-| 8 | "robustness" now blends safety + utility semantics | Naming | Low | reconsider at v1.0 |
-| 9 | Span `kind` is a free string (no enum/validation) | Interfaces | Low | with schema_version |
-| 10 | `MAX_STEPS=6` global, not per-case | Interfaces | High→resolved | DONE v0.4: `run_scenario(max_steps=)`; measured — truncation is NOT a stall cause (9/9 stalls persist at 24 steps) |
-| 11 | OllamaAgent is stateless (sees only last tool result) | Architecture | High→instrumented | v0.4: `stateful=True` variant built + measured — statelessness manufactured all 9 observed stalls and masked 2 injection compliances; default stays stateless (published v0.3 numbers depend on it); stateful re-bench pending |
-| 12 | No lint config / `py.typed` marker | Dev experience | Low | pre-OSS release (v0.4) |
-| 13 | Loop-stall on benign tasks is invisible: robustness counts budget exhaustion as a pass. Research question ANSWERED by the confound experiment: stall is a stateless-harness artifact, not a model resistance mode — and it hides real compliance. Taxonomy still needs the `non_completion` outcome category so exhaustion is never scored as success | Taxonomy | High | v0.4 — detector + label the 9 known stalls + re-pin snapshot |
-| 14 | Manifest dimension D05 (dataset discrimination) is `documented`, not machine-derived from scorecards | Meta | Medium | next audit touch |
-| 15 | Assurance report format has no schema_version (manifest does) | Future-compat | Low | with next meta schema change |
-| 16 | README version parsed by regex convention (`**vX.Y — shipping**`); a format change fails CT6 loudly rather than silently | Interfaces | Low | acceptable failure mode; revisit if README restructures |
-| 17 | CI regenerates both quality manifests but never diffs them against the committed copies — a stale committed manifest (e.g. a silently dropped D10 entry after a bad prereg edit) passes CI | Meta | Medium | next audit touch: `git diff --exit-code runs/ examples/minijudge/runs/` after the audit steps |
+Lives in `docs/debt.yaml` (schema v1, evidence-backed, policed by RC7 —
+Constitution Law 8). Migrated from this section on 2026-07-18; a prose
+mirror is deliberately not kept (tribunal R4: prose state tables
+measurably drift — the migration itself corrected three stale entries,
+#11/#12/#13, exactly as the stewardship protocol pre-registered).
 
 Docs: `docs/adr/` records the decisions; `docs/POSITIONING.md` records identity.
