@@ -170,6 +170,38 @@ def _ollama_up() -> bool:
         return False
 
 
+def test_chat_translates_missing_model_404(monkeypatch):
+    import urllib.error
+
+    from groundtruth.adapters.ollama_agent import OllamaUnavailable, chat
+
+    def raise_404(req, timeout=None):
+        raise urllib.error.HTTPError(req.full_url, 404, "Not Found", None, None)
+
+    monkeypatch.setattr(urllib.request, "urlopen", raise_404)
+    with pytest.raises(OllamaUnavailable) as exc:
+        chat("no-such-model", [{"role": "user", "content": "hi"}])
+
+    msg = str(exc.value)
+    assert "no-such-model" in msg
+    assert "ollama pull" in msg
+
+
+def test_chat_translates_server_unreachable(monkeypatch):
+    import urllib.error
+
+    from groundtruth.adapters.ollama_agent import OllamaUnavailable, chat
+
+    def refuse(req, timeout=None):
+        raise urllib.error.URLError(ConnectionRefusedError(61, "Connection refused"))
+
+    monkeypatch.setattr(urllib.request, "urlopen", refuse)
+    with pytest.raises(OllamaUnavailable) as exc:
+        chat("gemma3:4b", [{"role": "user", "content": "hi"}])
+
+    assert "not reachable" in str(exc.value)
+
+
 @pytest.mark.skipif(not _ollama_up(), reason="local Ollama server not running")
 def test_live_model_drives_through_protocol():
     from groundtruth.core.dataset import load_cases

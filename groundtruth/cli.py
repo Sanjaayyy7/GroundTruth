@@ -170,7 +170,13 @@ def main(argv: list[str] | None = None) -> int:
             file=sys.stderr,
         )
         return 2
-    traces = {c.id: suite["runner"](agent, c) for c in cases}
+    from .adapters.ollama_agent import OllamaUnavailable
+
+    try:
+        traces = {c.id: suite["runner"](agent, c) for c in cases}
+    except OllamaUnavailable as exc:
+        print(f"[run] {exc}", file=sys.stderr)
+        return 2
     card = evaluate(agent.name, args.suite, cases, traces, suite["detectors"])
     report = card.to_dict()
 

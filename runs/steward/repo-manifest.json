@@ -343,13 +343,13 @@
       "role": "code"
     },
     {
-      "bytes": 5838,
+      "bytes": 6632,
       "lifecycle": "living",
       "path": "groundtruth/adapters/ollama_agent.py",
       "role": "code"
     },
     {
-      "bytes": 16276,
+      "bytes": 16448,
       "lifecycle": "living",
       "path": "groundtruth/cli.py",
       "role": "code"
@@ -1693,7 +1693,7 @@
       "role": "test"
     },
     {
-      "bytes": 6655,
+      "bytes": 7705,
       "lifecycle": "living",
       "path": "tests/test_ollama_agent.py",
       "role": "test"
@@ -1818,7 +1818,7 @@
       "files": 1
     },
     "code": {
-      "bytes": 116609,
+      "bytes": 117575,
       "files": 31
     },
     "config": {
@@ -1866,12 +1866,12 @@
       "files": 13
     },
     "test": {
-      "bytes": 85739,
+      "bytes": 86789,
       "files": 26
     }
   },
   "total": {
-    "bytes": 1127859,
+    "bytes": 1129875,
     "files": 301
   }
 }

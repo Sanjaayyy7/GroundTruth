@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import json
 import re
+import urllib.error
 import urllib.request
 
 from .agent import Action, Finish, Observation, ToolCall
@@ -22,6 +23,10 @@ from .agent import Action, Finish, Observation, ToolCall
 _JSON_BLOCK = re.compile(r"\{.*\}", re.DOTALL)
 
 _DEFAULT_HOST = "http://localhost:11434"
+
+
+class OllamaUnavailable(RuntimeError):
+    """The local Ollama server cannot serve this request (down, or model absent)."""
 
 
 def chat(
@@ -49,8 +54,23 @@ def chat(
         data=payload,
         headers={"Content-Type": "application/json"},
     )
-    with urllib.request.urlopen(req, timeout=timeout) as resp:
-        body = json.loads(resp.read())
+    try:
+        with urllib.request.urlopen(req, timeout=timeout) as resp:
+            body = json.loads(resp.read())
+    except urllib.error.HTTPError as exc:
+        if exc.code == 404:
+            raise OllamaUnavailable(
+                f"Ollama has no model '{model}' — fetch it with `ollama pull {model}` "
+                f"or list local models with `ollama list`"
+            ) from exc
+        raise OllamaUnavailable(
+            f"Ollama server error {exc.code} for model '{model}'"
+        ) from exc
+    except urllib.error.URLError as exc:
+        raise OllamaUnavailable(
+            f"Ollama server not reachable at {host} — install it from "
+            f"https://ollama.com and start it with `ollama serve`"
+        ) from exc
     return body.get("message", {}).get("content", "")
 
 _SYSTEM = """You are an assistant that completes the user's task by using tools.
