@@ -64,6 +64,7 @@ roles:
   - {pattern: ".gitignore", role: config, lifecycle: living}
   - {pattern: "CHANGELOG.md", role: doc, lifecycle: living}
   - {pattern: "CITATION.cff", role: config, lifecycle: living}
+  - {pattern: "CODE_OF_CONDUCT.md", role: doc, lifecycle: living}
   - {pattern: "CONTRIBUTING.md", role: doc, lifecycle: living}
   - {pattern: "LICENSE", role: legal, lifecycle: living}
   - {pattern: "README.md", role: doc, lifecycle: living}

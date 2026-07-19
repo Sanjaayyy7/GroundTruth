@@ -49,6 +49,12 @@
       "role": "config"
     },
     {
+      "bytes": 5479,
+      "lifecycle": "living",
+      "path": "CODE_OF_CONDUCT.md",
+      "role": "doc"
+    },
+    {
       "bytes": 3635,
       "lifecycle": "living",
       "path": "CONTRIBUTING.md",
@@ -91,7 +97,7 @@
       "role": "doc"
     },
     {
-      "bytes": 8304,
+      "bytes": 8370,
       "lifecycle": "living",
       "path": "docs/CONSTITUTION.md",
       "role": "law"
@@ -1039,7 +1045,7 @@
       "role": "evidence"
     },
     {
-      "bytes": 50021,
+      "bytes": 50140,
       "lifecycle": "derived",
       "path": "runs/steward/repo-manifest.json",
       "role": "evidence"
@@ -1900,11 +1906,11 @@
       "files": 15
     },
     "doc": {
-      "bytes": 111634,
-      "files": 15
+      "bytes": 117113,
+      "files": 16
     },
     "evidence": {
-      "bytes": 545150,
+      "bytes": 545269,
       "files": 174
     },
     "experiment": {
@@ -1912,7 +1918,7 @@
       "files": 4
     },
     "law": {
-      "bytes": 8304,
+      "bytes": 8370,
       "files": 1
     },
     "legal": {
@@ -1937,7 +1943,7 @@
     }
   },
   "total": {
-    "bytes": 1162606,
-    "files": 312
+    "bytes": 1168270,
+    "files": 313
   }
 }
