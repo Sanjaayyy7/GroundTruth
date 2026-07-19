@@ -27,14 +27,14 @@ review trigger: >=5 active exemptions, or any exemption older than
 | config | 2 | 984 |
 | consumer | 10 | 14403 |
 | dataset | 15 | 61810 |
-| doc | 12 | 99465 |
-| evidence | 174 | 544148 |
+| doc | 13 | 106732 |
+| evidence | 174 | 544263 |
 | experiment | 4 | 16230 |
-| law | 1 | 8059 |
+| law | 1 | 8119 |
 | legal | 1 | 1063 |
 | plan | 1 | 4302 |
 | register | 3 | 25693 |
 | spec | 15 | 142992 |
 | test | 26 | 86789 |
 
-total: 304 files, 1145479 bytes
+total: 305 files, 1152921 bytes

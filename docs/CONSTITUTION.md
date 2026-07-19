@@ -62,6 +62,7 @@ constitution_schema: 1
 roles:
   - {pattern: ".github/**", role: ci, lifecycle: living}
   - {pattern: ".gitignore", role: config, lifecycle: living}
+  - {pattern: "CHANGELOG.md", role: doc, lifecycle: living}
   - {pattern: "LICENSE", role: legal, lifecycle: living}
   - {pattern: "README.md", role: doc, lifecycle: living}
   - {pattern: "SPEC.md", role: doc, lifecycle: living}
