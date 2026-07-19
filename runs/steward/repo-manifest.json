@@ -1,6 +1,30 @@
 {
   "files": [
     {
+      "bytes": 543,
+      "lifecycle": "living",
+      "path": ".github/ISSUE_TEMPLATE/bug_report.md",
+      "role": "ci"
+    },
+    {
+      "bytes": 27,
+      "lifecycle": "living",
+      "path": ".github/ISSUE_TEMPLATE/config.yml",
+      "role": "ci"
+    },
+    {
+      "bytes": 1236,
+      "lifecycle": "living",
+      "path": ".github/ISSUE_TEMPLATE/reproduction_report.md",
+      "role": "ci"
+    },
+    {
+      "bytes": 983,
+      "lifecycle": "living",
+      "path": ".github/PULL_REQUEST_TEMPLATE.md",
+      "role": "ci"
+    },
+    {
       "bytes": 1693,
       "lifecycle": "living",
       "path": ".github/workflows/ci.yml",
@@ -19,6 +43,18 @@
       "role": "doc"
     },
     {
+      "bytes": 922,
+      "lifecycle": "living",
+      "path": "CITATION.cff",
+      "role": "config"
+    },
+    {
+      "bytes": 3635,
+      "lifecycle": "living",
+      "path": "CONTRIBUTING.md",
+      "role": "doc"
+    },
+    {
       "bytes": 1063,
       "lifecycle": "living",
       "path": "LICENSE",
@@ -28,6 +64,12 @@
       "bytes": 16983,
       "lifecycle": "living",
       "path": "README.md",
+      "role": "doc"
+    },
+    {
+      "bytes": 1267,
+      "lifecycle": "living",
+      "path": "SECURITY.md",
       "role": "doc"
     },
     {
@@ -49,7 +91,7 @@
       "role": "doc"
     },
     {
-      "bytes": 8119,
+      "bytes": 8304,
       "lifecycle": "living",
       "path": "docs/CONSTITUTION.md",
       "role": "law"
@@ -997,13 +1039,13 @@
       "role": "evidence"
     },
     {
-      "bytes": 49135,
+      "bytes": 50021,
       "lifecycle": "derived",
       "path": "runs/steward/repo-manifest.json",
       "role": "evidence"
     },
     {
-      "bytes": 907,
+      "bytes": 908,
       "lifecycle": "derived",
       "path": "runs/steward/steward-report.md",
       "role": "evidence"
@@ -1838,16 +1880,16 @@
       "files": 8
     },
     "ci": {
-      "bytes": 1693,
-      "files": 1
+      "bytes": 4482,
+      "files": 5
     },
     "code": {
       "bytes": 117575,
       "files": 31
     },
     "config": {
-      "bytes": 984,
-      "files": 2
+      "bytes": 1906,
+      "files": 3
     },
     "consumer": {
       "bytes": 14403,
@@ -1858,11 +1900,11 @@
       "files": 15
     },
     "doc": {
-      "bytes": 106732,
-      "files": 13
+      "bytes": 111634,
+      "files": 15
     },
     "evidence": {
-      "bytes": 544263,
+      "bytes": 545150,
       "files": 174
     },
     "experiment": {
@@ -1870,7 +1912,7 @@
       "files": 4
     },
     "law": {
-      "bytes": 8119,
+      "bytes": 8304,
       "files": 1
     },
     "legal": {
@@ -1895,7 +1937,7 @@
     }
   },
   "total": {
-    "bytes": 1152921,
-    "files": 305
+    "bytes": 1162606,
+    "files": 312
   }
 }

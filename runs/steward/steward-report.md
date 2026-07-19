@@ -22,19 +22,19 @@ review trigger: >=5 active exemptions, or any exemption older than
 | role | files | bytes |
 |---|---|---|
 | adr | 8 | 20273 |
-| ci | 1 | 1693 |
+| ci | 5 | 4482 |
 | code | 31 | 117575 |
-| config | 2 | 984 |
+| config | 3 | 1906 |
 | consumer | 10 | 14403 |
 | dataset | 15 | 61810 |
-| doc | 13 | 106732 |
-| evidence | 174 | 544263 |
+| doc | 15 | 111634 |
+| evidence | 174 | 545150 |
 | experiment | 4 | 16230 |
-| law | 1 | 8119 |
+| law | 1 | 8304 |
 | legal | 1 | 1063 |
 | plan | 1 | 4302 |
 | register | 3 | 25693 |
 | spec | 15 | 142992 |
 | test | 26 | 86789 |
 
-total: 305 files, 1152921 bytes
+total: 312 files, 1162606 bytes

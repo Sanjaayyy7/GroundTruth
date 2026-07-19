@@ -63,8 +63,11 @@ roles:
   - {pattern: ".github/**", role: ci, lifecycle: living}
   - {pattern: ".gitignore", role: config, lifecycle: living}
   - {pattern: "CHANGELOG.md", role: doc, lifecycle: living}
+  - {pattern: "CITATION.cff", role: config, lifecycle: living}
+  - {pattern: "CONTRIBUTING.md", role: doc, lifecycle: living}
   - {pattern: "LICENSE", role: legal, lifecycle: living}
   - {pattern: "README.md", role: doc, lifecycle: living}
+  - {pattern: "SECURITY.md", role: doc, lifecycle: living}
   - {pattern: "SPEC.md", role: doc, lifecycle: living}
   - {pattern: "pyproject.toml", role: config, lifecycle: living}
   - {pattern: "docs/CONSTITUTION.md", role: law, lifecycle: living}

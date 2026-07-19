@@ -1,0 +1,26 @@
+cff-version: 1.2.0
+message: "If you use Groundtruth in your research, please cite it as below."
+title: "Groundtruth: an AI reliability platform"
+type: software
+authors:
+  - given-names: Sanjay
+    email: sanmanivas@ucdavis.edu
+    affiliation: "University of California, Davis"
+version: 0.8.0
+date-released: "2026-07-18"
+license: MIT
+repository-code: "https://github.com/Sanjaayyy7/GroundTruth"
+keywords:
+  - ai-safety
+  - evaluation
+  - llm
+  - red-team
+  - agents
+  - reliability
+abstract: >-
+  Groundtruth evaluates whether AI systems fail and explains why. One
+  platform spine (trace, eval, dataset, validation engines) powers
+  AgentProbe, an offline deterministic red-team evaluation for tool-using
+  agents with an explanatory failure taxonomy. Detector quality is itself
+  measured against a hand-labeled validation set, misses included, and the
+  repository audits its own claims, evidence, and structure in CI.
