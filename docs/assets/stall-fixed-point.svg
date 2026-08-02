@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 1200 640" width="1200" height="640"
+     preserveAspectRatio="xMidYMid meet"
+     role="img" aria-labelledby="figTitle figDesc"
+     font-family="system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">
+  <title id="figTitle">The stall is a fixed point of the harness</title>
+  <desc id="figDesc">A three panel cycle. Panel one is the prompt at step two, built only from goal G, tools T and last tool result R, with no conversation history. An arrow leads to panel two, the tool call read_email with arguments summary true, decoded greedily at temperature zero. A second arrow leads to panel three, the tool result R, which is identical on every call because read_email is idempotent. A highlighted return edge closes the cycle from panel three back into panel one, labelled: next prompt equals the tuple G, T, R, which is byte-identical to the step two prompt. Inside the loop a callout reads twenty three identical read_email summary true calls. Below the cycle the equation reads: temp 0 implies deterministic implies f of x equals x. Caption: stalling was an artifact of stateless prompt construction, a property of the harness and not of the model. Nine of nine subjects stalled stateless at budgets six, twelve and twenty four; zero of nine stalled with one message of history; two of the nine were complying with the attack all along.</desc>
+
+  <style>
+    @media (prefers-color-scheme: light) {
+      .bg   { fill: #ffffff; }
+      .ink  { fill: #1c2024; }
+      .dim  { fill: #5b636d; }
+      .code { fill: #242a31; }
+      .panel   { fill: #6e7781; fill-opacity: .05; stroke: #c8d0d8; stroke-opacity: 1; }
+      .codebg  { fill: #6e7781; fill-opacity: .07; }
+      .rule    { stroke: #c8d0d8; stroke-opacity: 1; }
+      .flow     { stroke: #6e7781; }
+      .flowfill { fill: #6e7781; }
+      .acc     { fill: #b0470a; }
+      .accs    { stroke: #b0470a; }
+      .accf    { fill: #b0470a; }
+      .pill    { fill: #b0470a; fill-opacity: .07; stroke: #b0470a; stroke-opacity: .45; }
+    }
+    @media (prefers-color-scheme: dark) {
+      .bg   { fill: #0d1117; }
+      .ink  { fill: #e8eef4; }
+      .dim  { fill: #98a2ad; }
+      .code { fill: #d7dee6; }
+      .panel   { fill: #9aa4b0; fill-opacity: .08; stroke: #3d454f; stroke-opacity: 1; }
+      .codebg  { fill: #9aa4b0; fill-opacity: .09; }
+      .rule    { stroke: #3d454f; stroke-opacity: 1; }
+      .flow     { stroke: #8b949e; }
+      .flowfill { fill: #8b949e; }
+      .acc     { fill: #ff8a3d; }
+      .accs    { stroke: #ff8a3d; }
+      .accf    { fill: #ff8a3d; }
+      .pill    { fill: #ff8a3d; fill-opacity: .10; stroke: #ff8a3d; stroke-opacity: .5; }
+    }
+  </style>
+
+  <defs>
+    <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5"
+            markerWidth="7" markerHeight="7" orient="auto">
+      <path class="flowfill" d="M0 0 L10 5 L0 10 Z" fill="#6e7781"/>
+    </marker>
+    <marker id="ahAcc" viewBox="0 0 10 10" refX="9" refY="5"
+            markerWidth="6" markerHeight="6" orient="auto">
+      <path class="accf" d="M0 0 L10 5 L0 10 Z" fill="#b0470a"/>
+    </marker>
+  </defs>
+
+  <!-- self-owned surface: every colour below is contrasted against this, not against the host page -->
+  <rect class="bg" x="0" y="0" width="1200" height="640" fill="#ffffff"/>
+
+  <!-- header -->
+  <text class="ink" x="60" y="58" font-size="30" font-weight="600" fill="#1c2024">The stall is a fixed point of the harness</text>
+  <text class="dim" x="60" y="88" font-size="14" fill="#5b636d"
+        font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">v0.3 adapter &#183; prompt = f(goal, tools, last_tool_result) &#183; temperature 0</text>
+  <text class="dim" x="1140" y="54" font-size="12.5" text-anchor="end" fill="#5b636d"
+        font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">GroundTruth &#183; experiments/stall_confounds</text>
+  <text class="dim" x="1140" y="76" font-size="12.5" text-anchor="end" fill="#5b636d"
+        font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">subject ollama:llama3.1:8b &#183; 24-step budget</text>
+
+  <!-- panel 1 : prompt -->
+  <rect class="panel" x="60" y="126" width="300" height="200" rx="10"
+        fill="#6e7781" fill-opacity=".05" stroke="#c8d0d8" stroke-opacity="1"/>
+  <text class="dim" x="78" y="160" font-size="11.5" font-weight="600" letter-spacing="1.4" fill="#5b636d">PROMPT</text>
+  <text class="ink" x="342" y="160" font-size="14" text-anchor="end" fill="#1c2024"
+        font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">P&#8322;</text>
+  <rect class="codebg" x="76" y="178" width="268" height="92" rx="6" fill="#6e7781" fill-opacity=".07"/>
+  <g class="code" fill="#242a31" font-size="14"
+     font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">
+    <text xml:space="preserve" x="92" y="205">goal:              G</text>
+    <text xml:space="preserve" x="92" y="229">tools:             T</text>
+    <text xml:space="preserve" x="92" y="253">last_tool_result:  R</text>
+  </g>
+  <text class="dim" x="78" y="294" font-size="13" fill="#5b636d">rebuilt from scratch each step</text>
+  <text class="dim" x="78" y="314" font-size="13" fill="#5b636d">no history &#183; no step counter</text>
+
+  <!-- panel 2 : tool call -->
+  <rect class="panel" x="450" y="126" width="300" height="200" rx="10"
+        fill="#6e7781" fill-opacity=".05" stroke="#c8d0d8" stroke-opacity="1"/>
+  <text class="dim" x="468" y="160" font-size="11.5" font-weight="600" letter-spacing="1.4" fill="#5b636d">TOOL CALL</text>
+  <text class="ink" x="732" y="160" font-size="14" text-anchor="end" fill="#1c2024"
+        font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">a = f(P&#8322;)</text>
+  <rect class="codebg" x="466" y="178" width="268" height="92" rx="6" fill="#6e7781" fill-opacity=".07"/>
+  <g class="code" fill="#242a31" font-size="14"
+     font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">
+    <text x="482" y="217">read_email</text>
+    <text x="482" y="241">{"summary": true}</text>
+  </g>
+  <text class="dim" x="468" y="294" font-size="13" fill="#5b636d">temperature 0 &#183; greedy decode</text>
+  <text class="dim" x="468" y="314" font-size="13" fill="#5b636d">same prompt &#8594; same call</text>
+
+  <!-- panel 3 : tool result -->
+  <rect class="panel" x="840" y="126" width="300" height="200" rx="10"
+        fill="#6e7781" fill-opacity=".05" stroke="#c8d0d8" stroke-opacity="1"/>
+  <text class="dim" x="858" y="160" font-size="11.5" font-weight="600" letter-spacing="1.4" fill="#5b636d">TOOL RESULT</text>
+  <text class="ink" x="1122" y="160" font-size="14" text-anchor="end" fill="#1c2024"
+        font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">R</text>
+  <rect class="codebg" x="856" y="178" width="268" height="92" rx="6" fill="#6e7781" fill-opacity=".07"/>
+  <g class="code" fill="#242a31" font-size="14"
+     font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">
+    <text x="872" y="229">{"emails": [ ... ]}</text>
+  </g>
+  <text class="dim" x="858" y="294" font-size="13" fill="#5b636d">read_email is idempotent</text>
+  <text class="dim" x="858" y="314" font-size="13" fill="#5b636d">same call &#8594; same bytes</text>
+
+  <!-- forward edges -->
+  <line class="flow" x1="378" y1="224" x2="432" y2="224" stroke="#6e7781" stroke-width="2" marker-end="url(#ah)"/>
+  <line class="flow" x1="768" y1="224" x2="822" y2="224" stroke="#6e7781" stroke-width="2" marker-end="url(#ah)"/>
+
+  <!-- closing edge : result R rebuilds the identical prompt -->
+  <path class="accs" d="M990 326 V392 Q990 408 974 408 H226 Q210 408 210 392 V336"
+        fill="none" stroke="#b0470a" stroke-width="2.5" marker-end="url(#ahAcc)"/>
+
+  <!-- evidence, held inside the loop -->
+  <rect class="pill" x="420" y="338" width="360" height="58" rx="10"
+        fill="#b0470a" fill-opacity=".07" stroke="#b0470a" stroke-opacity=".45"/>
+  <text class="acc" x="600" y="362" font-size="19" font-weight="600" text-anchor="middle" fill="#b0470a"
+        font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">23 identical calls</text>
+  <text class="dim" x="600" y="383" font-size="13" text-anchor="middle" fill="#5b636d"
+        font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">read_email {"summary": true}</text>
+
+  <text xml:space="preserve" class="acc" x="600" y="434" font-size="14" text-anchor="middle" fill="#b0470a"
+        font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">next prompt = (G, T, R)  &#8801;  P&#8322;   byte-identical</text>
+
+  <!-- the result -->
+  <text xml:space="preserve" class="ink" x="600" y="500" font-size="27" font-weight="600" text-anchor="middle" fill="#1c2024"
+        font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">temp 0  &#8658;  deterministic  &#8658;  f(x) = x</text>
+
+  <line class="rule" x1="60" y1="540" x2="1140" y2="540" stroke="#c8d0d8" stroke-opacity="1" stroke-width="1"/>
+
+  <text class="ink" x="600" y="572" font-size="16" font-weight="500" text-anchor="middle" fill="#1c2024">Stalling was an artifact of stateless prompt construction &#8212; a property of the harness, not of the model.</text>
+  <text class="dim" x="600" y="598" font-size="13" text-anchor="middle" fill="#5b636d">9/9 subjects stalled stateless at budgets 6, 12 and 24 &#183; 0/9 stalled with one message of history &#183; 2 of the 9 were complying with the attack all along</text>
+</svg>
