@@ -1,6 +1,6 @@
-"""RC1–RC8 + the eight pre-registered negative controls (stewardship
-protocol, 2026-07-17): every planted violation must yield a named finding;
-the unmutated fixture must be green; exemptions suppress visibly."""
+"""RC1–RC9 + the pre-registered negative controls (stewardship protocol,
+2026-07-17): every planted violation must yield a named finding; the
+unmutated fixture must be green; exemptions suppress visibly."""
 import subprocess
 from pathlib import Path
 
@@ -16,7 +16,9 @@ constitution_schema: 1
 roles:
   - {pattern: "docs/CONSTITUTION.md", role: law, lifecycle: living}
   - {pattern: "docs/adr/*.md", role: adr, lifecycle: living}
+  - {pattern: "docs/claims.yaml", role: register, lifecycle: living}
   - {pattern: "docs/debt.yaml", role: register, lifecycle: living}
+  - {pattern: "docs/specs/*.md", role: spec, lifecycle: historical}
   - {pattern: "docs/*.md", role: doc, lifecycle: living}
   - {pattern: "pkg/**", role: code, lifecycle: living}
   - {pattern: "runs/**", role: evidence, lifecycle: derived}
@@ -40,7 +42,23 @@ exemptions: []
 
 FILES = {
     "docs/adr/0001-x.md": "# ADR 1\n\n## Review trigger\n\nWhen X changes.\n",
-    "docs/GUIDE.md": "# guide\n\nSee [adr](adr/0001-x.md) and `runs/m.json`.\n",
+    "docs/GUIDE.md": (
+        "# guide\n\nSee [adr](adr/0001-x.md) and `runs/m.json`.\n\n"
+        "Micro precision 0.9545 (tp 42 / fp 2 / fn 5) at v0.1 on 2026-07-18.\n\n"
+        "| metric | value |\n|---|---|\n| recall | 0.89 |\n| counts | 42/2/5 |\n"
+    ),
+    "docs/specs/0001-v01.md": "# v0.1 record\n\nShipped micro precision 0.9143.\n",
+    "docs/claims.yaml": (
+        "schema_version: 2\nclaims:\n  - id: C1\n"
+        "    statement: rules reach micro precision 0.9545 on the fixture corpus\n"
+        "    metrics:\n"
+        "      - {name: micro_precision, value: 0.9545,"
+        " source: runs/detector-quality.json, path: micro.precision}\n"
+    ),
+    "runs/detector-quality.json": (
+        '{"micro": {"precision": 0.9545, "recall": 0.8936,'
+        ' "tp": 42, "fp": 2, "fn": 5}}\n'
+    ),
     "docs/debt.yaml": (
         "debt_schema: 1\nitems:\n"
         '  - {id: 1, title: "open item", category: x, state: open, origin: "v0.1", evidence: ["README.md"], resolution: ""}\n'
@@ -175,6 +193,60 @@ def test_rc8_control_one_byte_edited_in_frozen_tree(repo):
         fh.write("!")
     active, _ = run(repo)
     assert [(f.check_id, f.path) for f in active] == [("RC8", "frozen/data.txt")]
+
+
+def test_rc9_control_drifted_numeric_claim_in_a_living_document(repo):
+    """The exact drift the meta-engine exists to kill: prose keeps a number
+    the artifact no longer produces (0.9545 -> stale 0.9333)."""
+    _edit(repo, "docs/GUIDE.md", "0.9545", "0.9333")
+    active, _ = run(repo)
+    assert [(f.check_id, f.path) for f in active] == [("RC9", "docs/GUIDE.md")]
+    assert active[0].line == 5
+    assert "0.9333" in active[0].summary
+
+
+def test_rc9_control_drifted_confusion_triple(repo):
+    _edit(repo, "docs/GUIDE.md", "| 42/2/5 |", "| 42/3/5 |")
+    active, _ = run(repo)
+    assert [(f.check_id, f.path) for f in active] == [("RC9", "docs/GUIDE.md")]
+    assert "42/3/5" in active[0].summary
+
+
+def test_rc9_historical_record_keeps_the_number_it_shipped_with(repo):
+    """docs/specs/* is `historical`: 0.9143 resolves to nothing today and
+    must not fire — rewriting a shipped record would falsify it (Law 3)."""
+    active, _ = run(repo)
+    assert active == ()
+    _edit(repo, "docs/specs/0001-v01.md", "0.9143", "0.9333")
+    active, _ = run(repo)
+    assert active == ()
+
+
+def test_rc9_excludes_versions_dates_counts_indices_and_code(repo):
+    _edit(
+        repo, "docs/GUIDE.md", "# guide\n",
+        "# guide\n\nv0.9.1 on 2026-08-02 touched 51 files, 3 of them at line 1234;\n"
+        "see item 2 of 7. Fenced numbers are code, not prose:\n\n"
+        "```\nprecision = 0.1111\n```\n\nand so is `micro.precision 0.2222`.\n",
+    )
+    active, _ = run(repo)
+    assert active == ()
+
+
+def test_rc9_allowlist_entry_without_a_reason_is_itself_a_finding(repo):
+    _edit(repo, "docs/GUIDE.md", "0.9545", "0.9333")
+    _edit(repo, "docs/CONSTITUTION.md", "constitution_schema: 1", "constitution_schema: 2")
+    _edit(
+        repo, "docs/CONSTITUTION.md", "exemptions: []",
+        'exemptions: []\nnumeric_allowlist:\n'
+        '  - {literal: "0.9333", path: "docs/GUIDE.md", reason: ""}',
+    )
+    active, _ = run(repo)
+    assert [(f.check_id, f.path) for f in active] == [("RC9", "docs/CONSTITUTION.md")]
+    assert "reason" in active[0].summary
+    _edit(repo, "docs/CONSTITUTION.md", 'reason: ""', 'reason: "external paper threshold"')
+    active, _ = run(repo)
+    assert active == ()
 
 
 def test_exemption_suppresses_visibly_not_silently(repo):

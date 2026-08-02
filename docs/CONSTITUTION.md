@@ -33,7 +33,7 @@ preference.
 
 ## Schema conventions (format law, versioned — ADR-0007 D2 discipline)
 
-- Declarations block: `constitution_schema: 1`, exactly the keys `roles`,
+- Declarations block: `constitution_schema: 2`, exactly the keys `roles`,
   `version_anchors`, `derived_artifacts`, `frozen`, `layer_rules`,
   `exemptions`. A seventh key requires the RC9+ evidence bar and a schema
   bump with migration note.
@@ -58,11 +58,11 @@ preference.
 ## Declarations (schema v1)
 
 ```yaml
-constitution_schema: 1
+constitution_schema: 2
 roles:
   - {pattern: ".github/**", role: ci, lifecycle: living}
   - {pattern: ".gitignore", role: config, lifecycle: living}
-  - {pattern: "CHANGELOG.md", role: doc, lifecycle: living}
+  - {pattern: "CHANGELOG.md", role: doc, lifecycle: historical}
   - {pattern: "CITATION.cff", role: config, lifecycle: living}
   - {pattern: "CODE_OF_CONDUCT.md", role: doc, lifecycle: living}
   - {pattern: "CONTRIBUTING.md", role: doc, lifecycle: living}
@@ -113,4 +113,23 @@ layer_rules:
   - {kind: stdlib_only, src: "groundtruth.steward"}
   - {kind: only_importer, dst: "groundtruth.steward", allowed: ["groundtruth.cli"]}
 exemptions: []
+numeric_allowlist:
+  - {literal: "32/3/5", path: "README.md", reason: "rules-vs-judge comparison is scoped to corpus v1 and its five behavioural detectors, not to the current register"}
+  - {literal: "0.9143", path: "README.md", reason: "rules-vs-judge comparison is scoped to corpus v1 and its five behavioural detectors, not to the current register"}
+  - {literal: "0.8889", path: "README.md", reason: "rules-vs-judge comparison is scoped to corpus v1 and its five behavioural detectors, not to the current register"}
+  - {literal: "0.9032", path: "SPEC.md", reason: "milestone record: the figure this version shipped with, kept as written"}
+  - {literal: "0.8485", path: "SPEC.md", reason: "milestone record: the figure this version shipped with, kept as written"}
+  - {literal: "tp 32 / fp 3 / fn 5", path: "SPEC.md", reason: "milestone record: the figure this version shipped with, kept as written"}
+  - {literal: "0.9143", path: "SPEC.md", reason: "milestone record: the figure this version shipped with, kept as written"}
+  - {literal: "0.8889", path: "SPEC.md", reason: "milestone record: the figure this version shipped with, kept as written"}
+  - {literal: "0.9130", path: "SPEC.md", reason: "milestone record: the figure this version shipped with, kept as written"}
+  - {literal: "tp 42 / fp 3 / fn 5", path: "SPEC.md", reason: "milestone record: the figure this version shipped with, kept as written"}
+  - {literal: "0.8448", path: "SPEC.md", reason: "milestone record: the figure this version shipped with, kept as written"}
+  - {literal: "0.85", path: "SPEC.md", reason: "illustrative threshold, not a measurement"}
+  - {literal: "0.125", path: "docs/CLAIMS.md", reason: "robustness granularity at n=8 (1/8), a property of the denominator rather than a measurement"}
+  - {literal: "0.9032", path: "docs/STRATEGY.md", reason: "milestone record: the figure this version shipped with, kept as written"}
+  - {literal: "0.8485", path: "docs/STRATEGY.md", reason: "milestone record: the figure this version shipped with, kept as written"}
+  - {literal: "0.9143", path: "docs/STRATEGY.md", reason: "milestone record: the figure this version shipped with, kept as written"}
+  - {literal: "0.8889", path: "docs/STRATEGY.md", reason: "milestone record: the figure this version shipped with, kept as written"}
+  - {literal: "0.125", path: "docs/STRATEGY.md", reason: "milestone record: the figure this version shipped with, kept as written"}
 ```

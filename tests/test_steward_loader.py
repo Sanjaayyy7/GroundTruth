@@ -86,6 +86,32 @@ def test_load_constitution_rejects_missing_block_missing_key_and_seventh_key(tmp
         load_constitution(p)
 
 
+def test_schema_2_adds_numeric_allowlist_and_v1_migrates_to_an_empty_one(tmp_path):
+    """Migration note (schema 1 -> 2): the seventh key is `numeric_allowlist`
+    (RC9). A schema-1 block stays legal and reads as an empty allowlist, so
+    the bump is additive; a schema-2 block must carry the key."""
+    p = tmp_path / "CONSTITUTION.md"
+    p.write_text(CONSTITUTION)
+    assert load_constitution(p).numeric_allowlist == ()  # v1 still loads
+    two = CONSTITUTION.replace("constitution_schema: 1", "constitution_schema: 2")
+    p.write_text(two)
+    with pytest.raises(DeclarationError):  # schema 2 without the key
+        load_constitution(p)
+    p.write_text(two.replace(
+        "exemptions: []",
+        'exemptions: []\nnumeric_allowlist:\n'
+        '  - {literal: "0.9545", path: "README.md", reason: "why"}',
+    ))
+    entry = load_constitution(p).numeric_allowlist[0]
+    assert entry == {"literal": "0.9545", "path": "README.md", "reason": "why"}
+    p.write_text(two.replace(
+        "exemptions: []",
+        'exemptions: []\nnumeric_allowlist:\n  - {literal: "0.9545"}',
+    ))
+    with pytest.raises(DeclarationError):  # entry missing path/reason fields
+        load_constitution(p)
+
+
 def test_load_debt_validates_schema_and_state_vocabulary(tmp_path):
     p = tmp_path / "debt.yaml"
     p.write_text(

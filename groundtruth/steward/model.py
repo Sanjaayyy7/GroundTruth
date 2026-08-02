@@ -16,7 +16,7 @@ class DeclarationError(Exception):
 
 @dataclass(frozen=True)
 class Finding:
-    check_id: str  # RC1..RC8
+    check_id: str  # RC1..RC9
     path: str  # repo-relative path the finding cites
     summary: str
     line: int = 0  # 1-based; 0 means the finding is about the whole file
@@ -27,8 +27,10 @@ class Finding:
 
 @dataclass(frozen=True)
 class RepoDeclarations:
-    """Parsed Constitution declarations block (schema v1) — tuples of plain
-    mappings, exactly as declared; validation lives in the loader."""
+    """Parsed Constitution declarations block — tuples of plain mappings,
+    exactly as declared; validation lives in the loader. `numeric_allowlist`
+    is the schema-v2 seventh key and defaults empty, so a v1 block (and every
+    caller written against it) still constructs."""
 
     schema: int
     roles: tuple
@@ -37,3 +39,4 @@ class RepoDeclarations:
     frozen: tuple
     layer_rules: tuple
     exemptions: tuple
+    numeric_allowlist: tuple = ()

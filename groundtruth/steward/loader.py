@@ -28,6 +28,13 @@ _SCHEMA_KEYS = (
     "constitution_schema", "roles", "version_anchors", "derived_artifacts",
     "frozen", "layer_rules", "exemptions",
 )
+# Schema 2 adds exactly one key, `numeric_allowlist` (RC9). The bump is
+# additive: a schema-1 block stays legal and reads as an empty allowlist, so
+# no existing declaration has to be rewritten to keep loading. A schema-2
+# block must carry the key, because an allowlist that is absent and an
+# allowlist that is empty are different statements and only one is deliberate.
+_SCHEMA_2_KEYS = _SCHEMA_KEYS + ("numeric_allowlist",)
+_ALLOWLIST_FIELDS = ("literal", "path", "reason")
 _ROLE_FIELDS = ("pattern", "role", "lifecycle")
 _DEBT_FIELDS = ("id", "title", "category", "state", "origin", "evidence", "resolution")
 _BLOCK = re.compile(r"^```yaml\n(.*?)^```", re.M | re.S)
@@ -147,14 +154,21 @@ def load_constitution(path: Path) -> RepoDeclarations:
             f"{path.name}: no ```yaml declarations block with constitution_schema"
         )
     doc = parse_document(block)
-    if sorted(doc) != sorted(_SCHEMA_KEYS):
-        missing, extra = set(_SCHEMA_KEYS) - set(doc), set(doc) - set(_SCHEMA_KEYS)
+    schema = doc.get("constitution_schema")
+    if schema not in (1, 2):
+        raise DeclarationError(f"{path.name}: unsupported constitution_schema")
+    expected = _SCHEMA_2_KEYS if schema == 2 else _SCHEMA_KEYS
+    if sorted(doc) != sorted(expected):
+        missing, extra = set(expected) - set(doc), set(doc) - set(expected)
         raise DeclarationError(
-            f"{path.name}: declarations must carry exactly the schema v1 keys "
+            f"{path.name}: declarations must carry exactly the schema v{schema} keys "
             f"(missing={sorted(missing)}, extra={sorted(extra)})"
         )
-    if doc["constitution_schema"] != 1:
-        raise DeclarationError(f"{path.name}: unsupported constitution_schema")
+    for entry in doc.get("numeric_allowlist", []):
+        if not isinstance(entry, dict) or sorted(entry) != sorted(_ALLOWLIST_FIELDS):
+            raise DeclarationError(
+                f"{path.name}: numeric_allowlist entry needs exactly {_ALLOWLIST_FIELDS}"
+            )
     for rule in doc["roles"]:
         if not isinstance(rule, dict) or sorted(rule) != sorted(_ROLE_FIELDS):
             raise DeclarationError(f"{path.name}: role rule needs exactly {_ROLE_FIELDS}")
@@ -163,13 +177,14 @@ def load_constitution(path: Path) -> RepoDeclarations:
                 f"{path.name}: lifecycle {rule['lifecycle']!r} not in {LIFECYCLES}"
             )
     return RepoDeclarations(
-        schema=1,
+        schema=schema,
         roles=tuple(doc["roles"]),
         version_anchors=tuple(doc["version_anchors"]),
         derived_artifacts=tuple(doc["derived_artifacts"]),
         frozen=tuple(doc["frozen"]),
         layer_rules=tuple(doc["layer_rules"]),
         exemptions=tuple(doc["exemptions"]),
+        numeric_allowlist=tuple(doc.get("numeric_allowlist", ())),
     )
 
 

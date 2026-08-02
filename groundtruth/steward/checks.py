@@ -1,4 +1,4 @@
-"""RC1–RC8 — deterministic functions of (declarations × repository state).
+"""RC1–RC9 — deterministic functions of (declarations × repository state).
 
 Reserved role names (schema v1 law): `code` scopes RC5's import scan and
 `adr` scopes RC6 — scope lives in the Constitution's role declarations,
@@ -11,6 +11,7 @@ justification — never weakening a check.
 from __future__ import annotations
 
 import ast
+import json
 import re
 import sys
 from pathlib import Path
@@ -211,6 +212,164 @@ def _rc8(root: Path, decls: RepoDeclarations) -> list[Finding]:
     return out
 
 
+_FENCE = re.compile(r"^\s*```")
+# A measured ratio in this project lies in [0, 1]: precision, recall, F1 and
+# every rate. Restricting the grammar to that range is not a convenience, it
+# is what makes the check precise — it structurally cannot see an arXiv id
+# (2507.20526), a Python version (3.11) or any other identifier that happens
+# to carry a decimal point, so those need no exception list.
+_DECIMAL = re.compile(r"(?<![\w.])(0\.\d{2,}|1\.0+)(?![\w.])")
+_TRIPLE = re.compile(r"(?<![\w/.])(\d+)\s*/\s*(\d+)\s*/\s*(\d+)(?![\w/.])")
+_LABELLED_TRIPLE = re.compile(
+    r"tp\s*(\d+)\s*/\s*fp\s*(\d+)\s*/\s*fn\s*(\d+)", re.I
+)
+
+
+def _register_numbers(root: Path, decls: RepoDeclarations, index: tuple):
+    """Every number a living document may quote: values declared in the claims
+    register, and values inside tracked metric artifacts.
+
+    The register is read by regex, not parsed: the steward is stdlib-only and
+    the flow reader does not cover its nested block style, but this check needs
+    only the SET of declared numbers. Over-accepting is the safe direction —
+    Law 3 retires a check on sustained false positives, so one that
+    occasionally lets a stale number pass survives and one that cries wolf
+    does not."""
+    decimals: set[str] = set()
+    triples: set[tuple[int, int, int]] = set()
+
+    def walk(node) -> None:
+        if isinstance(node, dict):
+            if all(k in node for k in ("tp", "fp", "fn")):
+                try:
+                    triples.add((int(node["tp"]), int(node["fp"]), int(node["fn"])))
+                except (TypeError, ValueError):
+                    pass
+            for v in node.values():
+                walk(v)
+        elif isinstance(node, list):
+            for v in node:
+                walk(v)
+        elif isinstance(node, (int, float)) and not isinstance(node, bool):
+            decimals.add(repr(float(node)))
+
+    for path in index:
+        rule = match_role(path, decls.roles)
+        if rule is None:
+            continue
+        full = root / path
+        if not full.exists():
+            continue
+        if path.endswith(".json"):
+            try:
+                walk(json.loads(full.read_text()))
+            except (json.JSONDecodeError, OSError):
+                continue
+        elif rule.get("role") == "register":
+            for m in _DECIMAL.finditer(full.read_text()):
+                decimals.add(repr(float(m.group(1))))
+    return decimals, triples
+
+
+def _resolves(literal: str, decimals: set[str]) -> bool:
+    """Resolves if a declared value rounds to it at the precision the document
+    chose: prose saying 0.89 for a measured 0.8936 rounded, it did not drift."""
+    places = len(literal.split(".", 1)[1])
+    target = float(literal)
+    return any(round(float(v), places) == target for v in decimals)
+
+
+def _law_path(decls: RepoDeclarations, index: tuple) -> str:
+    for path in index:
+        rule = match_role(path, decls.roles)
+        if rule is not None and rule.get("role") == "law":
+            return path
+    return "docs/CONSTITUTION.md"
+
+
+def _rc9(root: Path, decls: RepoDeclarations, index: tuple) -> list[Finding]:
+    """Numeric claims in living documents resolve to a declared register value.
+
+    RC2 checks that a living document's *links* resolve. Nothing checked that
+    its *prose* agrees, so the drift class the meta-engine exists to kill — a
+    documented number the artifact no longer produces — stayed live outside the
+    eleven figures CT5 covers.
+
+    Grammar is narrow by construction, not by exception list: ratios in [0, 1]
+    with two or more places, and confusion triples (labelled anywhere, bare only
+    in a table cell). Integers never match, so counts, line numbers, indices and
+    dates cannot fire; identifiers carrying a decimal point (an arXiv id, a
+    Python version) fall outside [0, 1]. Fenced blocks and inline backticks are
+    stripped — code and command output are not claims.
+
+    Historical documents are exempt, by the same lifecycle law that exempts them
+    from RC2: a shipped record correctly states the number it shipped with, and
+    rewriting it to match today's artifact would falsify the record."""
+    out: list[Finding] = []
+    law = _law_path(decls, index)
+    allowed: set[str] = set()
+    for entry in decls.numeric_allowlist:
+        # The entry still covers its literal even when it is malformed: an
+        # exemption suppresses visibly, never silently, so the reported defect
+        # is the missing justification rather than the drift underneath it.
+        # Dropping coverage here would report two findings for one cause and
+        # bury the actionable one.
+        allowed.add(f"{entry.get('path')}::{entry.get('literal')}")
+        if not str(entry.get("reason", "")).strip():
+            out.append(
+                Finding(
+                    "RC9",
+                    law,
+                    f"numeric_allowlist entry {entry.get('literal')!r} carries no "
+                    f"reason; an unexplained exemption is itself a finding",
+                )
+            )
+
+    decimals, triples = _register_numbers(root, decls, index)
+
+    for path in index:
+        rule = match_role(path, decls.roles)
+        if rule is None or rule["lifecycle"] != "living" or not path.endswith(".md"):
+            continue
+        fenced = False
+        for lineno, line in enumerate((root / path).read_text().splitlines(), 1):
+            if _FENCE.match(line):
+                fenced = not fenced
+                continue
+            if fenced:
+                continue
+            bare = _TICK.sub(" ", line)
+            for m in _LABELLED_TRIPLE.finditer(bare):
+                trip = tuple(int(g) for g in m.groups())
+                if trip not in triples and f"{path}::{m.group(0)}" not in allowed:
+                    out.append(
+                        Finding("RC9", path, f"unregistered counts: {m.group(0)}", lineno)
+                    )
+            # A bare a/b/c is only read as a confusion triple inside a table
+            # cell, where a metric table puts it. In prose the same shape is a
+            # step budget (6/12/24) or an exit-code set (0/1/2), and reading
+            # those as counts is how a check earns a reputation for crying wolf.
+            for m in (_TRIPLE.finditer(_LABELLED_TRIPLE.sub(" ", bare))
+                      if bare.lstrip().startswith("|") else ()):
+                trip = tuple(int(g) for g in m.groups())
+                if trip not in triples and f"{path}::{m.group(0)}" not in allowed:
+                    out.append(
+                        Finding("RC9", path, f"unregistered counts: {m.group(0)}", lineno)
+                    )
+            for m in _DECIMAL.finditer(bare):
+                lit = m.group(1)
+                if not _resolves(lit, decimals) and f"{path}::{lit}" not in allowed:
+                    out.append(
+                        Finding(
+                            "RC9",
+                            path,
+                            f"numeric claim {lit} resolves to no declared register value",
+                            lineno,
+                        )
+                    )
+    return out
+
+
 def run_checks(
     root: Path, decls: RepoDeclarations, debt: tuple, index: tuple
 ) -> tuple[tuple[Finding, ...], tuple[Finding, ...]]:
@@ -225,7 +384,8 @@ def run_checks(
         + _rc5(root, decls, index)
         + _rc6(root, decls, index)
         + _rc7(root, debt, index)
-        + _rc8(root, decls),
+        + _rc8(root, decls)
+        + _rc9(root, decls, index),
         key=Finding.sort_key,
     )
     exempt = {(e["check"], e["path"]) for e in decls.exemptions}
