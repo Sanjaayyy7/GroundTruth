@@ -73,6 +73,7 @@ roles:
   - {pattern: "pyproject.toml", role: config, lifecycle: living}
   - {pattern: "docs/CONSTITUTION.md", role: law, lifecycle: living}
   - {pattern: "docs/adr/*.md", role: adr, lifecycle: living}
+  - {pattern: "docs/assets/**", role: asset, lifecycle: living}
   - {pattern: "docs/claims.yaml", role: register, lifecycle: living}
   - {pattern: "docs/threats.yaml", role: register, lifecycle: living}
   - {pattern: "docs/debt.yaml", role: register, lifecycle: living}
@@ -90,6 +91,7 @@ version_anchors:
   - {file: "pyproject.toml", pattern: "^version = \"([^\"]+)\""}
   - {file: "README.md", pattern: "\*\*v([0-9.]+) — shipping\*\*"}
   - {file: "runs/quality-manifest.json", pattern: "\"version\": \"([0-9.]+)\""}
+  - {file: "groundtruth/__init__.py", pattern: "^__version__ = \"([^\"]+)\""}
 derived_artifacts:
   - {path: "runs/quality-manifest.json", regen: "groundtruth audit"}
   - {path: "runs/assurance-report.md", regen: "groundtruth audit"}
