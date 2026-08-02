@@ -9,12 +9,13 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import sys
 from pathlib import Path
 from typing import Any
 
 from .core.dataset import load_cases
-from .core.evaluator import evaluate
+from .core.evaluator import TraceNotFound, evaluate
 from .core.validation import load_labeled, measure
 from .products.agentprobe.demo_agents import REGISTRY
 from .products.agentprobe.detectors import (
@@ -30,12 +31,42 @@ from .products.agentprobe.runner import run_scenario
 
 # Data directories resolve against the repo root, not the caller's cwd, so the
 # CLI works from anywhere (and inside CI checkouts).
-_REPO_ROOT = Path(__file__).resolve().parents[1]
+_DEFAULT_ROOT = Path(__file__).resolve().parents[1]
+
+
+class SourceInstallRequired(RuntimeError):
+    """The corpus is not reachable from the resolved root. CLI exit code 2."""
+
+
+def _repo_root() -> Path:
+    """Root that the corpus and default artifact paths resolve against.
+
+    GROUNDTRUTH_ROOT overrides it. A non-editable `pip install .` puts this
+    module under site-packages, where the corpus is absent: scenarios and
+    labeled traces are evaluation data, not package code, and are deliberately
+    not shipped inside the wheel."""
+    env = os.environ.get("GROUNDTRUTH_ROOT")
+    return Path(env).expanduser().resolve() if env else _DEFAULT_ROOT
+
+
+def _corpus_root() -> Path:
+    root = _repo_root()
+    missing = [d for d in ("scenarios", "validation") if not (root / d).is_dir()]
+    if missing:
+        raise SourceInstallRequired(
+            f"no {' or '.join(missing)} directory under {root} — Groundtruth resolves "
+            f"its scenario and validation corpus relative to a source checkout, and "
+            f"that corpus is not shipped inside the installed package. Either install "
+            f"from a clone in place (`pip install -e .`), or point GROUNDTRUTH_ROOT at "
+            f"the checkout (`GROUNDTRUTH_ROOT=/path/to/groundtruth groundtruth ...`)"
+        )
+    return root
+
 
 SUITES: dict[str, dict[str, Any]] = {
     "agentprobe": {
-        "scenarios": _REPO_ROOT / "scenarios/agentprobe",
-        "validation": _REPO_ROOT / "validation/agentprobe",
+        "scenarios": "scenarios/agentprobe",
+        "validation": "validation/agentprobe",
         "runner": run_scenario,
         "detectors": [
             UnsafeToolCall(),
@@ -150,7 +181,12 @@ def main(argv: list[str] | None = None) -> int:
         return _audit(args)
 
     suite = SUITES[args.suite]
-    cases = load_cases(args.scenarios or suite["scenarios"])
+    try:
+        scenarios = Path(args.scenarios) if args.scenarios else _corpus_root() / suite["scenarios"]
+    except SourceInstallRequired as exc:
+        print(f"[run] {exc}", file=sys.stderr)
+        return 2
+    cases = load_cases(scenarios)
     if not cases:
         print(f"no scenarios found for suite '{args.suite}'", file=sys.stderr)
         return 2
@@ -174,10 +210,10 @@ def main(argv: list[str] | None = None) -> int:
 
     try:
         traces = {c.id: suite["runner"](agent, c) for c in cases}
-    except OllamaUnavailable as exc:
+        card = evaluate(agent.name, args.suite, cases, traces, suite["detectors"])
+    except (OllamaUnavailable, TraceNotFound) as exc:
         print(f"[run] {exc}", file=sys.stderr)
         return 2
-    card = evaluate(agent.name, args.suite, cases, traces, suite["detectors"])
     report = card.to_dict()
 
     if args.traces_out:
@@ -211,12 +247,20 @@ def _ci(args: argparse.Namespace) -> int:
     if agent is None:
         print(f"unknown agent '{args.agent}'", file=sys.stderr)
         return 2
-    cases = load_cases(suite["scenarios"])
+    try:
+        cases = load_cases(_corpus_root() / suite["scenarios"])
+    except SourceInstallRequired as exc:
+        print(f"[ci] {exc}", file=sys.stderr)
+        return 2
     traces = {c.id: suite["runner"](agent, c) for c in cases}
-    current = evaluate(agent.name, args.suite, cases, traces, suite["detectors"]).to_dict()
+    try:
+        current = evaluate(agent.name, args.suite, cases, traces, suite["detectors"]).to_dict()
+    except TraceNotFound as exc:
+        print(f"[ci] {exc}", file=sys.stderr)
+        return 2
 
     default_name = f"baseline-{args.agent.replace(':', '-')}.json"
-    baseline_path = Path(args.baseline) if args.baseline else _REPO_ROOT / "runs" / default_name
+    baseline_path = Path(args.baseline) if args.baseline else _repo_root() / "runs" / default_name
 
     if args.update:
         baseline_path.parent.mkdir(parents=True, exist_ok=True)
@@ -258,7 +302,7 @@ def _ci(args: argparse.Namespace) -> int:
 def _report(args: argparse.Namespace) -> int:
     from .core.report import render_html
 
-    runs_dir = Path(args.runs) if args.runs else _REPO_ROOT / "runs"
+    runs_dir = Path(args.runs) if args.runs else _repo_root() / "runs"
     cards = [json.loads(p.read_text()) for p in sorted(runs_dir.glob("scorecard-*.json"))]
     if not cards:
         print(f"no scorecard-*.json artifacts in {runs_dir}", file=sys.stderr)
@@ -279,7 +323,7 @@ def _audit(args: argparse.Namespace) -> int:
     from .meta.loader import RegisterError, load_evidence
     from .meta.manifest import build_manifest, render_manifest
 
-    root = Path(args.root) if args.root else _REPO_ROOT
+    root = Path(args.root) if args.root else _repo_root()
     try:
         nodes = load_evidence(
             root,
@@ -332,7 +376,7 @@ def _steward(args: argparse.Namespace) -> int:
     )
     from .steward.report import render_manifest, render_report
 
-    root = Path(args.root) if args.root else _REPO_ROOT
+    root = Path(args.root) if args.root else _repo_root()
     try:
         decls = load_constitution(root / "docs/CONSTITUTION.md")
         debt = load_debt(root / "docs/debt.yaml")
@@ -373,7 +417,12 @@ def _steward(args: argparse.Namespace) -> int:
 
 def _validate(args: argparse.Namespace) -> int:
     suite = SUITES[args.suite]
-    items = load_labeled(args.labeled or suite["validation"])
+    try:
+        labeled = Path(args.labeled) if args.labeled else _corpus_root() / suite["validation"]
+    except SourceInstallRequired as exc:
+        print(f"[validate] {exc}", file=sys.stderr)
+        return 2
+    items = load_labeled(labeled)
     if not items:
         print(f"no labeled traces found for suite '{args.suite}'", file=sys.stderr)
         return 2

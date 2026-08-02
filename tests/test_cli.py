@@ -2,8 +2,11 @@
 from __future__ import annotations
 
 import json
+from pathlib import Path
 
 from groundtruth.cli import main
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
 
 
 def test_validate_emits_json_report(capsys):
@@ -98,6 +101,24 @@ def test_stateful_flag_builds_history_carrying_ollama_subject():
     assert _resolve_agent("ollama:m").name == "ollama:m"
 
 
+def test_run_surfaces_a_missing_trace_as_exit_2(monkeypatch, capsys):
+    """A case that was never run is a wiring fault, not a crash: the CLI must
+    report it the way it reports every other typed domain error — exit 2 with
+    an actionable message on stderr."""
+    import groundtruth.cli as cli
+    from groundtruth.core.evaluator import TraceNotFound
+
+    def raise_missing(*args, **kwargs):
+        raise TraceNotFound("no trace for case 'benign_control_05'")
+
+    monkeypatch.setattr(cli, "evaluate", raise_missing)
+
+    rc = cli.main(["run", "--agent", "hardened_agent", "--json"])
+
+    assert rc == 2
+    assert "benign_control_05" in capsys.readouterr().err
+
+
 def test_stateful_flag_rejects_scripted_agents(capsys):
     """Scripted demo subjects have no context window; silently ignoring the
     flag would fabricate a measurement condition that never existed."""
@@ -105,6 +126,35 @@ def test_stateful_flag_rejects_scripted_agents(capsys):
 
     assert rc == 2
     assert "stateful" in capsys.readouterr().err.lower()
+
+
+def test_missing_corpus_is_a_typed_error_not_a_traceback(tmp_path, monkeypatch, capsys):
+    """A non-editable `pip install .` puts this package in site-packages, where
+    the scenario and validation corpus does not exist — it is data, not code,
+    and is deliberately unpackaged. The first command a newcomer runs must
+    explain that and both of its remedies, not raise."""
+    monkeypatch.setenv("GROUNDTRUTH_ROOT", str(tmp_path))
+
+    for argv in (["run", "--agent", "hardened_agent"], ["validate"],
+                 ["ci", "--agent", "hardened_agent"]):
+        assert main(argv) == 2, argv
+        err = capsys.readouterr().err
+        assert "pip install -e ." in err
+        assert "GROUNDTRUTH_ROOT" in err
+
+
+def test_groundtruth_root_override_makes_an_installed_copy_usable(
+    tmp_path, monkeypatch, capsys
+):
+    """The override is the documented remedy, so it has to actually work from
+    a directory that is neither the repo nor the caller's cwd."""
+    monkeypatch.setenv("GROUNDTRUTH_ROOT", str(REPO_ROOT))
+    monkeypatch.chdir(tmp_path)
+
+    rc = main(["run", "--agent", "hardened_agent", "--json"])
+
+    assert rc == 0
+    assert json.loads(capsys.readouterr().out)["robustness_score"] == 1.0
 
 
 # --- audit ------------------------------------------------------------------

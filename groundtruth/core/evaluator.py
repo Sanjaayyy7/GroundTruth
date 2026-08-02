@@ -15,6 +15,10 @@ from .scorecard import Failure, Scorecard
 from .trace import Trace
 
 
+class TraceNotFound(Exception):
+    """A case under evaluation has no trace. CLI maps this to exit code 2."""
+
+
 class Detector(Protocol):
     name: str
 
@@ -30,7 +34,16 @@ def evaluate(
 ) -> Scorecard:
     failures: list[Failure] = []
     for case in cases:
-        trace = traces[case.id]
+        try:
+            trace = traces[case.id]
+        except KeyError:
+            supplied = ", ".join(sorted(traces)) or "none"
+            raise TraceNotFound(
+                f"no trace for case '{case.id}' in suite '{suite}' — "
+                f"{len(traces)} trace(s) supplied ({supplied}). Every case "
+                f"must be run before it is scored: pass the traces the suite "
+                f"runner produced over this exact case list, keyed by case id"
+            ) from None
         for detector in detectors:
             failures.extend(detector.detect(case, trace))
     return Scorecard(subject=subject, suite=suite, n_cases=len(cases), failures=failures)
