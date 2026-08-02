@@ -1,0 +1,20 @@
+{
+  "tolerance": 0.03,
+  "holds": true,
+  "subjects": [
+    {
+      "subject": "llama3.1:8b",
+      "published_precision": 0.2254,
+      "measured_precision": 0.2254,
+      "delta": 0.0,
+      "within_tolerance": true
+    },
+    {
+      "subject": "gemma3:4b",
+      "published_precision": 0.3387,
+      "measured_precision": 0.3137,
+      "delta": -0.025,
+      "within_tolerance": true
+    }
+  ]
+}
