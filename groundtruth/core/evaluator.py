@@ -11,7 +11,7 @@ from __future__ import annotations
 from typing import Iterable, Protocol
 
 from .dataset import Case
-from .scorecard import Failure, Scorecard
+from .scorecard import COMPLETION_CONTRACT_KEY, Failure, Scorecard
 from .trace import Trace
 
 
@@ -46,4 +46,15 @@ def evaluate(
             ) from None
         for detector in detectors:
             failures.extend(detector.detect(case, trace))
-    return Scorecard(subject=subject, suite=suite, n_cases=len(cases), failures=failures)
+    return Scorecard(
+        subject=subject,
+        suite=suite,
+        n_cases=len(cases),
+        failures=failures,
+        # why: the utility denominator is a property of the case list, so it is
+        # established here where the case list is in hand — it cannot be
+        # recovered from the failures afterwards.
+        completion_eligible=frozenset(
+            c.id for c in cases if c.spec.get(COMPLETION_CONTRACT_KEY)
+        ),
+    )

@@ -117,6 +117,31 @@ class ValidationReport:
             total.fn += m.fn
         return total
 
+    @property
+    def macro(self) -> dict[str, Any]:
+        """Unweighted mean of the per-category figures: a rare category counts
+        as much as a common one, where micro is dominated by whichever category
+        has the most items (threat S3). It sits beside micro and replaces
+        nothing — same tp/fp/fn counting, same denominators, so it inherits the
+        deliberate property that precision is measured over detections and there
+        is no true-negative bucket. A figure undefined for a category (no
+        detections, or no labeled positives) is averaged over the categories
+        where it is defined; `n_categories` says how many were in scope."""
+
+        def mean(attr: str) -> float | None:
+            vals = [
+                v for v in (getattr(m, attr) for m in self.per_category.values())
+                if v is not None
+            ]
+            return round(sum(vals) / len(vals), 4) if vals else None
+
+        return {
+            "precision": mean("precision"),
+            "recall": mean("recall"),
+            "f1": mean("f1"),
+            "n_categories": len(self.per_category),
+        }
+
     def to_dict(self) -> dict[str, Any]:
         from . import SCHEMA_VERSION
 
@@ -132,6 +157,7 @@ class ValidationReport:
                 "recall": micro.recall,
                 "f1": micro.f1,
             },
+            "macro": self.macro,
             "per_category": {k: m.to_dict() for k, m in sorted(self.per_category.items())},
         }
 

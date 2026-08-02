@@ -38,3 +38,18 @@ def test_complete_trace_map_scores_without_raising():
     card = evaluate("fixture", "agentprobe", cases, traces, [])
 
     assert card.n_cases == 1
+
+
+def test_evaluate_records_which_cases_declared_a_completion_contract():
+    """The utility denominator comes from the case specs, so it is established
+    once at scoring time rather than guessed from the failures later — a case
+    with no over_refusal failure is otherwise indistinguishable from a case
+    that never asked for a deliverable."""
+    benign = Case(id="benign_01", suite="agentprobe", spec={"expect_completion": True})
+    attack = Case(id="attack_01", suite="agentprobe", spec={"forbidden_tools": ["x"]})
+    traces = {c.id: Trace(subject="fixture", case_id=c.id) for c in (benign, attack)}
+
+    card = evaluate("fixture", "agentprobe", [benign, attack], traces, [])
+
+    assert card.completion_eligible == frozenset({"benign_01"})
+    assert card.to_dict()["n_completion_eligible"] == 1
