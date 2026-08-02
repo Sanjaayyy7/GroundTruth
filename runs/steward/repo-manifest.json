@@ -38,7 +38,7 @@
     },
     {
       "bytes": 7267,
-      "lifecycle": "living",
+      "lifecycle": "historical",
       "path": "CHANGELOG.md",
       "role": "doc"
     },
@@ -97,7 +97,7 @@
       "role": "doc"
     },
     {
-      "bytes": 8512,
+      "bytes": 10961,
       "lifecycle": "living",
       "path": "docs/CONSTITUTION.md",
       "role": "law"
@@ -391,6 +391,18 @@
       "role": "experiment"
     },
     {
+      "bytes": 6081,
+      "lifecycle": "historical",
+      "path": "experiments/judge_rerun/REPORT.md",
+      "role": "experiment"
+    },
+    {
+      "bytes": 10062,
+      "lifecycle": "historical",
+      "path": "experiments/judge_rerun/run.py",
+      "role": "experiment"
+    },
+    {
       "bytes": 4196,
       "lifecycle": "historical",
       "path": "experiments/stall_confounds/PREDICTIONS.md",
@@ -427,7 +439,7 @@
       "role": "code"
     },
     {
-      "bytes": 8562,
+      "bytes": 9325,
       "lifecycle": "living",
       "path": "groundtruth/adapters/ollama_agent.py",
       "role": "code"
@@ -547,7 +559,7 @@
       "role": "code"
     },
     {
-      "bytes": 4943,
+      "bytes": 9942,
       "lifecycle": "living",
       "path": "groundtruth/products/agentprobe/judge.py",
       "role": "code"
@@ -565,7 +577,7 @@
       "role": "code"
     },
     {
-      "bytes": 9713,
+      "bytes": 16920,
       "lifecycle": "living",
       "path": "groundtruth/steward/checks.py",
       "role": "code"
@@ -577,13 +589,13 @@
       "role": "code"
     },
     {
-      "bytes": 10072,
+      "bytes": 10990,
       "lifecycle": "living",
       "path": "groundtruth/steward/loader.py",
       "role": "code"
     },
     {
-      "bytes": 1154,
+      "bytes": 1323,
       "lifecycle": "living",
       "path": "groundtruth/steward/model.py",
       "role": "code"
@@ -634,6 +646,114 @@
       "bytes": 1654,
       "lifecycle": "derived",
       "path": "runs/detector-quality.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 3336,
+      "lifecycle": "derived",
+      "path": "runs/experiments/judge-rerun-2026-08-02/metrics/A0--gemma3-4b.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 5157,
+      "lifecycle": "derived",
+      "path": "runs/experiments/judge-rerun-2026-08-02/metrics/A0--llama3.1-8b.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 3336,
+      "lifecycle": "derived",
+      "path": "runs/experiments/judge-rerun-2026-08-02/metrics/A1--gemma3-4b.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 5027,
+      "lifecycle": "derived",
+      "path": "runs/experiments/judge-rerun-2026-08-02/metrics/A1--llama3.1-8b.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 3522,
+      "lifecycle": "derived",
+      "path": "runs/experiments/judge-rerun-2026-08-02/metrics/B--gemma3-4b.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 3596,
+      "lifecycle": "derived",
+      "path": "runs/experiments/judge-rerun-2026-08-02/metrics/B--llama3.1-8b.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 4344,
+      "lifecycle": "derived",
+      "path": "runs/experiments/judge-rerun-2026-08-02/metrics/C--gemma3-4b.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 5765,
+      "lifecycle": "derived",
+      "path": "runs/experiments/judge-rerun-2026-08-02/metrics/C--llama3.1-8b.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 399,
+      "lifecycle": "derived",
+      "path": "runs/experiments/judge-rerun-2026-08-02/p1-gate.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 16051,
+      "lifecycle": "derived",
+      "path": "runs/experiments/judge-rerun-2026-08-02/replies/A0--gemma3-4b.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 23068,
+      "lifecycle": "derived",
+      "path": "runs/experiments/judge-rerun-2026-08-02/replies/A0--llama3.1-8b.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 16052,
+      "lifecycle": "derived",
+      "path": "runs/experiments/judge-rerun-2026-08-02/replies/A1--gemma3-4b.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 22850,
+      "lifecycle": "derived",
+      "path": "runs/experiments/judge-rerun-2026-08-02/replies/A1--llama3.1-8b.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 21613,
+      "lifecycle": "derived",
+      "path": "runs/experiments/judge-rerun-2026-08-02/replies/B--gemma3-4b.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 22650,
+      "lifecycle": "derived",
+      "path": "runs/experiments/judge-rerun-2026-08-02/replies/B--llama3.1-8b.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 15279,
+      "lifecycle": "derived",
+      "path": "runs/experiments/judge-rerun-2026-08-02/replies/C--gemma3-4b.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 18951,
+      "lifecycle": "derived",
+      "path": "runs/experiments/judge-rerun-2026-08-02/replies/C--llama3.1-8b.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 6279,
+      "lifecycle": "derived",
+      "path": "runs/experiments/judge-rerun-2026-08-02/summary.json",
       "role": "evidence"
     },
     {
@@ -1057,13 +1177,13 @@
       "role": "evidence"
     },
     {
-      "bytes": 50620,
+      "bytes": 50880,
       "lifecycle": "derived",
       "path": "runs/steward/repo-manifest.json",
       "role": "evidence"
     },
     {
-      "bytes": 929,
+      "bytes": 930,
       "lifecycle": "derived",
       "path": "runs/steward/steward-report.md",
       "role": "evidence"
@@ -1735,7 +1855,7 @@
       "role": "test"
     },
     {
-      "bytes": 4835,
+      "bytes": 9619,
       "lifecycle": "living",
       "path": "tests/test_judge.py",
       "role": "test"
@@ -1783,7 +1903,7 @@
       "role": "test"
     },
     {
-      "bytes": 9837,
+      "bytes": 11886,
       "lifecycle": "living",
       "path": "tests/test_ollama_agent.py",
       "role": "test"
@@ -1813,7 +1933,7 @@
       "role": "test"
     },
     {
-      "bytes": 6981,
+      "bytes": 10061,
       "lifecycle": "living",
       "path": "tests/test_steward_checks.py",
       "role": "test"
@@ -1837,7 +1957,7 @@
       "role": "test"
     },
     {
-      "bytes": 5908,
+      "bytes": 7114,
       "lifecycle": "living",
       "path": "tests/test_steward_loader.py",
       "role": "test"
@@ -1924,7 +2044,7 @@
       "files": 5
     },
     "code": {
-      "bytes": 138212,
+      "bytes": 152268,
       "files": 31
     },
     "config": {
@@ -1944,15 +2064,15 @@
       "files": 16
     },
     "evidence": {
-      "bytes": 548820,
-      "files": 174
+      "bytes": 746356,
+      "files": 192
     },
     "experiment": {
-      "bytes": 16230,
-      "files": 4
+      "bytes": 32373,
+      "files": 6
     },
     "law": {
-      "bytes": 8512,
+      "bytes": 10961,
       "files": 1
     },
     "legal": {
@@ -1972,12 +2092,12 @@
       "files": 16
     },
     "test": {
-      "bytes": 112989,
+      "bytes": 124108,
       "files": 29
     }
   },
   "total": {
-    "bytes": 1235813,
-    "files": 318
+    "bytes": 1477116,
+    "files": 338
   }
 }
