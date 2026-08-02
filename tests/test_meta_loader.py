@@ -101,3 +101,25 @@ def test_missing_register_raises_register_error(fixture_repo):
     (fixture_repo / "docs/threats.yaml").unlink()
     with pytest.raises(RegisterError, match="threats.yaml"):
         load_evidence(fixture_repo, git_facts=GIT_FACTS)
+
+
+def test_git_probe_is_bounded_and_a_hang_becomes_a_register_error(monkeypatch, tmp_path):
+    """probe_git_facts shells out to git for commit existence and ancestry. A
+    git that never returns must surface as the loader's own domain error (CLI
+    exit 2), not as an audit that hangs forever."""
+    import subprocess
+
+    import groundtruth.meta.loader as loader
+
+    timeouts = []
+
+    def hang(argv, **kwargs):
+        timeouts.append(kwargs.get("timeout"))
+        raise subprocess.TimeoutExpired(argv, kwargs.get("timeout") or 0)
+
+    monkeypatch.setattr(loader.subprocess, "run", hang)
+    with pytest.raises(RegisterError) as exc:
+        loader.probe_git_facts(tmp_path, ["abc1234"])
+
+    assert timeouts == [loader._GIT_TIMEOUT]
+    assert "timed out" in str(exc.value)

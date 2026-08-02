@@ -26,9 +26,26 @@ class RegisterError(Exception):
     """A register is missing or malformed. CLI maps this to exit code 2."""
 
 
+_GIT_TIMEOUT = 30  # seconds, per invocation
 _PYPROJECT_VERSION = re.compile(r'^version\s*=\s*"([^"]+)"', re.M)
 _README_VERSION = re.compile(r"\*\*v(\d+\.\d+) — shipping\*\*")
 _PROSE_THREAT_ID = re.compile(r"^\|\s*([IEKS]\d+|T\d+)\s*\|", re.M)
+
+
+def _git(root: Path, *args: str) -> subprocess.CompletedProcess:
+    """Bounded git. An audit that hangs on a stale lock or a credential prompt
+    publishes nothing; a timeout must become a register error the CLI can
+    report and exit on."""
+    try:
+        return subprocess.run(
+            ["git", *args], cwd=root, capture_output=True, text=True, timeout=_GIT_TIMEOUT
+        )
+    except subprocess.TimeoutExpired as exc:
+        raise RegisterError(
+            f"git {args[0]} timed out after {_GIT_TIMEOUT}s in {root} — look for a "
+            f"stale .git/index.lock, a credential prompt, or an unresponsive "
+            f"filesystem, then rerun `groundtruth audit`"
+        ) from exc
 
 
 def probe_git_facts(
@@ -36,14 +53,10 @@ def probe_git_facts(
 ) -> dict:
     facts: dict = {"__ancestry__": {}}
     for sha in commits:
-        proc = subprocess.run(
-            ["git", "cat-file", "-t", sha], cwd=root, capture_output=True, text=True
-        )
+        proc = _git(root, "cat-file", "-t", sha)
         facts[sha] = {"exists": proc.returncode == 0 and proc.stdout.strip() == "commit"}
     for a, b in ancestry:
-        proc = subprocess.run(
-            ["git", "merge-base", "--is-ancestor", a, b], cwd=root, capture_output=True
-        )
+        proc = _git(root, "merge-base", "--is-ancestor", a, b)
         facts["__ancestry__"][(a, b)] = proc.returncode == 0
     return facts
 

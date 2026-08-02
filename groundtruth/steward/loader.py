@@ -21,6 +21,7 @@ from pathlib import Path
 
 from .model import DeclarationError, RepoDeclarations
 
+_GIT_TIMEOUT = 30  # seconds, per invocation
 LIFECYCLES = ("living", "historical", "derived", "frozen")
 DEBT_STATES = ("open", "resolved", "accepted")
 _SCHEMA_KEYS = (
@@ -190,12 +191,23 @@ def load_debt(path: Path) -> tuple[dict, ...]:
     return tuple(doc["items"])
 
 
-def _git(root: Path, *args: str) -> subprocess.CompletedProcess:
-    return subprocess.run(
-        ["git", "-c", "core.quotePath=false", *args],
-        cwd=root, capture_output=True, text=True,
-        env=dict(os.environ, LC_ALL="C"),
-    )
+def _git(root: Path, *args: str, stdin: str | None = None) -> subprocess.CompletedProcess:
+    """Every invocation is bounded: git blocks indefinitely on a stale lock, a
+    credential prompt or an unresponsive filesystem, and an audit that hangs
+    reports nothing at all."""
+    try:
+        return subprocess.run(
+            ["git", "-c", "core.quotePath=false", *args],
+            cwd=root, capture_output=True, text=True,
+            env=dict(os.environ, LC_ALL="C"),
+            input=stdin, timeout=_GIT_TIMEOUT,
+        )
+    except subprocess.TimeoutExpired as exc:
+        raise DeclarationError(
+            f"git {args[0]} timed out after {_GIT_TIMEOUT}s in {root} — look for a "
+            f"stale .git/index.lock, a credential prompt, or an unresponsive "
+            f"filesystem, then rerun `groundtruth steward`"
+        ) from exc
 
 
 def git_index(root: Path) -> tuple[str, ...]:
@@ -217,11 +229,9 @@ def git_blob_sizes(root: Path) -> dict[str, int]:
         if record:
             meta, path = record.split("\t", 1)
             entries.append((path, meta.split()[1]))
-    batch = subprocess.run(
-        ["git", "-c", "core.quotePath=false", "cat-file", "--batch-check=%(objectsize)"],
-        cwd=root, capture_output=True, text=True,
-        env=dict(os.environ, LC_ALL="C"),
-        input="".join(sha + "\n" for _, sha in entries),
+    batch = _git(
+        root, "cat-file", "--batch-check=%(objectsize)",
+        stdin="".join(sha + "\n" for _, sha in entries),
     )
     if batch.returncode != 0:
         raise DeclarationError(f"git cat-file --batch-check failed: {batch.stderr.strip()}")

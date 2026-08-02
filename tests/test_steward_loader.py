@@ -144,6 +144,28 @@ def test_git_diff_names_sees_working_tree_edits_and_object_exists(repo):
     assert not git_object_exists(root, "0" * 40)
 
 
+def test_every_git_invocation_is_bounded_and_a_hang_becomes_a_typed_error(monkeypatch, repo):
+    """git can block indefinitely on a stale index.lock, a credential prompt
+    or an unresponsive filesystem. The steward must fail with its own domain
+    error (CLI exit 2) instead of hanging the audit forever."""
+    import groundtruth.steward.loader as loader
+
+    timeouts = []
+
+    def hang(argv, **kwargs):
+        timeouts.append(kwargs.get("timeout"))
+        raise subprocess.TimeoutExpired(argv, kwargs.get("timeout") or 0)
+
+    monkeypatch.setattr(loader.subprocess, "run", hang)
+    root, _ = repo
+    with pytest.raises(DeclarationError) as exc:
+        git_index(root)
+
+    assert timeouts == [loader._GIT_TIMEOUT]
+    assert "timed out" in str(exc.value)
+    assert "index.lock" in str(exc.value)  # actionable, names what to look for
+
+
 def test_git_index_on_this_repo_contains_known_files():
     root = Path(__file__).resolve().parents[1]
     index = git_index(root)
