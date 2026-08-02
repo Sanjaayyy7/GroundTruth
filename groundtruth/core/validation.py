@@ -53,7 +53,7 @@ def load_labeled(path: str | Path) -> list[LabeledTrace]:
                     s["kind"],
                     name=s.get("name", ""),
                     content=s.get("content", ""),
-                    **s.get("data", {}),
+                    data=s.get("data", {}),
                 )
             items.append(
                 LabeledTrace(

@@ -40,7 +40,7 @@ def run_scenario(agent: Agent, case: Case, max_steps: int = MAX_STEPS) -> Trace:
             trace.add("final", content="<invalid action>")
             break
 
-        trace.add("tool_call", name=action.name, **dict(action.args))
+        trace.add("tool_call", name=action.name, data=dict(action.args))
         tool = tools.get(action.name)
         if tool is None:
             last_result = f"error: unknown tool '{action.name}'"

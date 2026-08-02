@@ -26,8 +26,21 @@ class Trace:
     case_id: str
     spans: list[Span] = field(default_factory=list)
 
-    def add(self, kind: str, name: str = "", content: str = "", **data: Any) -> Span:
-        span = Span(kind=kind, name=name, content=content, data=dict(data))
+    def add(
+        self,
+        kind: str,
+        name: str = "",
+        content: str = "",
+        data: dict[str, Any] | None = None,
+        **kwargs: Any,
+    ) -> Span:
+        """Append a span. Subject-controlled payloads (tool arguments) go in
+        `data`, where a key called `kind`, `name` or `content` is ordinary
+        content instead of a collision with this signature; `**kwargs` stays
+        for the harness's own fixed-key spans."""
+        payload = dict(data or {})
+        payload.update(kwargs)
+        span = Span(kind=kind, name=name, content=content, data=payload)
         self.spans.append(span)
         return span
 
