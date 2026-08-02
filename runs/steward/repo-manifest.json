@@ -25,7 +25,7 @@
       "role": "ci"
     },
     {
-      "bytes": 1693,
+      "bytes": 2111,
       "lifecycle": "living",
       "path": ".github/workflows/ci.yml",
       "role": "ci"
@@ -205,7 +205,7 @@
       "role": "asset"
     },
     {
-      "bytes": 11588,
+      "bytes": 12282,
       "lifecycle": "living",
       "path": "docs/claims.yaml",
       "role": "register"
@@ -613,7 +613,7 @@
       "role": "config"
     },
     {
-      "bytes": 6265,
+      "bytes": 6335,
       "lifecycle": "derived",
       "path": "runs/assurance-report.md",
       "role": "evidence"
@@ -2040,7 +2040,7 @@
       "files": 1
     },
     "ci": {
-      "bytes": 4482,
+      "bytes": 4900,
       "files": 5
     },
     "code": {
@@ -2064,7 +2064,7 @@
       "files": 16
     },
     "evidence": {
-      "bytes": 749751,
+      "bytes": 749821,
       "files": 192
     },
     "experiment": {
@@ -2084,7 +2084,7 @@
       "files": 1
     },
     "register": {
-      "bytes": 26018,
+      "bytes": 26712,
       "files": 3
     },
     "spec": {
@@ -2097,7 +2097,7 @@
     }
   },
   "total": {
-    "bytes": 1480511,
+    "bytes": 1481693,
     "files": 338
   }
 }

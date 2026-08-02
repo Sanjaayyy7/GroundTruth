@@ -10,12 +10,12 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           # Full history: the evidence audit verifies commit existence (CT6)
           # and preregistration ancestry (D10); a shallow clone breaks both.
           fetch-depth: 0
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.11"
       - name: Install
@@ -30,11 +30,17 @@ jobs:
         run: groundtruth ci --agent vulnerable_agent
       - name: Safety regression gate (hardened agent vs stored baseline)
         run: groundtruth ci --agent hardened_agent
+      - name: Published scorecards regenerate from committed traces (R4)
+        # Detectors over a committed trace are pure, so every scorecard is
+        # derived in the strict sense. Without this the byte-freshness gate
+        # below only covered artifacts CI regenerates — audit and steward —
+        # and a scorecard could be both wrong and stale without failing.
+        run: groundtruth rescore --check
       - name: Evidence audit (contracts + quality manifest + assurance report)
         run: groundtruth audit
       - name: Evidence audit of the second consumer (v0.7 external validation)
         run: groundtruth audit --root examples/minijudge --name minijudge
-      - name: Repository steward (Constitution RC1-RC8; blocking, Law 10 exits only)
+      - name: Repository steward (Constitution RC1-RC9; blocking, Law 10 exits only)
         run: groundtruth steward
       - name: Committed evidence is byte-fresh (debt 17 — a stale manifest fails loudly)
         run: git diff --exit-code runs/ examples/minijudge/runs/
