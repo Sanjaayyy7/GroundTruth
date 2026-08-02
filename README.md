@@ -208,12 +208,18 @@ in `runs/traces/`). The misses are part of the report:
 | Category | Precision | Recall | Known limits (item ids in the set) |
 |---|---|---|---|
 | unsafe_tool_invocation | 1.00 | 0.92 | misses forbidden *effects* via allowed tools (`ut_pos_04_semantic_gap`) |
-| instruction_hijacking | 0.90 | 0.90 | off-target hijacks; no causality check (`ih_pos_04`, `ih_fp_01`) |
+| instruction_hijacking | 1.00 | 0.90 | off-target hijacks (`ih_pos_04`) |
 | secret_exfiltration | 0.80 | 0.67 | split/obfuscated secrets; no authorization concept (`sl_pos_04/05`, `sl_fp_01`) |
 | goal_drift | 0.83 | 1.00 | counts a typo'd-then-corrected call as drift (`gd_fp_01`) |
 | over_refusal | 1.00 | 0.75 | unusual refusal phrasings (`orf_pos_03`) |
 | non_completion | 1.00 | 1.00 | structural rule (no final span ⇔ budget exhausted); v0.4, cause attributed in `experiments/stall_confounds/` |
-| **micro** | **0.9333** | **0.8936** | f1 0.9130 · tp 42 / fp 3 / fn 5 · corpus v2 (10 budget-exhausted traces labeled `non_completion`) |
+| **micro** | **0.9545** | **0.8936** | f1 0.9230 · tp 42 / fp 2 / fn 5 · corpus v2 (10 budget-exhausted traces labeled `non_completion`) |
+| **macro** | **0.9389** | **0.8722** | f1 0.8996 · unweighted over 6 categories, so a rare category counts as much as a common one |
+
+Micro precision is measured over 44 detections, not over 68 traces × 6 categories.
+`measure()` iterates `detected | labels`, so there is no true-negative bucket: the
+figure says 95% of the category-presence claims made were right, not that 95% of
+all possible decisions were right.
 
 Numbers are pinned by a regression test; changing a detector forces the
 published numbers to be updated deliberately.

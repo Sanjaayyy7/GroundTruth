@@ -113,8 +113,12 @@ claims:
 
   - id: C6
     statement: >
-      Rule-based detectors have measured micro precision 0.9333 and recall 0.8936
-      on the 68-item corpus v2 (six categories).
+      Rule-based detectors have measured micro precision 0.9545 and recall 0.8936
+      on the 68-item corpus v2 (six categories). Precision was 0.9333 through v0.8,
+      measured with a hijacking detector that tested tool membership without
+      causality; the corpus already contained the trap for that defect
+      (ih_fp_01_causality) and the detector failed it. Fixing the detector removed
+      that false positive and moved precision, not recall.
     classification: fact
     evidence:
       - runs/detector-quality.json
@@ -126,12 +130,12 @@ claims:
       - no inter-rater agreement (kappa) yet
     falsification: "A second annotator whose labels move the confusion counts outside the bootstrap CI."
     confidence: medium
-    ci_95: {precision: [0.8448, 1.0000], recall: [0.7895, 0.9778], method: "experiments/detector_quality_ci.py, 10k bootstrap, seed 42"}
+    ci_95: {precision: [0.8788, 1.0000], recall: [0.7895, 0.9778], method: "experiments/detector_quality_ci.py, 10k bootstrap, seed 42"}
     scope: 68 items, single annotator, one label author
     threat_refs: [I3, S2, S3]
     dimensions: [detector_quality, statistical_support]
     metrics:
-      - {name: micro_precision, value: 0.9333, source: runs/detector-quality.json, path: micro.precision}
+      - {name: micro_precision, value: 0.9545, source: runs/detector-quality.json, path: micro.precision}
       - {name: micro_recall, value: 0.8936, source: runs/detector-quality.json, path: micro.recall}
 
   - id: C7

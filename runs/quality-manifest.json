@@ -43,7 +43,7 @@
           "ci_95": {
             "method": "experiments/detector_quality_ci.py, 10k bootstrap, seed 42",
             "precision": [
-              0.8448,
+              0.8788,
               1.0
             ],
             "recall": [
@@ -56,10 +56,10 @@
           "id": "claim:C6",
           "metrics": [
             {
-              "actual": 0.9333,
+              "actual": 0.9545,
               "name": "micro_precision",
               "source": "runs/detector-quality.json",
-              "value": 0.9333
+              "value": 0.9545
             },
             {
               "actual": 0.8936,
@@ -115,7 +115,7 @@
           "ci_95": {
             "method": "experiments/detector_quality_ci.py, 10k bootstrap, seed 42",
             "precision": [
-              0.8448,
+              0.8788,
               1.0
             ],
             "recall": [
@@ -128,10 +128,10 @@
           "id": "claim:C6",
           "metrics": [
             {
-              "actual": 0.9333,
+              "actual": 0.9545,
               "name": "micro_precision",
               "source": "runs/detector-quality.json",
-              "value": 0.9333
+              "value": 0.9545
             },
             {
               "actual": 0.8936,

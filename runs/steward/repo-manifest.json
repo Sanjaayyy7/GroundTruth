@@ -67,7 +67,7 @@
       "role": "legal"
     },
     {
-      "bytes": 16983,
+      "bytes": 17370,
       "lifecycle": "living",
       "path": "README.md",
       "role": "doc"
@@ -97,7 +97,7 @@
       "role": "doc"
     },
     {
-      "bytes": 8370,
+      "bytes": 8512,
       "lifecycle": "living",
       "path": "docs/CONSTITUTION.md",
       "role": "law"
@@ -127,7 +127,7 @@
       "role": "doc"
     },
     {
-      "bytes": 4812,
+      "bytes": 4792,
       "lifecycle": "living",
       "path": "docs/REPRODUCIBILITY.md",
       "role": "doc"
@@ -199,7 +199,13 @@
       "role": "adr"
     },
     {
-      "bytes": 11263,
+      "bytes": 9574,
+      "lifecycle": "living",
+      "path": "docs/assets/stall-fixed-point.svg",
+      "role": "asset"
+    },
+    {
+      "bytes": 11588,
       "lifecycle": "living",
       "path": "docs/claims.yaml",
       "role": "register"
@@ -304,6 +310,12 @@
       "bytes": 9521,
       "lifecycle": "historical",
       "path": "docs/specs/2026-07-18-v08-steward-validation-report.md",
+      "role": "spec"
+    },
+    {
+      "bytes": 6747,
+      "lifecycle": "historical",
+      "path": "docs/specs/2026-08-02-judge-rerun-preregistration.md",
       "role": "spec"
     },
     {
@@ -415,13 +427,13 @@
       "role": "code"
     },
     {
-      "bytes": 6632,
+      "bytes": 8562,
       "lifecycle": "living",
       "path": "groundtruth/adapters/ollama_agent.py",
       "role": "code"
     },
     {
-      "bytes": 16448,
+      "bytes": 23593,
       "lifecycle": "living",
       "path": "groundtruth/cli.py",
       "role": "code"
@@ -439,7 +451,7 @@
       "role": "code"
     },
     {
-      "bytes": 1143,
+      "bytes": 2111,
       "lifecycle": "living",
       "path": "groundtruth/core/evaluator.py",
       "role": "code"
@@ -451,19 +463,19 @@
       "role": "code"
     },
     {
-      "bytes": 2150,
+      "bytes": 6588,
       "lifecycle": "living",
       "path": "groundtruth/core/scorecard.py",
       "role": "code"
     },
     {
-      "bytes": 1469,
+      "bytes": 2522,
       "lifecycle": "living",
       "path": "groundtruth/core/trace.py",
       "role": "code"
     },
     {
-      "bytes": 4939,
+      "bytes": 6109,
       "lifecycle": "living",
       "path": "groundtruth/core/validation.py",
       "role": "code"
@@ -493,7 +505,7 @@
       "role": "code"
     },
     {
-      "bytes": 7988,
+      "bytes": 8595,
       "lifecycle": "living",
       "path": "groundtruth/meta/loader.py",
       "role": "code"
@@ -529,19 +541,19 @@
       "role": "code"
     },
     {
-      "bytes": 10793,
+      "bytes": 13091,
       "lifecycle": "living",
       "path": "groundtruth/products/agentprobe/detectors.py",
       "role": "code"
     },
     {
-      "bytes": 4439,
+      "bytes": 4943,
       "lifecycle": "living",
       "path": "groundtruth/products/agentprobe/judge.py",
       "role": "code"
     },
     {
-      "bytes": 1910,
+      "bytes": 1913,
       "lifecycle": "living",
       "path": "groundtruth/products/agentprobe/runner.py",
       "role": "code"
@@ -565,7 +577,7 @@
       "role": "code"
     },
     {
-      "bytes": 9551,
+      "bytes": 10072,
       "lifecycle": "living",
       "path": "groundtruth/steward/loader.py",
       "role": "code"
@@ -619,7 +631,7 @@
       "role": "evidence"
     },
     {
-      "bytes": 1582,
+      "bytes": 1654,
       "lifecycle": "derived",
       "path": "runs/detector-quality.json",
       "role": "evidence"
@@ -973,85 +985,85 @@
       "role": "evidence"
     },
     {
-      "bytes": 1883,
+      "bytes": 2106,
       "lifecycle": "derived",
       "path": "runs/scorecard-gemma3-4b-stateful.json",
       "role": "evidence"
     },
     {
-      "bytes": 4728,
+      "bytes": 4953,
       "lifecycle": "derived",
       "path": "runs/scorecard-gemma3-4b.json",
       "role": "evidence"
     },
     {
-      "bytes": 7027,
+      "bytes": 7378,
       "lifecycle": "derived",
       "path": "runs/scorecard-llama3.1-8b-stateful.json",
       "role": "evidence"
     },
     {
-      "bytes": 5993,
+      "bytes": 6197,
       "lifecycle": "derived",
       "path": "runs/scorecard-llama3.1-8b.json",
       "role": "evidence"
     },
     {
-      "bytes": 6015,
+      "bytes": 6327,
       "lifecycle": "derived",
       "path": "runs/scorecard-llama3.2-latest-stateful.json",
       "role": "evidence"
     },
     {
-      "bytes": 5997,
+      "bytes": 6201,
       "lifecycle": "derived",
       "path": "runs/scorecard-llama3.2-latest.json",
       "role": "evidence"
     },
     {
-      "bytes": 5990,
+      "bytes": 6312,
       "lifecycle": "derived",
       "path": "runs/scorecard-mistral-7b-stateful.json",
       "role": "evidence"
     },
     {
-      "bytes": 5992,
+      "bytes": 6196,
       "lifecycle": "derived",
       "path": "runs/scorecard-mistral-7b.json",
       "role": "evidence"
     },
     {
-      "bytes": 2899,
+      "bytes": 3145,
       "lifecycle": "derived",
       "path": "runs/scorecard-phi4-mini-stateful.json",
       "role": "evidence"
     },
     {
-      "bytes": 3706,
+      "bytes": 3911,
       "lifecycle": "derived",
       "path": "runs/scorecard-phi4-mini.json",
       "role": "evidence"
     },
     {
-      "bytes": 2943,
+      "bytes": 3193,
       "lifecycle": "derived",
       "path": "runs/scorecard-qwen3-4b-stateful.json",
       "role": "evidence"
     },
     {
-      "bytes": 3618,
+      "bytes": 3850,
       "lifecycle": "derived",
       "path": "runs/scorecard-qwen3-4b.json",
       "role": "evidence"
     },
     {
-      "bytes": 50140,
+      "bytes": 50620,
       "lifecycle": "derived",
       "path": "runs/steward/repo-manifest.json",
       "role": "evidence"
     },
     {
-      "bytes": 908,
+      "bytes": 929,
       "lifecycle": "derived",
       "path": "runs/steward/steward-report.md",
       "role": "evidence"
@@ -1693,13 +1705,13 @@
       "role": "test"
     },
     {
-      "bytes": 6363,
+      "bytes": 8331,
       "lifecycle": "living",
       "path": "tests/test_cli.py",
       "role": "test"
     },
     {
-      "bytes": 7611,
+      "bytes": 11839,
       "lifecycle": "living",
       "path": "tests/test_detectors_v02.py",
       "role": "test"
@@ -1711,13 +1723,19 @@
       "role": "test"
     },
     {
+      "bytes": 2272,
+      "lifecycle": "living",
+      "path": "tests/test_evaluator.py",
+      "role": "test"
+    },
+    {
       "bytes": 6872,
       "lifecycle": "living",
       "path": "tests/test_external_validation.py",
       "role": "test"
     },
     {
-      "bytes": 3101,
+      "bytes": 4835,
       "lifecycle": "living",
       "path": "tests/test_judge.py",
       "role": "test"
@@ -1741,7 +1759,7 @@
       "role": "test"
     },
     {
-      "bytes": 3677,
+      "bytes": 4460,
       "lifecycle": "living",
       "path": "tests/test_meta_loader.py",
       "role": "test"
@@ -1765,7 +1783,7 @@
       "role": "test"
     },
     {
-      "bytes": 7705,
+      "bytes": 9837,
       "lifecycle": "living",
       "path": "tests/test_ollama_agent.py",
       "role": "test"
@@ -1777,9 +1795,21 @@
       "role": "test"
     },
     {
-      "bytes": 1878,
+      "bytes": 3594,
+      "lifecycle": "living",
+      "path": "tests/test_rescore.py",
+      "role": "test"
+    },
+    {
+      "bytes": 2949,
       "lifecycle": "living",
       "path": "tests/test_runner.py",
+      "role": "test"
+    },
+    {
+      "bytes": 5597,
+      "lifecycle": "living",
+      "path": "tests/test_scorecard_rates.py",
       "role": "test"
     },
     {
@@ -1807,7 +1837,7 @@
       "role": "test"
     },
     {
-      "bytes": 5059,
+      "bytes": 5908,
       "lifecycle": "living",
       "path": "tests/test_steward_loader.py",
       "role": "test"
@@ -1825,13 +1855,13 @@
       "role": "test"
     },
     {
-      "bytes": 2645,
+      "bytes": 4107,
       "lifecycle": "living",
       "path": "tests/test_validation.py",
       "role": "test"
     },
     {
-      "bytes": 4286,
+      "bytes": 4796,
       "lifecycle": "living",
       "path": "tests/test_validation_set.py",
       "role": "test"
@@ -1885,12 +1915,16 @@
       "bytes": 20273,
       "files": 8
     },
+    "asset": {
+      "bytes": 9574,
+      "files": 1
+    },
     "ci": {
       "bytes": 4482,
       "files": 5
     },
     "code": {
-      "bytes": 117575,
+      "bytes": 138212,
       "files": 31
     },
     "config": {
@@ -1906,11 +1940,11 @@
       "files": 15
     },
     "doc": {
-      "bytes": 117113,
+      "bytes": 117480,
       "files": 16
     },
     "evidence": {
-      "bytes": 545269,
+      "bytes": 548820,
       "files": 174
     },
     "experiment": {
@@ -1918,7 +1952,7 @@
       "files": 4
     },
     "law": {
-      "bytes": 8370,
+      "bytes": 8512,
       "files": 1
     },
     "legal": {
@@ -1930,20 +1964,20 @@
       "files": 1
     },
     "register": {
-      "bytes": 25693,
+      "bytes": 26018,
       "files": 3
     },
     "spec": {
-      "bytes": 142992,
-      "files": 15
+      "bytes": 149739,
+      "files": 16
     },
     "test": {
-      "bytes": 86789,
-      "files": 26
+      "bytes": 112989,
+      "files": 29
     }
   },
   "total": {
-    "bytes": 1168270,
-    "files": 313
+    "bytes": 1235813,
+    "files": 318
   }
 }

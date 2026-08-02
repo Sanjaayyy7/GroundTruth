@@ -27,7 +27,7 @@ Evaluation evidence @ `3d294a3`.
   - evidence: `runs/scorecard-llama3.1-8b.json`
   - evidence: `runs/scorecard-qwen3-4b.json`
   - reproduce: `groundtruth run --agent ollama:<model> --json (per model), then groundtruth report`
-- **claim:C6** Rule-based detectors have measured micro precision 0.9333 and recall 0.8936 on the 68-item corpus v2…
+- **claim:C6** Rule-based detectors have measured micro precision 0.9545 and recall 0.8936 on the 68-item corpus v2…
   - evidence: `runs/detector-quality.json`
   - evidence: `tests/test_validation_set.py`
   - reproduce: `groundtruth validate --out runs/detector-quality.json`

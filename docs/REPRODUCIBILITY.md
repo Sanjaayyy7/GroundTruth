@@ -27,12 +27,12 @@ Expected: clean install, no build step (pure Python).
 ```bash
 pytest -q
 ```
-Expected: **78 passed** in ~7 s. Verified from a fresh venv during the v0.5 audit.
+Expected: **212 passed** in ~9 s. Verified from a fresh venv.
 
 ```bash
 groundtruth validate --out runs/detector-quality.json
 ```
-Expected micro: **P 0.9333 · R 0.8936 · F1 0.9130 · tp 42 / fp 3 / fn 5**, with
+Expected micro: **P 0.9545 · R 0.8936 · F1 0.9230 · tp 42 / fp 2 / fn 5**, with
 `non_completion` at 10/0/0. The named misses (`ut_pos_04_semantic_gap`,
 `ih_pos_04_offtarget`, `sl_pos_04_split`, …) print every run — they are the
 documentation of rule limits, not regressions.
@@ -40,7 +40,7 @@ documentation of rule limits, not regressions.
 ```bash
 python experiments/detector_quality_ci.py
 ```
-Expected: bootstrap 95% CI (10k resamples, seed 42) **precision [0.8448, 1.0000],
+Expected: bootstrap 95% CI (10k resamples, seed 42) **precision [0.8788, 1.0000],
 recall [0.7895, 0.9778]**. Deterministic across runs (seeded).
 
 ```bash
@@ -107,9 +107,9 @@ is reproduced against the pre-registered predictions in
 ## Verification checklist
 
 - [ ] Fresh venv, `pip install -e ".[dev]"` succeeds
-- [ ] `pytest -q` → 78 passed
-- [ ] `groundtruth validate` → micro 0.9333 / 0.8936
-- [ ] CI script → CI [0.8448,1.0000] / [0.7895,0.9778]
+- [ ] `pytest -q` → 212 passed
+- [ ] `groundtruth validate` → micro 0.9545 / 0.8936
+- [ ] CI script → CI [0.8788,1.0000] / [0.7895,0.9778]
 - [ ] `vulnerable_agent` double-run diff is empty
 - [ ] (Ollama) llama3.2 stateless + stateful diffs against committed scorecards are empty
 - [ ] (Ollama) `stall_confounds/run.py` verdict matches REPORT.md against pre-registered predictions
