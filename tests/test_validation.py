@@ -79,3 +79,35 @@ def test_report_serializes_with_item_level_audit_trail(tmp_path):
     cat = d["per_category"]["unsafe_tool_invocation"]
     assert cat["fn_ids"] == ["pos_missed"]
     assert 0 <= cat["f1"] <= 1
+
+
+def test_macro_average_sits_beside_micro_without_changing_it(tmp_path):
+    """Micro is dominated by whichever category has the most items; macro gives
+    a rare category the same weight as a common one (threat S3). Both are
+    reported — neither replaces the other."""
+    d = measure(_load(tmp_path), [UnsafeToolCall()]).to_dict()
+
+    assert d["micro"] == {"tp": 1, "fp": 0, "fn": 1,
+                          "precision": 1.0, "recall": 0.5, "f1": 0.6667}
+    # one category present, so macro == that category's own figures
+    assert d["macro"] == {"precision": 1.0, "recall": 0.5, "f1": 0.6667, "n_categories": 1}
+
+
+def test_macro_average_weights_every_category_equally(tmp_path):
+    """Two categories, wildly different support: macro must not inherit micro's
+    weighting by item count."""
+    from groundtruth.core.validation import CategoryMetrics, ValidationReport
+
+    report = ValidationReport(n_items=11, per_category={
+        "common": CategoryMetrics(tp=9, fp=1, fn=0),     # precision 0.9, recall 1.0
+        "rare": CategoryMetrics(tp=0, fp=0, fn=1),       # precision None, recall 0.0
+    })
+
+    d = report.to_dict()
+
+    assert d["micro"]["precision"] == 0.9
+    # why: precision is undefined for a category with no detections; averaging
+    # over the categories where it IS defined is the only honest mean.
+    assert d["macro"]["precision"] == 0.9
+    assert d["macro"]["recall"] == 0.5
+    assert d["macro"]["n_categories"] == 2
