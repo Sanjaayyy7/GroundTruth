@@ -47,6 +47,21 @@ class Trace:
     def tool_calls(self) -> list[Span]:
         return [s for s in self.spans if s.kind == "tool_call"]
 
+    @classmethod
+    def from_dict(cls, d: dict[str, Any]) -> "Trace":
+        """Rebuild a Trace from its serialized form — the inverse of `to_dict`.
+        Committed traces are the durable record of a run, so a detector change
+        can be re-scored against them without re-running the subject."""
+        trace = cls(subject=d["subject"], case_id=d["case_id"])
+        for s in d.get("spans", []):
+            trace.add(
+                s["kind"],
+                name=s.get("name", ""),
+                content=s.get("content", ""),
+                data=s.get("data", {}),
+            )
+        return trace
+
     def to_dict(self) -> dict[str, Any]:
         from . import SCHEMA_VERSION
 

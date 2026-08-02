@@ -14,8 +14,9 @@ import sys
 from pathlib import Path
 from typing import Any
 
-from .core.dataset import load_cases
+from .core.dataset import Case, load_cases
 from .core.evaluator import TraceNotFound, evaluate
+from .core.trace import Trace
 from .core.validation import load_labeled, measure
 from .products.agentprobe.demo_agents import REGISTRY
 from .products.agentprobe.detectors import (
@@ -36,6 +37,10 @@ _DEFAULT_ROOT = Path(__file__).resolve().parents[1]
 
 class SourceInstallRequired(RuntimeError):
     """The corpus is not reachable from the resolved root. CLI exit code 2."""
+
+
+class RescoreError(RuntimeError):
+    """A rescore cannot proceed from the committed traces. CLI exit code 2."""
 
 
 def _repo_root() -> Path:
@@ -106,6 +111,27 @@ def main(argv: list[str] | None = None) -> int:
         "episode (second measurement condition; subject is named <model>+stateful)",
     )
 
+    res = sub.add_parser(
+        "rescore",
+        help="re-score committed traces with the current detectors (no model required)",
+    )
+    res.add_argument("--suite", default="agentprobe", choices=list(SUITES))
+    res.add_argument(
+        "--subject",
+        default=None,
+        help="trace-directory slug under --traces (default: every slug present)",
+    )
+    res.add_argument("--traces", default=None, help="trace root (default <root>/runs/traces)")
+    res.add_argument(
+        "--runs", default=None, help="scorecard directory (default <root>/runs)"
+    )
+    res.add_argument(
+        "--check",
+        action="store_true",
+        help="regenerate in memory and diff against the committed scorecards; "
+        "exit 1 on any difference and write nothing (this is what CI calls)",
+    )
+
     val = sub.add_parser(
         "validate", help="measure detector precision/recall on the labeled set"
     )
@@ -171,6 +197,8 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
     if args.cmd == "steward":
         return _steward(args)
+    if args.cmd == "rescore":
+        return _rescore(args)
     if args.cmd == "validate":
         return _validate(args)
     if args.cmd == "ci":
@@ -224,12 +252,20 @@ def main(argv: list[str] | None = None) -> int:
                 json.dumps(trace.to_dict(), indent=2)
             )
     if args.out:
-        Path(args.out).write_text(json.dumps(report, indent=2))
+        _write_json(Path(args.out), report)
     if args.json:
         print(json.dumps(report, indent=2))
     else:
         _print_human(report)
     return 0
+
+
+def _write_json(path: Path, payload: dict[str, Any]) -> None:
+    """The single serialization for every JSON artifact this CLI emits, so that
+    `run`, `ci` and `rescore` produce byte-identical files for identical content
+    — rescoring an unchanged detector set must not churn the diff."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(payload, indent=2))
 
 
 def _resolve_agent(name: str, stateful: bool = False):
@@ -263,8 +299,7 @@ def _ci(args: argparse.Namespace) -> int:
     baseline_path = Path(args.baseline) if args.baseline else _repo_root() / "runs" / default_name
 
     if args.update:
-        baseline_path.parent.mkdir(parents=True, exist_ok=True)
-        baseline_path.write_text(json.dumps(current, indent=2))
+        _write_json(baseline_path, current)
         print(f"baseline written: {baseline_path} (robustness {current['robustness_score']})")
         return 0
 
@@ -297,6 +332,91 @@ def _ci(args: argparse.Namespace) -> int:
     else:
         print("  no regression")
     return 0
+
+
+def _rescore(args: argparse.Namespace) -> int:
+    """Re-derive scorecards from committed traces. A trace is the durable record
+    of a run; without this path a detector change cannot reach the published
+    artifacts and CI cannot tell whether they have gone stale (finding R4)."""
+    suite = SUITES[args.suite]
+    try:
+        cases = load_cases(_corpus_root() / suite["scenarios"])
+    except SourceInstallRequired as exc:
+        print(f"[rescore] {exc}", file=sys.stderr)
+        return 2
+    traces_root = Path(args.traces) if args.traces else _repo_root() / "runs" / "traces"
+    runs_dir = Path(args.runs) if args.runs else _repo_root() / "runs"
+
+    try:
+        slugs = _rescore_slugs(traces_root, args.subject)
+        cards = {s: _rescore_one(traces_root / s, args.suite, cases, suite) for s in slugs}
+    except (RescoreError, TraceNotFound) as exc:
+        print(f"[rescore] {exc}", file=sys.stderr)
+        return 2
+
+    if not args.check:
+        for slug, card in cards.items():
+            _write_json(runs_dir / f"scorecard-{slug}.json", card)
+        print(f"\n  rescore · wrote {len(cards)} scorecard(s) to {runs_dir}\n")
+        return 0
+
+    drifted: dict[str, list[str]] = {}
+    for slug, card in cards.items():
+        path = runs_dir / f"scorecard-{slug}.json"
+        committed = json.loads(path.read_text()) if path.exists() else None
+        if committed is None:
+            drifted[slug] = ["<no committed scorecard>"]
+        elif committed != card:
+            drifted[slug] = sorted(
+                k for k in set(committed) | set(card) if committed.get(k) != card.get(k)
+            )
+    print(f"\n  rescore --check · {len(cards)} scorecard(s) vs {runs_dir}")
+    if not drifted:
+        print("  all identical to the committed artifacts\n")
+        return 0
+    print(f"  STALE ARTIFACTS ({len(drifted)}):")
+    for slug, keys in drifted.items():
+        print(f"    x scorecard-{slug}.json differs in: {', '.join(keys)}")
+    print("  regenerate with: groundtruth rescore\n")
+    return 1
+
+
+def _rescore_slugs(traces_root: Path, subject: str | None) -> list[str]:
+    available = sorted(p.name for p in traces_root.iterdir() if p.is_dir()) \
+        if traces_root.is_dir() else []
+    if not available:
+        raise RescoreError(
+            f"no trace directories under {traces_root} — rescore reads the traces a "
+            f"previous `run --traces-out` committed; point --traces at that directory"
+        )
+    if subject is None:
+        return available
+    if subject not in available:
+        raise RescoreError(
+            f"no traces for subject '{subject}' under {traces_root} — the subject is the "
+            f"trace directory slug, not the model name. Available: {', '.join(available)}"
+        )
+    return [subject]
+
+
+def _rescore_one(
+    directory: Path, suite_name: str, cases: list[Case], suite: dict[str, Any]
+) -> dict[str, Any]:
+    """The trace files carry their own `subject`, so the slug <-> subject mapping
+    is read from the data rather than reconstructed from the directory name."""
+    traces: dict[str, Trace] = {}
+    subjects: set[str] = set()
+    for path in sorted(directory.glob("trace-*.json")):
+        trace = Trace.from_dict(json.loads(path.read_text()))
+        traces[trace.case_id] = trace
+        subjects.add(trace.subject)
+    if len(subjects) > 1:
+        raise RescoreError(
+            f"{directory} mixes {len(subjects)} subjects ({', '.join(sorted(subjects))}) — "
+            f"one trace directory records exactly one subject-condition; split them"
+        )
+    subject = subjects.pop() if subjects else directory.name
+    return evaluate(subject, suite_name, cases, traces, suite["detectors"]).to_dict()
 
 
 def _report(args: argparse.Namespace) -> int:
@@ -444,9 +564,14 @@ def _validate(args: argparse.Namespace) -> int:
 def _print_validation(suite: str, d: dict[str, Any]) -> None:
     micro = d["micro"]
     print(f"\n  Groundtruth · {suite} detector quality   labeled items: {d['n_items']}")
+    macro = d["macro"]
     print(
         f"  micro: precision {micro['precision']}   recall {micro['recall']}"
         f"   f1 {micro['f1']}   (tp {micro['tp']} / fp {micro['fp']} / fn {micro['fn']})"
+    )
+    print(
+        f"  macro: precision {macro['precision']}   recall {macro['recall']}"
+        f"   f1 {macro['f1']}   (unweighted over {macro['n_categories']} categories)"
     )
     print(f"\n  {'category':<24} {'precision':>9} {'recall':>7} {'f1':>7}  tp/fp/fn")
     for cat, m in d["per_category"].items():
