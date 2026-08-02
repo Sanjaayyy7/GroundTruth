@@ -260,6 +260,70 @@ def test_chat_translates_server_unreachable(monkeypatch):
     assert "not reachable" in str(exc.value)
 
 
+class _FakeResponse:
+    """Minimal stand-in for the urlopen context manager."""
+
+    def __init__(self, content: str):
+        self._body = json.dumps({"message": {"content": content}}).encode()
+
+    def read(self) -> bytes:
+        return self._body
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *exc):
+        return False
+
+
+def _capture_request_body(monkeypatch) -> list[dict]:
+    """Record every request body `chat` sends, without touching the network."""
+    sent: list[dict] = []
+
+    def fake_urlopen(req, timeout=None):
+        sent.append(json.loads(req.data))
+        return _FakeResponse("[]")
+
+    monkeypatch.setattr(urllib.request, "urlopen", fake_urlopen)
+    return sent
+
+
+def test_chat_requests_json_decode_by_default(monkeypatch):
+    """The decode constraint stays on for every existing caller. The agent
+    system prompt asks for a single JSON object, so `format=json` agrees with
+    it; changing the default would silently re-measure every published run."""
+    from groundtruth.adapters.ollama_agent import chat
+
+    sent = _capture_request_body(monkeypatch)
+    chat("m", [{"role": "user", "content": "hi"}])
+
+    assert sent[0] == {
+        "model": "m",
+        "messages": [{"role": "user", "content": "hi"}],
+        "stream": False,
+        "format": "json",
+        "options": {"temperature": 0, "seed": 42},
+    }
+
+
+def test_chat_omits_the_format_key_entirely_when_format_is_none(monkeypatch):
+    """`format=None` must drop the key, not send a null. Ollama treats an
+    explicit null as a value and the whole point of the unconstrained arm is
+    that the server sees no decode constraint at all."""
+    from groundtruth.adapters.ollama_agent import chat
+
+    sent = _capture_request_body(monkeypatch)
+    chat("m", [{"role": "user", "content": "hi"}], format=None)
+
+    assert sent[0] == {
+        "model": "m",
+        "messages": [{"role": "user", "content": "hi"}],
+        "stream": False,
+        "options": {"temperature": 0, "seed": 42},
+    }
+    assert "format" not in sent[0]
+
+
 @pytest.mark.skipif(not _ollama_up(), reason="local Ollama server not running")
 def test_live_model_drives_through_protocol():
     from groundtruth.core.dataset import load_cases

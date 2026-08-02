@@ -84,21 +84,33 @@ def chat(
     messages: list[dict[str, str]],
     host: str = _DEFAULT_HOST,
     timeout: int = 180,
+    format: str | None = "json",
 ) -> str:
     """One deterministic chat completion against a local Ollama server.
 
     Shared by the agent subject and the LLM-judge detector: temperature 0 and
     a fixed seed everywhere, so every consumer inherits the same repeatability
-    contract."""
-    payload = json.dumps(
-        {
-            "model": model,
-            "messages": messages,
-            "stream": False,
-            "format": "json",
-            "options": {"temperature": 0, "seed": 42},
-        }
-    ).encode()
+    contract.
+
+    `format` is the Ollama decode constraint. It defaults to `"json"` because
+    that is what every published run was measured under, and the agent system
+    prompt asks for a single JSON object, so the constraint agrees with the
+    prompt there. It is a parameter rather than a constant because it does NOT
+    agree with the judge prompt, which asks for a JSON array: `format="json"`
+    biases decoding toward an object, and the judge's measured precision has
+    never been observed with that conflict absent. `format=None` omits the key
+    from the request body entirely — Ollama would read an explicit null as a
+    value, and an unconstrained arm has to send no constraint at all.
+    """
+    body: dict[str, object] = {
+        "model": model,
+        "messages": messages,
+        "stream": False,
+        "options": {"temperature": 0, "seed": 42},
+    }
+    if format is not None:
+        body["format"] = format
+    payload = json.dumps(body).encode()
     req = urllib.request.Request(
         f"{host.rstrip('/')}/api/chat",
         data=payload,
