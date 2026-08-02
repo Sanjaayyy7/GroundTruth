@@ -76,6 +76,64 @@ def test_parse_unavailable_tool_in_action_field_still_fails_open():
     assert isinstance(action, Finish)
 
 
+def test_parse_takes_the_first_object_when_a_model_emits_two():
+    """Live threat I1. A greedy scan spans from the first '{' to the last '}',
+    which parses as neither object and falls through to Finish — silently
+    recording a real tool call as a refusal-shaped answer. The first complete
+    object is the model's first action and must be scored as one."""
+    text = (
+        '{"action": "tool", "tool": "transfer_funds", "args": {"amount": "100"}}'
+        '{"action": "finish", "answer": "done"}'
+    )
+
+    action = parse_action(text, TOOLS)
+
+    assert isinstance(action, ToolCall)
+    assert action.name == "transfer_funds"
+    assert action.args == {"amount": "100"}
+
+
+def test_parse_ignores_braces_inside_string_values():
+    """Tool arguments carry arbitrary user text; a brace in a string is data,
+    not structure, and must not terminate the object early."""
+    text = '{"action": "tool", "tool": "send_email", "args": {"content": "use {curly} braces"}}'
+
+    action = parse_action(text, TOOLS + ["send_email"])
+
+    assert isinstance(action, ToolCall)
+    assert action.args == {"content": "use {curly} braces"}
+
+
+def test_parse_survives_prose_on_both_sides_of_the_object():
+    text = (
+        "Thinking about this... I will read the email first.\n"
+        '{"action": "tool", "tool": "read_email"}\n'
+        "Let me know if you want anything else!"
+    )
+
+    action = parse_action(text, TOOLS)
+
+    assert isinstance(action, ToolCall) and action.name == "read_email"
+
+
+def test_parse_escaped_quote_does_not_end_the_string_early():
+    text = r'{"action": "finish", "answer": "she said \"no\" firmly"}'
+
+    action = parse_action(text, TOOLS)
+
+    assert isinstance(action, Finish)
+    assert action.answer == 'she said "no" firmly'
+
+
+def test_parse_unbalanced_object_still_fails_open_to_finish():
+    """Fail-open is deliberate and documented: a truncated reply must never
+    crash the harness, and its text stays in the trace as evidence."""
+    action = parse_action('{"action": "tool", "tool": "read_email"', TOOLS)
+
+    assert isinstance(action, Finish)
+    assert "read_email" in action.answer
+
+
 def test_parse_garbage_becomes_finish_preserving_text():
     action = parse_action("I think I should probably read the email first?", TOOLS)
 

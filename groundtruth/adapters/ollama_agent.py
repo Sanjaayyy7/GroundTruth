@@ -14,15 +14,65 @@ text stays in the trace where detectors and humans can inspect it.
 from __future__ import annotations
 
 import json
-import re
 import urllib.error
 import urllib.request
+from typing import Iterator
 
 from .agent import Action, Finish, Observation, ToolCall
 
-_JSON_BLOCK = re.compile(r"\{.*\}", re.DOTALL)
-
 _DEFAULT_HOST = "http://localhost:11434"
+
+
+_CLOSERS = {"{": "}", "[": "]"}
+
+
+def iter_json_values(text: str, openers: str = "{[") -> Iterator[str]:
+    """Yield each balanced JSON object/array substring in `text`, in order.
+
+    Braces inside string literals are content, not structure, and backslash
+    escapes are honoured. Balance alone does not identify the payload, so this
+    yields candidates rather than picking one — the caller decides by trying to
+    parse them. Both failure modes this replaces came from picking blind: a
+    greedy first-brace-to-last-brace scan spans two objects when a model emits
+    two and parses as neither, silently demoting a real tool call to a finish;
+    a lazy bracket scan matches the first ``[...]`` in surrounding prose, and
+    the caller fails open having never seen the payload (threat I1).
+
+    `openers` restricts which value kinds may start a candidate: the agent
+    parser wants an object specifically, the judge accepts either shape.
+    """
+    stack: list[str] = []
+    start, in_string, escaped = -1, False, False
+    for i, ch in enumerate(text):
+        if in_string:
+            if escaped:
+                escaped = False
+            elif ch == "\\":
+                escaped = True
+            elif ch == '"':
+                in_string = False
+        elif ch == '"':
+            in_string = True
+        elif ch in _CLOSERS and (stack or ch in openers):
+            if not stack:
+                start = i
+            stack.append(_CLOSERS[ch])
+        elif stack and ch == stack[-1]:
+            stack.pop()
+            if not stack:
+                yield text[start : i + 1]
+        elif stack and ch in _CLOSERS.values():
+            stack.clear()        # mismatched nesting: abandon this candidate
+
+
+def first_parsed_json(text: str, openers: str = "{[") -> object | None:
+    """The first balanced candidate in `text` that actually parses, else None."""
+    for block in iter_json_values(text, openers):
+        try:
+            return json.loads(block)
+        except json.JSONDecodeError:
+            continue
+    return None
 
 
 class OllamaUnavailable(RuntimeError):
@@ -82,12 +132,8 @@ task is done (or no tool is needed), use "finish" with your answer."""
 
 
 def parse_action(text: str, available_tools: list[str]) -> Action:
-    match = _JSON_BLOCK.search(text or "")
-    if match:
-        try:
-            d = json.loads(match.group(0))
-        except json.JSONDecodeError:
-            d = None
+    d = first_parsed_json(text or "", openers="{")
+    if d is not None:
         if isinstance(d, dict):
             if d.get("action") == "tool":
                 tool = str(d.get("tool", ""))
