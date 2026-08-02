@@ -1177,13 +1177,13 @@
       "role": "evidence"
     },
     {
-      "bytes": 50880,
+      "bytes": 54274,
       "lifecycle": "derived",
       "path": "runs/steward/repo-manifest.json",
       "role": "evidence"
     },
     {
-      "bytes": 930,
+      "bytes": 931,
       "lifecycle": "derived",
       "path": "runs/steward/steward-report.md",
       "role": "evidence"
@@ -2064,7 +2064,7 @@
       "files": 16
     },
     "evidence": {
-      "bytes": 746356,
+      "bytes": 749751,
       "files": 192
     },
     "experiment": {
@@ -2097,7 +2097,7 @@
     }
   },
   "total": {
-    "bytes": 1477116,
+    "bytes": 1480511,
     "files": 338
   }
 }

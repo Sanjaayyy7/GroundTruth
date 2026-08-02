@@ -172,10 +172,10 @@
     "version": "0.8.0"
   },
   "graph": {
-    "edges": 70,
-    "nodes": 65,
+    "edges": 72,
+    "nodes": 67,
     "nodes_by_kind": {
-      "artifact": 24,
+      "artifact": 26,
       "claim": 11,
       "experiment": 11,
       "threat": 18,

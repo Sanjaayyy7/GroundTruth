@@ -141,18 +141,27 @@ claims:
   - id: C7
     statement: >
       Small local zero-shot LLM judges (4B/8B) are far less precise than the
-      rules: llama3.1:8b ties recall then emits 110 false positives (P 0.2254).
+      rules: the best measured arm reaches P 0.3600 (llama3.1:8b, 48 false
+      positives) against rules at P 0.9545 on the same items. The originally
+      published P 0.2254 was measured with the decode constraint forcing an
+      object while the prompt asked for an array; correcting that mismatch
+      raised precision by 0.1247 and cut instruction_hijacking false positives
+      from 53 to 17, so the first figure understated the judge by ~60%. The
+      ordering is unchanged and is not a harness artifact.
     classification: supported_observation
     evidence:
       - runs/detector-quality-judge-llama3.1-8b.json
       - runs/detector-quality-judge-gemma3-4b.json
-    reproduce: "groundtruth validate --judge ollama:llama3.1:8b"
+      - runs/experiments/judge-rerun-2026-08-02/summary.json
+      - experiments/judge_rerun/REPORT.md
+    reproduce: "python experiments/judge_rerun/run.py"
+    preregistration: docs/specs/2026-08-02-judge-rerun-preregistration.md
     assumptions: []
     confounds_remaining:
-      - one prompt design; two small local models; corpus v1 labels (5 categories)
+      - two small local models; corpus v1 labels (5 categories); rules were authored against this corpus, so they keep home-field advantage in every arm
     falsification: "A judge prompt / model that matches rule precision on the same items."
     confidence: medium
-    scope: 4B/8B zero-shot, one prompt, single annotator — explicitly NOT a claim about frontier judges
+    scope: 4B/8B zero-shot, four decode/prompt/parser arms, single annotator — explicitly NOT a claim about frontier judges
     threat_refs: [E1]
 
   - id: C8
