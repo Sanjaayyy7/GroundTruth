@@ -31,7 +31,7 @@
       "role": "ci"
     },
     {
-      "bytes": 3482,
+      "bytes": 3811,
       "lifecycle": "living",
       "path": ".github/workflows/ci.yml",
       "role": "ci"
@@ -115,7 +115,7 @@
       "role": "doc"
     },
     {
-      "bytes": 12879,
+      "bytes": 13199,
       "lifecycle": "living",
       "path": "docs/CONSTITUTION.md",
       "role": "law"
@@ -235,7 +235,7 @@
       "role": "register"
     },
     {
-      "bytes": 5922,
+      "bytes": 6024,
       "lifecycle": "living",
       "path": "docs/debt.yaml",
       "role": "register"
@@ -271,7 +271,7 @@
       "role": "spec"
     },
     {
-      "bytes": 15824,
+      "bytes": 15827,
       "lifecycle": "historical",
       "path": "docs/specs/2026-07-16-v08-architecture-review-report.md",
       "role": "spec"
@@ -325,7 +325,7 @@
       "role": "spec"
     },
     {
-      "bytes": 8197,
+      "bytes": 8229,
       "lifecycle": "historical",
       "path": "docs/specs/2026-07-18-public-release-readiness.md",
       "role": "spec"
@@ -2112,7 +2112,7 @@
       "files": 1
     },
     "ci": {
-      "bytes": 16655,
+      "bytes": 16984,
       "files": 6
     },
     "code": {
@@ -2144,7 +2144,7 @@
       "files": 7
     },
     "law": {
-      "bytes": 12879,
+      "bytes": 13199,
       "files": 1
     },
     "legal": {
@@ -2156,11 +2156,11 @@
       "files": 1
     },
     "register": {
-      "bytes": 26712,
+      "bytes": 26814,
       "files": 3
     },
     "spec": {
-      "bytes": 149739,
+      "bytes": 149774,
       "files": 16
     },
     "test": {
@@ -2169,7 +2169,7 @@
     }
   },
   "total": {
-    "bytes": 1543239,
+    "bytes": 1544025,
     "files": 350
   }
 }

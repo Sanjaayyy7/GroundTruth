@@ -111,6 +111,10 @@ derived_artifacts:
   - {path: "examples/minijudge/runs/agreement.json", regen: "cd examples/minijudge && python scripts/judge.py"}
   - {path: "runs/steward/repo-manifest.json", regen: "groundtruth steward"}
   - {path: "runs/steward/steward-report.md", regen: "groundtruth steward"}
+# Finding D1 (v0.9). Paths below are enumerated rather than globbed because RC4
+# tests membership of the git index (checks.py: `d["path"] not in index`), and a
+# glob string is never an index entry — under the declaration law a pattern
+# would read as one undeclared, untracked artifact, not as twelve declared ones.
   - {path: "runs/scorecard-gemma3-4b-stateful.json", regen: "groundtruth rescore"}
   - {path: "runs/scorecard-gemma3-4b.json", regen: "groundtruth rescore"}
   - {path: "runs/scorecard-llama3.1-8b-stateful.json", regen: "groundtruth rescore"}

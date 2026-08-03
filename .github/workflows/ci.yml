@@ -67,6 +67,11 @@ jobs:
         # below only covered artifacts CI regenerates — audit and steward —
         # and a scorecard could be both wrong and stale without failing.
         run: groundtruth rescore --check
+      - name: Detector-quality report regenerates (R4)
+        # Declared derived, but CI ran `validate` without --out, so Law 5's CI
+        # half never covered the artifact it names. A declaration that nothing
+        # regenerates is a promise, not a check.
+        run: groundtruth validate --out runs/detector-quality.json
       - name: HTML evidence report regenerates (R4)
         # Deterministic render of the persisted scorecards, no timestamps. It
         # was committed stale through an entire detector change because nothing

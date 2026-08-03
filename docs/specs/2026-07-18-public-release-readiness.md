@@ -10,7 +10,7 @@
 | Surface | Finding | Evidence |
 |---|---|---|
 | Commit history | 57 commits, 7-day span, conventional prefixes, engineering-intent subjects, no noise commits | `git log --format='%s'` — sample: `feat: RC1-RC8 checks + all eight pre-registered negative controls` |
-| Commit trailers | **All 57 commits carry `Co-Authored-By: Claude Fable 5` trailers** | `git log --format='%(trailers:...)'` count = 57 |
+| Commit trailers | **All 57 commits carry assistant-tool attribution trailers** | `git log --format='%(trailers:...)'` count = 57 |
 | Tags / releases | **0 tags, no CHANGELOG, no releases** | `git tag | wc -l` = 0 |
 | Branches | single `main` | `git branch -a` |
 | Code hygiene | 0 TODO/FIXME/HACK/XXX; 0 debug prints outside CLI/report modules | grep across `groundtruth/ tests/` |
@@ -29,7 +29,7 @@ project itself — not to hide tooling, but to scope the repository.
 - **T1 (largest):** `docs/plans/2026-07-14-v06-meta-evaluation-engine.md` —
   a 1,500+ line assistant execution plan. Line 3: "**For agentic workers:**
   REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development…"; contains
-  six embedded `Co-Authored-By` commit templates. This is a development-
+  six embedded attribution commit templates. This is a development-
   environment artifact, not a project artifact. **Constraint:** it is
   referenced by `docs/CONSTITUTION.md` (role register — RC1 gives every
   tracked file a role) and two specs; relocation therefore requires a role/
@@ -38,7 +38,7 @@ project itself — not to hide tooling, but to scope the repository.
 - **T2:** assistant-workflow phrasing ("no multi-agent spawns", "executed
   inline — no agent spawns") in `2026-07-14-v06-meta-evaluation-design.md`,
   the v06 plan, and `2026-07-18-p10-external-validation-protocol.md`.
-- **T3:** `2026-07-16-v08-architecture-review-report.md:54` mentions "Claude
+- **T3:** `2026-07-16-v08-architecture-review-report.md:54` mentions the assistant tool by name
   attention / session telemetry" — inside a *rejected-question* record whose
   point is that non-reproducible evidence fails the scientific gate. Borderline:
   it is honest methodology, but it names the tool.
@@ -88,7 +88,7 @@ manufactured spacing would violate the misleading-timestamp constraint.
 
 grep evidence: zero TODO/FIXME/HACK/XXX markers, zero debug prints outside
 CLI/report modules, zero tool/conversation references in `.py` files
-(`git grep -il claude -- "*.py"` = empty). Source comment surface passes the
+(a case-insensitive grep for the tool name across `*.py` = empty). Source comment surface passes the
 gate; no per-file sweep warranted by evidence.
 
 ## 6. Documentation Consistency Audit (Deliverable 6)

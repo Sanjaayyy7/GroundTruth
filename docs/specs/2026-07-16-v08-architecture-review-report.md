@@ -51,7 +51,7 @@ shared output type.
 
 | Question | Why rejected |
 |---|---|
-| "Which files consume the most Claude attention / are repeatedly opened but never modified?" | Requires session telemetry that does not exist in repository evidence. Not reproducible from a checkout. Fails the Scientific gate (observation vs. opinion). |
+| "Which files consume the most assistant attention / are repeatedly opened but never modified?" | Requires session telemetry that does not exist in repository evidence. Not reproducible from a checkout. Fails the Scientific gate (observation vs. opinion). |
 | "How much context/token waste does the repo carry?" | Token estimates are heuristics, not observations. The deterministic residue (bytes per role class) falls out of EQ1's inventory for free. |
 | "Has prose semantically drifted from implementation?" | Semantic similarity is a judgment, not a deterministic check. Any implementation would be an opinion engine — the exact thing the directive prohibits. The checkable subset (paths, versions, IDs, freezes) is EQ3/EQ4/EQ5. |
 | "Is the repository release-ready?" | Decomposes entirely into existing checks (pytest, audit rc, CT6) plus EQ2/EQ3 — composition, not capability. See §5 verdict on Release Readiness Auditor. |
