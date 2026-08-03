@@ -35,8 +35,17 @@ preference.
 
 - Declarations block: `constitution_schema: 2`, exactly the keys `roles`,
   `version_anchors`, `derived_artifacts`, `frozen`, `layer_rules`,
-  `exemptions`. A seventh key requires the RC9+ evidence bar and a schema
-  bump with migration note.
+  `exemptions`, `numeric_allowlist`. An eighth key requires the RC10+
+  evidence bar and a schema bump with migration note.
+- **Migration note, schema 1 → 2 (v0.9).** The bump adds exactly one key,
+  `numeric_allowlist`, for RC9. It is additive: a schema-1 block stays
+  legal and reads as an empty allowlist, so no existing declaration had to
+  be rewritten. A schema-2 block must carry the key, because an allowlist
+  that is absent and one that is empty are different statements and only
+  one of them is deliberate. Entries carry `literal`, `path`, `reason`; an
+  entry still covers its literal when the reason is blank, and the missing
+  justification is reported instead — an exemption suppresses visibly,
+  never silently.
 - Pattern law: `**` crosses directories, `*` does not, `?` matches one
   non-separator character; rules evaluate in order, first match wins.
 - Lifecycle vocabulary: `living` (policed by RC2), `historical`
@@ -55,7 +64,7 @@ preference.
   `category`, `state` (open/resolved/accepted), `origin`, `evidence`,
   `resolution`. No numeric scoring fields — findings, never scores.
 
-## Declarations (schema v1)
+## Declarations (schema v2)
 
 ```yaml
 constitution_schema: 2
@@ -130,9 +139,9 @@ layer_rules:
   - {kind: only_importer, dst: "groundtruth.steward", allowed: ["groundtruth.cli"]}
 exemptions: []
 numeric_allowlist:
-  - {literal: "32/3/5", path: "README.md", reason: "rules-vs-judge comparison is scoped to corpus v1 and its five behavioural detectors, not to the current register"}
-  - {literal: "0.9143", path: "README.md", reason: "rules-vs-judge comparison is scoped to corpus v1 and its five behavioural detectors, not to the current register"}
-  - {literal: "0.8889", path: "README.md", reason: "rules-vs-judge comparison is scoped to corpus v1 and its five behavioural detectors, not to the current register"}
+  - {literal: "32/3/5", path: "docs/README-full.md", reason: "rules-vs-judge comparison is scoped to corpus v1 and its five behavioural detectors, not to the current register"}
+  - {literal: "0.9143", path: "docs/README-full.md", reason: "rules-vs-judge comparison is scoped to corpus v1 and its five behavioural detectors, not to the current register"}
+  - {literal: "0.8889", path: "docs/README-full.md", reason: "rules-vs-judge comparison is scoped to corpus v1 and its five behavioural detectors, not to the current register"}
   - {literal: "0.9032", path: "SPEC.md", reason: "milestone record: the figure this version shipped with, kept as written"}
   - {literal: "0.8485", path: "SPEC.md", reason: "milestone record: the figure this version shipped with, kept as written"}
   - {literal: "tp 32 / fp 3 / fn 5", path: "SPEC.md", reason: "milestone record: the figure this version shipped with, kept as written"}

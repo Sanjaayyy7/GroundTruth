@@ -85,7 +85,7 @@
       "role": "config"
     },
     {
-      "bytes": 17370,
+      "bytes": 8423,
       "lifecycle": "living",
       "path": "README.md",
       "role": "doc"
@@ -115,7 +115,7 @@
       "role": "doc"
     },
     {
-      "bytes": 12217,
+      "bytes": 12879,
       "lifecycle": "living",
       "path": "docs/CONSTITUTION.md",
       "role": "law"
@@ -142,6 +142,12 @@
       "bytes": 3016,
       "lifecycle": "living",
       "path": "docs/POSITIONING.md",
+      "role": "doc"
+    },
+    {
+      "bytes": 17370,
+      "lifecycle": "living",
+      "path": "docs/README-full.md",
       "role": "doc"
     },
     {
@@ -1225,7 +1231,7 @@
       "role": "evidence"
     },
     {
-      "bytes": 55812,
+      "bytes": 55932,
       "lifecycle": "derived",
       "path": "runs/steward/repo-manifest.json",
       "role": "evidence"
@@ -2126,11 +2132,11 @@
       "files": 15
     },
     "doc": {
-      "bytes": 117480,
-      "files": 16
+      "bytes": 125903,
+      "files": 17
     },
     "evidence": {
-      "bytes": 757509,
+      "bytes": 757629,
       "files": 195
     },
     "experiment": {
@@ -2138,7 +2144,7 @@
       "files": 7
     },
     "law": {
-      "bytes": 12217,
+      "bytes": 12879,
       "files": 1
     },
     "legal": {
@@ -2163,7 +2169,7 @@
     }
   },
   "total": {
-    "bytes": 1534034,
-    "files": 349
+    "bytes": 1543239,
+    "files": 350
   }
 }
