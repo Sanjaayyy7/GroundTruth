@@ -13,8 +13,10 @@ PlannerBench registers, external evaluations emitting the same formats.
 from __future__ import annotations
 
 import json
+import logging
 import re
 import subprocess
+from collections.abc import Sequence
 from pathlib import Path
 
 import yaml
@@ -26,6 +28,7 @@ class RegisterError(Exception):
     """A register is missing or malformed. CLI maps this to exit code 2."""
 
 
+_LOG = logging.getLogger(__name__)
 _GIT_TIMEOUT = 30  # seconds, per invocation
 _PYPROJECT_VERSION = re.compile(r'^version\s*=\s*"([^"]+)"', re.M)
 _README_VERSION = re.compile(r"\*\*v(\d+\.\d+) — shipping\*\*")
@@ -36,6 +39,7 @@ def _git(root: Path, *args: str) -> subprocess.CompletedProcess:
     """Bounded git. An audit that hangs on a stale lock or a credential prompt
     publishes nothing; a timeout must become a register error the CLI can
     report and exit on."""
+    _LOG.debug("git %s", " ".join(args))
     try:
         return subprocess.run(
             ["git", *args], cwd=root, capture_output=True, text=True, timeout=_GIT_TIMEOUT
@@ -49,7 +53,7 @@ def _git(root: Path, *args: str) -> subprocess.CompletedProcess:
 
 
 def probe_git_facts(
-    root: Path, commits: list[str], ancestry: list[tuple[str, str]] = ()
+    root: Path, commits: list[str], ancestry: Sequence[tuple[str, str]] = ()
 ) -> dict:
     facts: dict = {"__ancestry__": {}}
     for sha in commits:
@@ -108,7 +112,7 @@ def _script_paths(root: Path, command: str) -> dict[str, bool]:
     paths: dict[str, bool] = {}
     for token in command.split():
         token = token.rstrip(",.);")
-        if "/" not in token or token.startswith("--") or token.startswith("./.venv"):
+        if "/" not in token or token.startswith(("--", "./.venv")):
             continue
         paths[token] = (root / token).exists()
     return paths

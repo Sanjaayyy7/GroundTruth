@@ -167,7 +167,7 @@ def test_control_invalid_threat_status_fails_ct7(minijudge_copy, tmp_path, capsy
 
 def test_control_prose_register_divergence_fails_ct8(minijudge_copy, tmp_path, capsys):
     prose = minijudge_copy / "docs/THREATS_TO_VALIDITY.md"
-    lines = [l for l in prose.read_text().splitlines() if not l.startswith("| T3 ")]
+    lines = [ln for ln in prose.read_text().splitlines() if not ln.startswith("| T3 ")]
     prose.write_text("\n".join(lines) + "\n")
 
     assert _audit(minijudge_copy, tmp_path) == 1

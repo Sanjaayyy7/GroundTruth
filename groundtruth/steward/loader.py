@@ -14,6 +14,7 @@ actually consumed is implemented. Every invocation pins byte-determinism
 """
 from __future__ import annotations
 
+import logging
 import os
 import re
 import subprocess
@@ -33,7 +34,7 @@ _SCHEMA_KEYS = (
 # no existing declaration has to be rewritten to keep loading. A schema-2
 # block must carry the key, because an allowlist that is absent and an
 # allowlist that is empty are different statements and only one is deliberate.
-_SCHEMA_2_KEYS = _SCHEMA_KEYS + ("numeric_allowlist",)
+_SCHEMA_2_KEYS = (*_SCHEMA_KEYS, "numeric_allowlist")
 _ALLOWLIST_FIELDS = ("literal", "path", "reason")
 _ROLE_FIELDS = ("pattern", "role", "lifecycle")
 _DEBT_FIELDS = ("id", "title", "category", "state", "origin", "evidence", "resolution")
@@ -210,6 +211,7 @@ def _git(root: Path, *args: str, stdin: str | None = None) -> subprocess.Complet
     """Every invocation is bounded: git blocks indefinitely on a stale lock, a
     credential prompt or an unresponsive filesystem, and an audit that hangs
     reports nothing at all."""
+    logging.getLogger(__name__).debug("git %s", " ".join(args))
     try:
         return subprocess.run(
             ["git", "-c", "core.quotePath=false", *args],
@@ -251,7 +253,7 @@ def git_blob_sizes(root: Path) -> dict[str, int]:
     if batch.returncode != 0:
         raise DeclarationError(f"git cat-file --batch-check failed: {batch.stderr.strip()}")
     sizes = batch.stdout.split()
-    return {path: int(size) for (path, _), size in zip(entries, sizes)}
+    return {path: int(size) for (path, _), size in zip(entries, sizes, strict=False)}
 
 
 def git_diff_names(root: Path, commit: str, path: str) -> tuple[str, ...]:

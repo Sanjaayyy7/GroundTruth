@@ -23,19 +23,19 @@ review trigger: >=5 active exemptions, or any exemption older than
 |---|---|---|
 | adr | 8 | 20273 |
 | asset | 1 | 9574 |
-| ci | 5 | 4900 |
-| code | 31 | 152268 |
-| config | 3 | 1906 |
+| ci | 6 | 15583 |
+| code | 32 | 158248 |
+| config | 5 | 8353 |
 | consumer | 10 | 14403 |
 | dataset | 15 | 61810 |
 | doc | 16 | 117480 |
-| evidence | 195 | 755472 |
-| experiment | 7 | 39379 |
-| law | 1 | 10961 |
+| evidence | 195 | 757509 |
+| experiment | 7 | 39358 |
+| law | 1 | 12217 |
 | legal | 1 | 1063 |
 | plan | 1 | 4302 |
 | register | 3 | 26712 |
 | spec | 16 | 149739 |
-| test | 29 | 124108 |
+| test | 32 | 136338 |
 
-total: 342 files, 1494350 bytes
+total: 349 files, 1532962 bytes

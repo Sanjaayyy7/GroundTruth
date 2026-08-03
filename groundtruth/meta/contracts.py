@@ -12,8 +12,8 @@ Future consumers: any evaluation emitting the register formats.
 """
 from __future__ import annotations
 
+from collections.abc import Callable
 from dataclasses import dataclass
-from typing import Callable
 
 from .graph import EvidenceGraph
 
@@ -93,10 +93,10 @@ def _ct4(g: EvidenceGraph) -> list[Finding]:
     for t in g.by_kind("threat"):
         tid = t.id.removeprefix("threat:")
         for cid in t.attrs.get("claim_refs", []):
-            c = g.node(f"claim:{cid}")
-            if c is None:
+            claim = g.node(f"claim:{cid}")
+            if claim is None:
                 out.append(Finding("CT4", t.id, f"claim_ref does not resolve: {cid}"))
-            elif tid not in c.attrs.get("threat_refs", []):
+            elif tid not in claim.attrs.get("threat_refs", []):
                 out.append(Finding("CT4", t.id, f"one-way reference: {cid} does not list {tid}"))
     return out
 
@@ -165,9 +165,9 @@ def _ct9(g: EvidenceGraph) -> list[Finding]:
     for c in g.by_kind("claim"):
         if c.attrs.get("confidence") not in CONFIDENCES:
             out.append(Finding("CT9", c.id, f"confidence {c.attrs.get('confidence')!r} invalid"))
-        if c.attrs.get("classification") in ("supported_observation", "working_hypothesis"):
-            if not c.attrs.get("confounds_remaining"):
-                out.append(Finding("CT9", c.id, "non-fact names no remaining confound to resolve"))
+        if (c.attrs.get("classification") in ("supported_observation", "working_hypothesis")
+                and not c.attrs.get("confounds_remaining")):
+            out.append(Finding("CT9", c.id, "non-fact names no remaining confound to resolve"))
     return out
 
 

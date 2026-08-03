@@ -36,6 +36,11 @@ jobs:
         # below only covered artifacts CI regenerates — audit and steward —
         # and a scorecard could be both wrong and stale without failing.
         run: groundtruth rescore --check
+      - name: HTML evidence report regenerates (R4)
+        # Deterministic render of the persisted scorecards, no timestamps. It
+        # was committed stale through an entire detector change because nothing
+        # regenerated it — the exact failure R4 names.
+        run: groundtruth report
       - name: Evidence audit (contracts + quality manifest + assurance report)
         run: groundtruth audit
       - name: Evidence audit of the second consumer (v0.7 external validation)

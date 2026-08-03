@@ -13,9 +13,10 @@ from __future__ import annotations
 
 from .contracts import Finding
 from .graph import EvidenceGraph
+from .model import EvidenceNode
 
 
-def _statement(node) -> str:
+def _statement(node: EvidenceNode) -> str:
     text = str(node.attrs.get("statement", "")).strip().replace("\n", " ")
     return (text[:100] + "…") if len(text) > 100 else text
 

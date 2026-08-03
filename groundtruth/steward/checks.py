@@ -11,6 +11,7 @@ justification — never weakening a check.
 from __future__ import annotations
 
 import ast
+import contextlib
 import json
 import re
 import sys
@@ -26,7 +27,7 @@ _SHA = re.compile(r"[0-9a-f]{7,40}\Z")
 _TRIGGER = re.compile(r"^## Review trigger", re.M)
 
 
-def _rc1(index: tuple, decls: RepoDeclarations) -> list[Finding]:
+def _rc1(index: tuple[str, ...], decls: RepoDeclarations) -> list[Finding]:
     return [
         Finding("RC1", path, "no role rule matches this tracked path")
         for path in index
@@ -34,12 +35,12 @@ def _rc1(index: tuple, decls: RepoDeclarations) -> list[Finding]:
     ]
 
 
-def _reference_resolves(root: Path, referencing: str, target: str, frozen_roots) -> bool:
-    bases = [Path(referencing).parent.as_posix(), "."] + list(frozen_roots)
+def _reference_resolves(root: Path, referencing: str, target: str, frozen_roots: list[str]) -> bool:
+    bases = [Path(referencing).parent.as_posix(), ".", *frozen_roots]
     return any((root / base / target).exists() for base in bases)
 
 
-def _rc2(root: Path, decls: RepoDeclarations, index: tuple) -> list[Finding]:
+def _rc2(root: Path, decls: RepoDeclarations, index: tuple[str, ...]) -> list[Finding]:
     out = []
     frozen_roots = [f["path"] for f in decls.frozen]
     for path in index:
@@ -94,7 +95,7 @@ def _rc3(root: Path, decls: RepoDeclarations) -> list[Finding]:
     return out
 
 
-def _rc4(decls: RepoDeclarations, index: tuple) -> list[Finding]:
+def _rc4(decls: RepoDeclarations, index: tuple[str, ...]) -> list[Finding]:
     out = []
     for d in decls.derived_artifacts:
         if not str(d.get("regen", "")).strip():
@@ -128,7 +129,7 @@ def _imports_of(root: Path, mod: str, path: str) -> list[tuple[str, int]]:
     return found
 
 
-def _rc5(root: Path, decls: RepoDeclarations, index: tuple) -> list[Finding]:
+def _rc5(root: Path, decls: RepoDeclarations, index: tuple[str, ...]) -> list[Finding]:
     mods: dict[str, str] = {}
     for path in index:
         rule = match_role(path, decls.roles)
@@ -155,7 +156,7 @@ def _rc5(root: Path, decls: RepoDeclarations, index: tuple) -> list[Finding]:
                             f"non-stdlib import in {rule['src']}: {mod} -> {target}",
                             lineno,
                         ))
-                elif kind == "only_importer" and _under(target, rule["dst"]) and not _under(mod, rule["dst"]):
+                elif kind == "only_importer" and _under(target, rule["dst"]) and not _under(mod, rule["dst"]):  # noqa: SIM102
                     if not any(_under(mod, a) for a in rule["allowed"]):
                         out.append(Finding(
                             "RC5", path,
@@ -165,7 +166,7 @@ def _rc5(root: Path, decls: RepoDeclarations, index: tuple) -> list[Finding]:
     return out
 
 
-def _rc6(root: Path, decls: RepoDeclarations, index: tuple) -> list[Finding]:
+def _rc6(root: Path, decls: RepoDeclarations, index: tuple[str, ...]) -> list[Finding]:
     return [
         Finding("RC6", path, "accepted ADR carries no '## Review trigger' section")
         for path in index
@@ -175,7 +176,7 @@ def _rc6(root: Path, decls: RepoDeclarations, index: tuple) -> list[Finding]:
     ]
 
 
-def _rc7(root: Path, debt: tuple, index: tuple) -> list[Finding]:
+def _rc7(root: Path, debt: tuple, index: tuple[str, ...]) -> list[Finding]:
     out, seen, register = [], set(), "docs/debt.yaml"
     tracked = set(index)
     for item in debt:
@@ -225,7 +226,7 @@ _LABELLED_TRIPLE = re.compile(
 )
 
 
-def _register_numbers(root: Path, decls: RepoDeclarations, index: tuple):
+def _register_numbers(root: Path, decls: RepoDeclarations, index: tuple[str, ...]) -> tuple[set[str], set[tuple[int, int, int]]]:
     """Every number a living document may quote: values declared in the claims
     register, and values inside tracked metric artifacts.
 
@@ -238,13 +239,11 @@ def _register_numbers(root: Path, decls: RepoDeclarations, index: tuple):
     decimals: set[str] = set()
     triples: set[tuple[int, int, int]] = set()
 
-    def walk(node) -> None:
+    def walk(node: object) -> None:
         if isinstance(node, dict):
             if all(k in node for k in ("tp", "fp", "fn")):
-                try:
+                with contextlib.suppress(TypeError, ValueError):
                     triples.add((int(node["tp"]), int(node["fp"]), int(node["fn"])))
-                except (TypeError, ValueError):
-                    pass
             for v in node.values():
                 walk(v)
         elif isinstance(node, list):
@@ -279,7 +278,7 @@ def _resolves(literal: str, decimals: set[str]) -> bool:
     return any(round(float(v), places) == target for v in decimals)
 
 
-def _law_path(decls: RepoDeclarations, index: tuple) -> str:
+def _law_path(decls: RepoDeclarations, index: tuple[str, ...]) -> str:
     for path in index:
         rule = match_role(path, decls.roles)
         if rule is not None and rule.get("role") == "law":
@@ -287,7 +286,7 @@ def _law_path(decls: RepoDeclarations, index: tuple) -> str:
     return "docs/CONSTITUTION.md"
 
 
-def _rc9(root: Path, decls: RepoDeclarations, index: tuple) -> list[Finding]:
+def _rc9(root: Path, decls: RepoDeclarations, index: tuple[str, ...]) -> list[Finding]:
     """Numeric claims in living documents resolve to a declared register value.
 
     RC2 checks that a living document's *links* resolve. Nothing checked that
@@ -371,7 +370,7 @@ def _rc9(root: Path, decls: RepoDeclarations, index: tuple) -> list[Finding]:
 
 
 def run_checks(
-    root: Path, decls: RepoDeclarations, debt: tuple, index: tuple
+    root: Path, decls: RepoDeclarations, debt: tuple[dict[str, object], ...], index: tuple[str, ...]
 ) -> tuple[tuple[Finding, ...], tuple[Finding, ...]]:
     """All contracts; returns (active, exempted), each sorted. Exemptions
     suppress visibly — the finding moves to the exempted list, never

@@ -20,6 +20,7 @@ from dataclasses import asdict
 
 from .contracts import CONTRACTS_DOC, Finding
 from .graph import EvidenceGraph
+from .model import EvidenceNode
 
 DIMENSIONS = (
     "determinism", "reproducibility", "detector_quality", "label_quality",
@@ -33,7 +34,7 @@ def _tagged(graph: EvidenceGraph, dimension: str) -> list:
     return [n for n in nodes if dimension in n.attrs.get("dimensions", [])]
 
 
-def _node_summary(node) -> dict:
+def _node_summary(node: EvidenceNode) -> dict:
     summary: dict = {"id": node.id}
     for key in ("classification", "confidence", "status"):
         if key in node.attrs:

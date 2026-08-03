@@ -25,7 +25,13 @@
       "role": "ci"
     },
     {
-      "bytes": 2111,
+      "bytes": 10384,
+      "lifecycle": "living",
+      "path": ".github/hooks/verify_derived.py",
+      "role": "ci"
+    },
+    {
+      "bytes": 2410,
       "lifecycle": "living",
       "path": ".github/workflows/ci.yml",
       "role": "ci"
@@ -34,6 +40,12 @@
       "bytes": 77,
       "lifecycle": "living",
       "path": ".gitignore",
+      "role": "config"
+    },
+    {
+      "bytes": 1338,
+      "lifecycle": "living",
+      "path": ".pre-commit-config.yaml",
       "role": "config"
     },
     {
@@ -67,6 +79,12 @@
       "role": "legal"
     },
     {
+      "bytes": 1192,
+      "lifecycle": "living",
+      "path": "Makefile",
+      "role": "config"
+    },
+    {
       "bytes": 17370,
       "lifecycle": "living",
       "path": "README.md",
@@ -97,7 +115,7 @@
       "role": "doc"
     },
     {
-      "bytes": 10961,
+      "bytes": 12217,
       "lifecycle": "living",
       "path": "docs/CONSTITUTION.md",
       "role": "law"
@@ -403,7 +421,7 @@
       "role": "experiment"
     },
     {
-      "bytes": 10062,
+      "bytes": 10041,
       "lifecycle": "historical",
       "path": "experiments/judge_rerun/run.py",
       "role": "experiment"
@@ -439,19 +457,19 @@
       "role": "code"
     },
     {
-      "bytes": 1062,
+      "bytes": 1049,
       "lifecycle": "living",
       "path": "groundtruth/adapters/agent.py",
       "role": "code"
     },
     {
-      "bytes": 9325,
+      "bytes": 10470,
       "lifecycle": "living",
       "path": "groundtruth/adapters/ollama_agent.py",
       "role": "code"
     },
     {
-      "bytes": 23593,
+      "bytes": 27846,
       "lifecycle": "living",
       "path": "groundtruth/cli.py",
       "role": "code"
@@ -469,7 +487,7 @@
       "role": "code"
     },
     {
-      "bytes": 2111,
+      "bytes": 2138,
       "lifecycle": "living",
       "path": "groundtruth/core/evaluator.py",
       "role": "code"
@@ -487,7 +505,7 @@
       "role": "code"
     },
     {
-      "bytes": 2522,
+      "bytes": 2520,
       "lifecycle": "living",
       "path": "groundtruth/core/trace.py",
       "role": "code"
@@ -505,13 +523,13 @@
       "role": "code"
     },
     {
-      "bytes": 4418,
+      "bytes": 4464,
       "lifecycle": "living",
       "path": "groundtruth/meta/assurance.py",
       "role": "code"
     },
     {
-      "bytes": 8427,
+      "bytes": 8450,
       "lifecycle": "living",
       "path": "groundtruth/meta/contracts.py",
       "role": "code"
@@ -523,13 +541,13 @@
       "role": "code"
     },
     {
-      "bytes": 8595,
+      "bytes": 8709,
       "lifecycle": "living",
       "path": "groundtruth/meta/loader.py",
       "role": "code"
     },
     {
-      "bytes": 5798,
+      "bytes": 5844,
       "lifecycle": "living",
       "path": "groundtruth/meta/manifest.py",
       "role": "code"
@@ -559,13 +577,13 @@
       "role": "code"
     },
     {
-      "bytes": 13091,
+      "bytes": 13100,
       "lifecycle": "living",
       "path": "groundtruth/products/agentprobe/detectors.py",
       "role": "code"
     },
     {
-      "bytes": 9942,
+      "bytes": 9944,
       "lifecycle": "living",
       "path": "groundtruth/products/agentprobe/judge.py",
       "role": "code"
@@ -577,25 +595,31 @@
       "role": "code"
     },
     {
+      "bytes": 0,
+      "lifecycle": "living",
+      "path": "groundtruth/py.typed",
+      "role": "code"
+    },
+    {
       "bytes": 226,
       "lifecycle": "living",
       "path": "groundtruth/steward/__init__.py",
       "role": "code"
     },
     {
-      "bytes": 16920,
+      "bytes": 17108,
       "lifecycle": "living",
       "path": "groundtruth/steward/checks.py",
       "role": "code"
     },
     {
-      "bytes": 2184,
+      "bytes": 2234,
       "lifecycle": "living",
       "path": "groundtruth/steward/inventory.py",
       "role": "code"
     },
     {
-      "bytes": 10990,
+      "bytes": 11082,
       "lifecycle": "living",
       "path": "groundtruth/steward/loader.py",
       "role": "code"
@@ -613,7 +637,7 @@
       "role": "code"
     },
     {
-      "bytes": 907,
+      "bytes": 4824,
       "lifecycle": "living",
       "path": "pyproject.toml",
       "role": "config"
@@ -1123,7 +1147,7 @@
       "role": "evidence"
     },
     {
-      "bytes": 61132,
+      "bytes": 62296,
       "lifecycle": "derived",
       "path": "runs/report.html",
       "role": "evidence"
@@ -1201,13 +1225,13 @@
       "role": "evidence"
     },
     {
-      "bytes": 54940,
+      "bytes": 55812,
       "lifecycle": "derived",
       "path": "runs/steward/repo-manifest.json",
       "role": "evidence"
     },
     {
-      "bytes": 931,
+      "bytes": 932,
       "lifecycle": "derived",
       "path": "runs/steward/steward-report.md",
       "role": "evidence"
@@ -1843,7 +1867,7 @@
       "role": "test"
     },
     {
-      "bytes": 2222,
+      "bytes": 3932,
       "lifecycle": "living",
       "path": "tests/test_ci.py",
       "role": "test"
@@ -1855,7 +1879,13 @@
       "role": "test"
     },
     {
-      "bytes": 11839,
+      "bytes": 3237,
+      "lifecycle": "living",
+      "path": "tests/test_cli_config.py",
+      "role": "test"
+    },
+    {
+      "bytes": 11842,
       "lifecycle": "living",
       "path": "tests/test_detectors_v02.py",
       "role": "test"
@@ -1873,7 +1903,7 @@
       "role": "test"
     },
     {
-      "bytes": 6872,
+      "bytes": 6875,
       "lifecycle": "living",
       "path": "tests/test_external_validation.py",
       "role": "test"
@@ -1882,6 +1912,12 @@
       "bytes": 9619,
       "lifecycle": "living",
       "path": "tests/test_judge.py",
+      "role": "test"
+    },
+    {
+      "bytes": 3226,
+      "lifecycle": "living",
+      "path": "tests/test_logging.py",
       "role": "test"
     },
     {
@@ -1903,7 +1939,7 @@
       "role": "test"
     },
     {
-      "bytes": 4460,
+      "bytes": 4492,
       "lifecycle": "living",
       "path": "tests/test_meta_loader.py",
       "role": "test"
@@ -1933,19 +1969,25 @@
       "role": "test"
     },
     {
+      "bytes": 3990,
+      "lifecycle": "living",
+      "path": "tests/test_precommit_hook.py",
+      "role": "test"
+    },
+    {
       "bytes": 4330,
       "lifecycle": "living",
       "path": "tests/test_report.py",
       "role": "test"
     },
     {
-      "bytes": 3594,
+      "bytes": 3579,
       "lifecycle": "living",
       "path": "tests/test_rescore.py",
       "role": "test"
     },
     {
-      "bytes": 2949,
+      "bytes": 3018,
       "lifecycle": "living",
       "path": "tests/test_runner.py",
       "role": "test"
@@ -1957,7 +1999,7 @@
       "role": "test"
     },
     {
-      "bytes": 10061,
+      "bytes": 10036,
       "lifecycle": "living",
       "path": "tests/test_steward_checks.py",
       "role": "test"
@@ -2064,16 +2106,16 @@
       "files": 1
     },
     "ci": {
-      "bytes": 4900,
-      "files": 5
+      "bytes": 15583,
+      "files": 6
     },
     "code": {
-      "bytes": 152268,
-      "files": 31
+      "bytes": 158248,
+      "files": 32
     },
     "config": {
-      "bytes": 1906,
-      "files": 3
+      "bytes": 8353,
+      "files": 5
     },
     "consumer": {
       "bytes": 14403,
@@ -2088,15 +2130,15 @@
       "files": 16
     },
     "evidence": {
-      "bytes": 755472,
+      "bytes": 757509,
       "files": 195
     },
     "experiment": {
-      "bytes": 39379,
+      "bytes": 39358,
       "files": 7
     },
     "law": {
-      "bytes": 10961,
+      "bytes": 12217,
       "files": 1
     },
     "legal": {
@@ -2116,12 +2158,12 @@
       "files": 16
     },
     "test": {
-      "bytes": 124108,
-      "files": 29
+      "bytes": 136338,
+      "files": 32
     }
   },
   "total": {
-    "bytes": 1494350,
-    "files": 342
+    "bytes": 1532962,
+    "files": 349
   }
 }

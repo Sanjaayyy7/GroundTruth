@@ -8,10 +8,10 @@ an unmatched path is recorded with role None and becomes an RC1 finding.
 from __future__ import annotations
 
 import re
-from functools import lru_cache
+from functools import cache
 
 
-@lru_cache(maxsize=None)
+@cache
 def _pattern_regex(pattern: str) -> re.Pattern:
     out = []
     i = 0
@@ -31,14 +31,14 @@ def _pattern_regex(pattern: str) -> re.Pattern:
     return re.compile("".join(out) + r"\Z")
 
 
-def match_role(path: str, roles: tuple) -> dict | None:
+def match_role(path: str, roles: tuple[dict[str, str], ...]) -> dict[str, str] | None:
     for rule in roles:
         if _pattern_regex(rule["pattern"]).match(path):
             return rule
     return None
 
 
-def build_inventory(index: tuple, roles: tuple, sizes: dict) -> dict:
+def build_inventory(index: tuple[str, ...], roles: tuple[dict[str, str], ...], sizes: dict[str, int]) -> dict:
     """sizes maps path -> byte size of the *index blob* (loader.git_blob_sizes);
     working-tree sizes are forbidden here — the manifest lists itself and
     stat-based sizes would deny the artifact a byte fixed point."""

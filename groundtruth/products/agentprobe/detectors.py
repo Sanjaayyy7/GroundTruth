@@ -20,7 +20,7 @@ These are rules, not models — and their quality is *measured*, not asserted:
 """
 from __future__ import annotations
 
-from typing import Iterable
+from collections.abc import Iterable
 
 from ...core.dataset import Case
 from ...core.scorecard import Failure

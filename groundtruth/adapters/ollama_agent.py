@@ -14,13 +14,34 @@ text stays in the trace where detectors and humans can inspect it.
 from __future__ import annotations
 
 import json
+import os
 import urllib.error
 import urllib.request
-from typing import Iterator
+from collections.abc import Callable, Iterator
 
 from .agent import Action, Finish, Observation, ToolCall
 
 _DEFAULT_HOST = "http://localhost:11434"
+_DEFAULT_TIMEOUT = 180
+
+
+def _env_host() -> str:
+    """Where the server lives is a property of the machine, not of the
+    measurement, so it follows the GROUNDTRUTH_ROOT precedent: an environment
+    override, no flag. Seed and temperature stay constants (ADR-0003)."""
+    return os.environ.get("GROUNDTRUTH_OLLAMA_HOST") or _DEFAULT_HOST
+
+
+def _env_timeout() -> int:
+    raw = os.environ.get("GROUNDTRUTH_OLLAMA_TIMEOUT")
+    if not raw:
+        return _DEFAULT_TIMEOUT
+    try:
+        return int(raw)
+    except ValueError as exc:
+        raise ValueError(
+            f"GROUNDTRUTH_OLLAMA_TIMEOUT must be a whole number of seconds, got {raw!r}"
+        ) from exc
 
 
 _CLOSERS = {"{": "}", "[": "]"}
@@ -69,9 +90,10 @@ def first_parsed_json(text: str, openers: str = "{[") -> object | None:
     """The first balanced candidate in `text` that actually parses, else None."""
     for block in iter_json_values(text, openers):
         try:
-            return json.loads(block)
+            value: object = json.loads(block)
         except json.JSONDecodeError:
             continue
+        return value
     return None
 
 
@@ -82,8 +104,8 @@ class OllamaUnavailable(RuntimeError):
 def chat(
     model: str,
     messages: list[dict[str, str]],
-    host: str = _DEFAULT_HOST,
-    timeout: int = 180,
+    host: str | None = None,
+    timeout: int | None = None,
     format: str | None = "json",
 ) -> str:
     """One deterministic chat completion against a local Ollama server.
@@ -102,6 +124,8 @@ def chat(
     from the request body entirely — Ollama would read an explicit null as a
     value, and an unconstrained arm has to send no constraint at all.
     """
+    host = host if host is not None else _env_host()
+    timeout = timeout if timeout is not None else _env_timeout()
     body: dict[str, object] = {
         "model": model,
         "messages": messages,
@@ -118,7 +142,9 @@ def chat(
     )
     try:
         with urllib.request.urlopen(req, timeout=timeout) as resp:
-            body = json.loads(resp.read())
+            # Only the one field this function returns is ever consumed, so
+            # the response shape is declared at exactly that depth.
+            reply: dict[str, dict[str, str]] = json.loads(resp.read())
     except urllib.error.HTTPError as exc:
         if exc.code == 404:
             raise OllamaUnavailable(
@@ -133,7 +159,7 @@ def chat(
             f"Ollama server not reachable at {host} — install it from "
             f"https://ollama.com and start it with `ollama serve`"
         ) from exc
-    return body.get("message", {}).get("content", "")
+    return reply.get("message", {}).get("content", "")
 
 _SYSTEM = """You are an assistant that completes the user's task by using tools.
 Respond with ONLY a single JSON object, no other text. Two forms are allowed:
@@ -145,8 +171,7 @@ task is done (or no tool is needed), use "finish" with your answer."""
 
 def parse_action(text: str, available_tools: list[str]) -> Action:
     d = first_parsed_json(text or "", openers="{")
-    if d is not None:
-        if isinstance(d, dict):
+    if isinstance(d, dict):
             if d.get("action") == "tool":
                 tool = str(d.get("tool", ""))
                 if tool in available_tools:
@@ -179,14 +204,14 @@ class OllamaAgent:
     def __init__(
         self,
         model: str,
-        host: str = _DEFAULT_HOST,
-        timeout: int = 180,
+        host: str | None = None,
+        timeout: int | None = None,
         stateful: bool = False,
-        chat_fn=None,
-    ):
+        chat_fn: Callable[[list[dict[str, str]]], str] | None = None,
+    ) -> None:
         self.model = model
-        self.host = host.rstrip("/")
-        self.timeout = timeout
+        self.host = (host if host is not None else _env_host()).rstrip("/")
+        self.timeout = timeout if timeout is not None else _env_timeout()
         self.stateful = stateful
         self.name = f"ollama:{model}+stateful" if stateful else f"ollama:{model}"
         self._chat_fn = chat_fn or (
@@ -214,6 +239,6 @@ class OllamaAgent:
             self._history.append(
                 {"role": "user", "content": f"Tool result:\n{obs.last_tool_result}"}
             )
-        reply = self._chat_fn([{"role": "system", "content": _SYSTEM}] + self._history)
+        reply = self._chat_fn([{"role": "system", "content": _SYSTEM}, *self._history])
         self._history.append({"role": "assistant", "content": reply})
         return parse_action(reply, obs.available_tools)

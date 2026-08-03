@@ -48,7 +48,7 @@ class Trace:
         return [s for s in self.spans if s.kind == "tool_call"]
 
     @classmethod
-    def from_dict(cls, d: dict[str, Any]) -> "Trace":
+    def from_dict(cls, d: dict[str, Any]) -> Trace:
         """Rebuild a Trace from its serialized form — the inverse of `to_dict`.
         Committed traces are the durable record of a run, so a detector change
         can be re-scored against them without re-running the subject."""

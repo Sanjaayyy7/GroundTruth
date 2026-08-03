@@ -8,7 +8,8 @@ register step-efficiency/recovery detectors — the engine below does not change
 """
 from __future__ import annotations
 
-from typing import Iterable, Protocol
+from collections.abc import Iterable
+from typing import Protocol
 
 from .dataset import Case
 from .scorecard import COMPLETION_CONTRACT_KEY, Failure, Scorecard

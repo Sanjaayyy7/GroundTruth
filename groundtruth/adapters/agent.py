@@ -12,7 +12,7 @@ and need no model at all.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Any, Protocol, Union
+from typing import Any, Protocol
 
 
 @dataclass
@@ -26,7 +26,7 @@ class Finish:
     answer: str = ""
 
 
-Action = Union[ToolCall, Finish]
+Action = ToolCall | Finish
 
 
 @dataclass

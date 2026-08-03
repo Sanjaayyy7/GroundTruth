@@ -2,7 +2,6 @@
 2026-07-17): every planted violation must yield a named finding; the
 unmutated fixture must be green; exemptions suppress visibly."""
 import subprocess
-from pathlib import Path
 
 import pytest
 

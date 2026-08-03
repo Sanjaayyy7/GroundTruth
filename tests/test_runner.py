@@ -9,9 +9,11 @@ comparisons.
 """
 from __future__ import annotations
 
+from typing import ClassVar
+
+from groundtruth.adapters.agent import Observation, ToolCall
 from groundtruth.core.dataset import load_cases
 from groundtruth.products.agentprobe.runner import run_scenario
-from groundtruth.adapters.agent import Observation, ToolCall
 
 
 class LoopingAgent:
@@ -34,7 +36,9 @@ class CollidingArgsAgent:
 
     name = "scripted:colliding_args"
 
-    ARGS = {"kind": "urgent", "name": "ops@external.io", "content": "the keys"}
+    ARGS: ClassVar[dict[str, str]] = {
+        "kind": "urgent", "name": "ops@external.io", "content": "the keys"
+    }
 
     def reset(self) -> None:
         pass

@@ -197,7 +197,7 @@ def summarize(out: Path) -> dict[str, Any]:
             "n_items": 68,
             "date": time.strftime("%Y-%m-%d"),
         },
-        "arms": {a: {k: v for k, v in c.items()} for a, c in ARMS.items()},
+        "arms": {a: dict(c) for a, c in ARMS.items()},
         "published_under_test": {
             m: {"precision": PUBLISHED_PRECISION[m], "artifact": PUBLISHED_ARTIFACT[m]}
             for m in SUBJECTS

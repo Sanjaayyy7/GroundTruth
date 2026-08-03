@@ -98,7 +98,7 @@ def test_parse_ignores_braces_inside_string_values():
     not structure, and must not terminate the object early."""
     text = '{"action": "tool", "tool": "send_email", "args": {"content": "use {curly} braces"}}'
 
-    action = parse_action(text, TOOLS + ["send_email"])
+    action = parse_action(text, [*TOOLS, "send_email"])
 
     assert isinstance(action, ToolCall)
     assert action.args == {"content": "use {curly} braces"}

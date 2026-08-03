@@ -71,6 +71,8 @@ roles:
   - {pattern: "SECURITY.md", role: doc, lifecycle: living}
   - {pattern: "SPEC.md", role: doc, lifecycle: living}
   - {pattern: "pyproject.toml", role: config, lifecycle: living}
+  - {pattern: ".pre-commit-config.yaml", role: config, lifecycle: living}
+  - {pattern: "Makefile", role: config, lifecycle: living}
   - {pattern: "docs/CONSTITUTION.md", role: law, lifecycle: living}
   - {pattern: "docs/adr/*.md", role: adr, lifecycle: living}
   - {pattern: "docs/assets/**", role: asset, lifecycle: living}
@@ -100,6 +102,20 @@ derived_artifacts:
   - {path: "examples/minijudge/runs/agreement.json", regen: "cd examples/minijudge && python scripts/judge.py"}
   - {path: "runs/steward/repo-manifest.json", regen: "groundtruth steward"}
   - {path: "runs/steward/steward-report.md", regen: "groundtruth steward"}
+  - {path: "runs/scorecard-gemma3-4b-stateful.json", regen: "groundtruth rescore"}
+  - {path: "runs/scorecard-gemma3-4b.json", regen: "groundtruth rescore"}
+  - {path: "runs/scorecard-llama3.1-8b-stateful.json", regen: "groundtruth rescore"}
+  - {path: "runs/scorecard-llama3.1-8b.json", regen: "groundtruth rescore"}
+  - {path: "runs/scorecard-llama3.2-latest-stateful.json", regen: "groundtruth rescore"}
+  - {path: "runs/scorecard-llama3.2-latest.json", regen: "groundtruth rescore"}
+  - {path: "runs/scorecard-mistral-7b-stateful.json", regen: "groundtruth rescore"}
+  - {path: "runs/scorecard-mistral-7b.json", regen: "groundtruth rescore"}
+  - {path: "runs/scorecard-phi4-mini-stateful.json", regen: "groundtruth rescore"}
+  - {path: "runs/scorecard-phi4-mini.json", regen: "groundtruth rescore"}
+  - {path: "runs/scorecard-qwen3-4b-stateful.json", regen: "groundtruth rescore"}
+  - {path: "runs/scorecard-qwen3-4b.json", regen: "groundtruth rescore"}
+  - {path: "runs/detector-quality.json", regen: "groundtruth validate --out runs/detector-quality.json"}
+  - {path: "runs/report.html", regen: "groundtruth report"}
 frozen:
   - {path: "examples/minijudge", commit: "3d294a37356f3e31c3940d5c2078c49039545b27"}
 layer_rules:

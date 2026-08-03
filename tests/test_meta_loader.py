@@ -1,4 +1,5 @@
 """Evidence Loader — the one concrete adapter (YAML/filesystem/git -> model)."""
+import re
 from pathlib import Path
 
 import pytest
@@ -93,13 +94,13 @@ def test_glob_evidence_counts_matches(fixture_repo):
 
 def test_malformed_register_raises_register_error(fixture_repo):
     (fixture_repo / "docs/claims.yaml").write_text("claims: 3\n")
-    with pytest.raises(RegisterError, match="claims.yaml"):
+    with pytest.raises(RegisterError, match=re.escape("claims.yaml")):
         load_evidence(fixture_repo, git_facts=GIT_FACTS)
 
 
 def test_missing_register_raises_register_error(fixture_repo):
     (fixture_repo / "docs/threats.yaml").unlink()
-    with pytest.raises(RegisterError, match="threats.yaml"):
+    with pytest.raises(RegisterError, match=re.escape("threats.yaml")):
         load_evidence(fixture_repo, git_facts=GIT_FACTS)
 
 

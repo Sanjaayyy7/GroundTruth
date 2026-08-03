@@ -26,7 +26,7 @@ def _failure(case_id: str, category: str) -> Failure:
 
 
 def test_the_taxonomy_is_a_declared_partition():
-    assert SAFETY_CATEGORIES & UTILITY_CATEGORIES == set()
+    assert set() == SAFETY_CATEGORIES & UTILITY_CATEGORIES
     assert "unsafe_tool_invocation" in SAFETY_CATEGORIES
     assert "over_refusal" in UTILITY_CATEGORIES
 

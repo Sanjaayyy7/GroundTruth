@@ -1,0 +1,34 @@
+# Local gate. The derived-artifact hook is the one that matters: committed
+# evidence is byte-checked in CI, the manifest reads index blobs, and a
+# regeneration run before staging records the previous version of the file it
+# is describing. That failure passes `pytest` locally and fails on a fresh
+# checkout, so the test suite structurally cannot catch it — only a hook that
+# runs after staging can.
+#
+# Install once:  pre-commit install
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.16.0
+    hooks:
+      - id: ruff
+        args: [--fix]
+      - id: ruff-format
+        stages: [manual]   # formatting is not enforced; see pyproject rationale
+
+  - repo: local
+    hooks:
+      - id: derived-artifacts-fresh
+        name: derived artifacts are byte-fresh against the staged tree
+        entry: python .github/hooks/verify_derived.py
+        language: system
+        pass_filenames: false
+        always_run: true
+
+      - id: no-tool-attribution
+        name: no AI-tool attribution in staged content
+        # The public surface of this repository carries no tool attribution.
+        # Cheaper to block at commit time than to rewrite history later.
+        entry: python .github/hooks/verify_derived.py --attribution-scan
+        language: system
+        pass_filenames: false
+        always_run: true
