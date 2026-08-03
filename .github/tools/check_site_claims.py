@@ -44,9 +44,32 @@ from pathlib import Path
 _NUM = re.compile(r"(?<![\w.])(0\.\d{2,}|1\.0+|\d{1,3})(?![\w.%])")
 _SOURCE = re.compile(r"Source:\s*(.+?)\s*$")
 
+#: HTML void elements: they emit a start tag and never an end tag.
+_VOID = frozenset(
+    {
+        "area", "base", "br", "col", "embed", "hr", "img", "input",
+        "link", "meta", "param", "source", "track", "wbr",
+    }
+)
+
 
 class StatExtractor(HTMLParser):
-    """Collects <dd> text and its title attribute — the shape the site uses."""
+    """Collects <dd> text and its title attribute — the shape the site uses.
+
+    `aria-hidden="true"` subtrees are skipped, and the reason is a finding this
+    check produced against the live site. An accessible animated counter renders
+    its value twice — once in a screen-reader span, once in an `aria-hidden`
+    span that the animation drives — so naive concatenation reads a milestone
+    count of 9 as the number "99", and reported it as an unsupported stat. No
+    user ever saw "99": a screen reader reads the first span, a sighted reader
+    sees the second. The stat was an artifact of the extractor, not of the page.
+
+    This is the same correction RC9 made after a wider grammar reported an arXiv
+    id: when a check fires on something no reader can observe, the check is
+    wrong. Skipping the hidden copy also keeps the extractor honest in the other
+    direction — a number rendered *only* inside `aria-hidden` is invisible to
+    assistive tech and should not silently count as published.
+    """
 
     def __init__(self) -> None:
         super().__init__()
@@ -54,15 +77,28 @@ class StatExtractor(HTMLParser):
         self._depth = 0
         self._title: str | None = None
         self._buf: list[str] = []
+        self._hidden_depth = 0
 
     def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        pairs = dict(attrs)
+        if self._hidden_depth or pairs.get("aria-hidden") == "true":
+            # Track nesting so the skip ends at the matching close tag, not at
+            # the first close tag of any descendant. Void elements never emit an
+            # end tag, so counting them would strand the skip open for the rest
+            # of the document and silently drop every later stat.
+            if tag not in _VOID:
+                self._hidden_depth += 1
+            return
         if tag == "dd":
             self._depth += 1
             if self._depth == 1:
-                self._title = dict(attrs).get("title")
+                self._title = pairs.get("title")
                 self._buf = []
 
     def handle_endtag(self, tag: str) -> None:
+        if self._hidden_depth:
+            self._hidden_depth -= 1
+            return
         if tag == "dd" and self._depth:
             self._depth -= 1
             if self._depth == 0:
@@ -71,7 +107,7 @@ class StatExtractor(HTMLParser):
                     self.stats.append((text, self._title))
 
     def handle_data(self, data: str) -> None:
-        if self._depth:
+        if self._depth and not self._hidden_depth:
             self._buf.append(data)
 
 
