@@ -23,7 +23,7 @@ review trigger: >=5 active exemptions, or any exemption older than
 |---|---|---|
 | adr | 8 | 20273 |
 | asset | 1 | 9574 |
-| ci | 6 | 15583 |
+| ci | 6 | 16655 |
 | code | 32 | 158248 |
 | config | 5 | 8353 |
 | consumer | 10 | 14403 |
@@ -38,4 +38,4 @@ review trigger: >=5 active exemptions, or any exemption older than
 | spec | 16 | 149739 |
 | test | 32 | 136338 |
 
-total: 349 files, 1532962 bytes
+total: 349 files, 1534034 bytes

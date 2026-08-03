@@ -31,7 +31,7 @@
       "role": "ci"
     },
     {
-      "bytes": 2410,
+      "bytes": 3482,
       "lifecycle": "living",
       "path": ".github/workflows/ci.yml",
       "role": "ci"
@@ -2106,7 +2106,7 @@
       "files": 1
     },
     "ci": {
-      "bytes": 15583,
+      "bytes": 16655,
       "files": 6
     },
     "code": {
@@ -2163,7 +2163,7 @@
     }
   },
   "total": {
-    "bytes": 1532962,
+    "bytes": 1534034,
     "files": 349
   }
 }

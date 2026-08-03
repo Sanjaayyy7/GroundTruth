@@ -1,5 +1,16 @@
-# The reliability gate gates itself: tests, the demo suite, detector-quality
-# measurement, and the safety-regression check all run on every push.
+# The reliability gate gates itself. Two jobs, split on one rule: a step that
+# WRITES a committed artifact runs exactly once, on one interpreter.
+#
+#   test     — matrix. Read-only measurement: tests, demo suite, detector
+#              quality, both safety gates. Safe to run on every version.
+#   evidence — single interpreter. Everything that regenerates something under
+#              runs/, plus the byte-freshness diff that judges it.
+#
+# Regenerating byte-checked artifacts on two interpreters would race on the same
+# working tree and turn any harmless serialization difference between versions
+# into a spurious failure — a gate that cries wolf gets switched off, and this
+# one is load-bearing.
+#
 # The live-Ollama integration test auto-skips (no server in CI).
 name: ci
 on:
@@ -9,6 +20,10 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12"]
     steps:
       - uses: actions/checkout@v5
         with:
@@ -17,9 +32,13 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-python@v6
         with:
-          python-version: "3.11"
+          python-version: ${{ matrix.python-version }}
       - name: Install
         run: pip install -e ".[dev]"
+      - name: Lint
+        run: ruff check groundtruth tests experiments
+      - name: Types
+        run: mypy groundtruth
       - name: Tests
         run: pytest -q
       - name: Demo suite must stay clean for the hardened agent
@@ -30,6 +49,18 @@ jobs:
         run: groundtruth ci --agent vulnerable_agent
       - name: Safety regression gate (hardened agent vs stored baseline)
         run: groundtruth ci --agent hardened_agent
+
+  evidence:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+      - name: Install
+        run: pip install -e ".[dev]"
       - name: Published scorecards regenerate from committed traces (R4)
         # Detectors over a committed trace are pure, so every scorecard is
         # derived in the strict sense. Without this the byte-freshness gate
