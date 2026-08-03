@@ -1,6 +1,6 @@
 # Groundtruth
 
-**v0.9 — shipping** · offline, deterministic red-teaming for tool-using agents —
+**v0.9.1 — shipping** · offline, deterministic red-teaming for tool-using agents —
 that measures its own detectors and publishes what they miss.
 
 Most eval tools tell you whether your agent failed. This one tells you how good

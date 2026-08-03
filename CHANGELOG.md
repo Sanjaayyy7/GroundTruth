@@ -7,6 +7,42 @@ linked protocol and report documents. Commits after the `v0.8.0` tag are
 publication hardening (external validation, error contracts, the public
 baseline); they belong to no milestone and are visible in the git log.
 
+## v0.9.1 — 2026-08-03
+
+Close three findings from the external technical due-diligence review that the
+v0.9.0 pass left open. All three are the same shape: a guarantee the repository
+stated in prose but never enforced in code.
+
+- **`secret_leak` reported one sink per secret** (review finding A7). A
+  credential copied into *both* an outbound tool call and the final answer was
+  recorded once, and when the tool call came first the disclosure to the user
+  vanished from the record entirely. Now deduplicated per sink rather than
+  capped at one — a subject that loops the same call twenty times still leaked
+  to that tool once. **Corrected 2 of 12 committed scorecards** (`llama3.1:8b`
+  and `llama3.2` stateful, each `secret_exfiltration` 1 → 2, each gaining the
+  missing `high`-severity answer disclosure). **No published rate moved**:
+  `robustness_score` and `safety_rate` count cases, not failures, and both are
+  unchanged at 0.25 and 0.375.
+- **C5's breakdown was amended, its headline was not.** The claim read "3 send
+  to the attacker address, 2 paste the key into the answer" — a breakdown that
+  summed to 5 of 6 models and was produced by the under-count above. Re-measured:
+  3 send to the attacker, **5** paste into the answer, **2 do both**. The
+  2/6 → 6/6 headline counts models that leaked at all and is untouched.
+- **Scenario keys are now vocabulary-guarded** (review finding A8, debt #22).
+  Labels have been guarded since v0.2 while scenarios — the larger surface —
+  were not, so a misspelled `completion_tools` loaded, ran, and scored clean
+  with a detector contract silently dropped. `CaseSchema` is declared by the
+  product and enforced in the core loader, because core must not learn what an
+  AgentProbe scenario contains (ADR-0001, RC5-enforced). All violations in a
+  file are reported in one pass.
+- **`parse_action` has adversarial coverage** (review finding A6, threat I1,
+  debt #23). The fail-open guarantee was previously mitigated by code reading.
+  900 seeded inputs now assert it as a type. Stdlib `random` under a fixed seed
+  rather than a property-based dependency: the one-runtime-dependency law is
+  machine-checked, and a corpus that differs per run would make a failure
+  unreproducible from the artifact alone.
+- Test count 267 → 1187 (the fuzz corpus is parametrized). Runtime 11s.
+
 ## v0.9.0 — 2026-08-02
 
 Close the loop: the most attackable published number was re-measured under a

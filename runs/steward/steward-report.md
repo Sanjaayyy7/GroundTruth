@@ -33,18 +33,18 @@ silent: RC1, RC2, RC3, RC4, RC5, RC6, RC7, RC8, RC9
 | adr | 8 | 20273 |
 | asset | 1 | 9574 |
 | ci | 7 | 22581 |
-| code | 32 | 160478 |
-| config | 5 | 8353 |
+| code | 32 | 166220 |
+| config | 5 | 8379 |
 | consumer | 10 | 14403 |
 | dataset | 15 | 61810 |
-| doc | 17 | 128530 |
-| evidence | 195 | 758480 |
+| doc | 17 | 130887 |
+| evidence | 195 | 760949 |
 | experiment | 7 | 39358 |
 | law | 1 | 13199 |
 | legal | 1 | 1063 |
 | plan | 1 | 4302 |
-| register | 3 | 26814 |
+| register | 3 | 29079 |
 | spec | 16 | 149774 |
-| test | 33 | 139214 |
+| test | 36 | 151001 |
 
-total: 352 files, 1558206 bytes
+total: 355 files, 1582852 bytes

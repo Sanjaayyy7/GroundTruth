@@ -6,3 +6,6 @@ __pycache__/
 build/
 dist/
 *.out.json
+.env
+.env.*
+!.env.example

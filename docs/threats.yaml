@@ -15,11 +15,18 @@ threats:
     mitigation: >
       Caught once (v0.3 agent parser) and once (judge parser); adapter now
       translates the unambiguous action-field variant; fail-open only for
-      genuine garbage.
-    remaining_risk: "A third parseable-but-unhandled reply shape could still misscore"
+      genuine garbage. v0.9.1 adds a seeded fuzz corpus (tests/test_parse_action_fuzz.py)
+      over both parse_action and its JSON scanner: 900 generated inputs assert the
+      fail-open guarantee as a type, and a hallucinated tool must degrade to Finish
+      carrying the raw text rather than becoming an unexecutable ToolCall.
+    remaining_risk: >
+      The corpus is built from fragments of failure modes already observed, so it
+      pins known shapes and generalizes only near them. A reply shape unlike
+      anything in the fragment set could still misscore.
     future_experiment: >
-      Parser fuzzing over recorded real replies; assert no silent Finish on
-      well-formed tool JSON.
+      Replay the fuzz assertions over the recorded real replies in
+      runs/experiments/judge-rerun-2026-08-02/, which are model output rather
+      than synthesized fragments.
     status: mitigated
     claim_refs: []
 

@@ -31,7 +31,15 @@ class RegisterError(Exception):
 _LOG = logging.getLogger(__name__)
 _GIT_TIMEOUT = 30  # seconds, per invocation
 _PYPROJECT_VERSION = re.compile(r'^version\s*=\s*"([^"]+)"', re.M)
-_README_VERSION = re.compile(r"\*\*v(\d+\.\d+) — shipping\*\*")
+# Two-or-more components, not exactly two. The original `\d+\.\d+` could not
+# match a patch release, so the first `0.9.1` README made CT6 report the anchor
+# *missing* rather than drifted — the version law was unable to express a
+# version the project could ship. Same class as the v0.9.0 finding that
+# `version_anchors` never declared the package itself: the law was narrower than
+# its subject. RC3's Constitution pattern was already `[0-9.]+`; the two
+# readers of one anchor disagreed, which is the drift this engine exists to
+# catch, occurring inside the engine.
+_README_VERSION = re.compile(r"\*\*v(\d+(?:\.\d+)+) — shipping\*\*")
 _PROSE_THREAT_ID = re.compile(r"^\|\s*([IEKS]\d+|T\d+)\s*\|", re.M)
 
 

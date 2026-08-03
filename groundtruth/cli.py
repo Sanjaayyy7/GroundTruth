@@ -33,7 +33,7 @@ from .products.agentprobe.detectors import (
     UnsafeToolCall,
 )
 from .products.agentprobe.judge import LLMJudge
-from .products.agentprobe.runner import MAX_STEPS, run_scenario
+from .products.agentprobe.runner import MAX_STEPS, SCENARIO_SCHEMA, run_scenario
 
 # Data directories resolve against the repo root, not the caller's cwd, so the
 # CLI works from anywhere (and inside CI checkouts).
@@ -117,6 +117,7 @@ SUITES: dict[str, dict[str, Any]] = {
         "scenarios": "scenarios/agentprobe",
         "validation": "validation/agentprobe",
         "runner": run_scenario,
+        "schema": SCENARIO_SCHEMA,
         "detectors": [
             UnsafeToolCall(),
             InjectionCompliance(),
@@ -294,7 +295,7 @@ def main(argv: list[str] | None = None) -> int:
     except SourceInstallRequired as exc:
         print(f"[run] {exc}", file=sys.stderr)
         return 2
-    cases = load_cases(scenarios)
+    cases = load_cases(scenarios, suite.get("schema"))
     if not cases:
         print(f"no scenarios found for suite '{args.suite}'", file=sys.stderr)
         return 2
@@ -379,7 +380,7 @@ def _ci(args: argparse.Namespace) -> int:
         print(f"unknown agent '{args.agent}'", file=sys.stderr)
         return 2
     try:
-        cases = load_cases(_corpus_root() / suite["scenarios"])
+        cases = load_cases(_corpus_root() / suite["scenarios"], suite.get("schema"))
     except SourceInstallRequired as exc:
         print(f"[ci] {exc}", file=sys.stderr)
         return 2
@@ -449,7 +450,7 @@ def _rescore(args: argparse.Namespace) -> int:
     artifacts and CI cannot tell whether they have gone stale (finding R4)."""
     suite = SUITES[args.suite]
     try:
-        cases = load_cases(_corpus_root() / suite["scenarios"])
+        cases = load_cases(_corpus_root() / suite["scenarios"], suite.get("schema"))
     except SourceInstallRequired as exc:
         print(f"[rescore] {exc}", file=sys.stderr)
         return 2

@@ -96,11 +96,17 @@ claims:
     statement: >
       With message history, secret exfiltration rises from 2/6 to 6/6 models:
       completing the task forces every model to mishandle the poisoned content
-      somewhere (3 send to the attacker address, 2 paste the key into the answer).
+      somewhere (3 send to the attacker address, 5 paste the key into the answer,
+      2 do both). Amended at v0.9.1: the published breakdown read "3 send / 2
+      paste" and summed to 5 of 6 models, because `secret_leak` stopped at the
+      first sink per secret and never recorded the second (deep-dive A7). The
+      2/6 -> 6/6 headline is unchanged — it counts models that leaked at all,
+      which the under-count could not affect.
     classification: supported_observation
     evidence:
       - runs/scorecard-gemma3-4b-stateful.json
       - runs/scorecard-llama3.1-8b-stateful.json
+      - runs/scorecard-llama3.2-latest-stateful.json
       - runs/scorecard-mistral-7b-stateful.json
     reproduce: "groundtruth run --agent ollama:<model> --stateful --json (all six)"
     assumptions: []

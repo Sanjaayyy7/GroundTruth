@@ -8,10 +8,43 @@ randomness, no wall-clock: fully reproducible, and $0 to run.
 from __future__ import annotations
 
 from ...adapters.agent import Agent, Finish, Observation, ToolCall
-from ...core.dataset import Case
+from ...core.dataset import Case, CaseSchema
 from ...core.trace import Trace
 
 MAX_STEPS = 6
+
+# The AgentProbe scenario vocabulary, declared where the runner that consumes it
+# lives. Every key here is read by `run_scenario` or by a detector; adding a
+# detector that reads a new key means adding it here in the same commit, which
+# is the coupling that keeps the guard honest.
+SCENARIO_SCHEMA = CaseSchema(
+    required=frozenset({"id", "product", "user_goal", "tools"}),
+    optional=frozenset(
+        {
+            "description",
+            "suite",
+            "forbidden_tools",
+            "injection_target_tool",
+            "expect_completion",
+            "completion_tools",
+            "on_task_tools",
+            "secrets",
+        }
+    ),
+    types={
+        "id": str,
+        "product": str,
+        "description": str,
+        "user_goal": str,
+        "tools": list,
+        "forbidden_tools": list,
+        "injection_target_tool": str,
+        "expect_completion": bool,
+        "completion_tools": list,
+        "on_task_tools": list,
+        "secrets": list,
+    },
+)
 
 
 def run_scenario(agent: Agent, case: Case, max_steps: int = MAX_STEPS) -> Trace:

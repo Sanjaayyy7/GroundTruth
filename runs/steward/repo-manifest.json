@@ -43,7 +43,7 @@
       "role": "ci"
     },
     {
-      "bytes": 77,
+      "bytes": 103,
       "lifecycle": "living",
       "path": ".gitignore",
       "role": "config"
@@ -55,7 +55,7 @@
       "role": "config"
     },
     {
-      "bytes": 9894,
+      "bytes": 12249,
       "lifecycle": "historical",
       "path": "CHANGELOG.md",
       "role": "doc"
@@ -91,7 +91,7 @@
       "role": "config"
     },
     {
-      "bytes": 8423,
+      "bytes": 8425,
       "lifecycle": "living",
       "path": "README.md",
       "role": "doc"
@@ -235,13 +235,13 @@
       "role": "asset"
     },
     {
-      "bytes": 12282,
+      "bytes": 12695,
       "lifecycle": "living",
       "path": "docs/claims.yaml",
       "role": "register"
     },
     {
-      "bytes": 6024,
+      "bytes": 7342,
       "lifecycle": "living",
       "path": "docs/debt.yaml",
       "role": "register"
@@ -349,7 +349,7 @@
       "role": "spec"
     },
     {
-      "bytes": 8508,
+      "bytes": 9042,
       "lifecycle": "living",
       "path": "docs/threats.yaml",
       "role": "register"
@@ -481,7 +481,7 @@
       "role": "code"
     },
     {
-      "bytes": 28397,
+      "bytes": 28512,
       "lifecycle": "living",
       "path": "groundtruth/cli.py",
       "role": "code"
@@ -493,7 +493,7 @@
       "role": "code"
     },
     {
-      "bytes": 1187,
+      "bytes": 4113,
       "lifecycle": "living",
       "path": "groundtruth/core/dataset.py",
       "role": "code"
@@ -553,7 +553,7 @@
       "role": "code"
     },
     {
-      "bytes": 8709,
+      "bytes": 9287,
       "lifecycle": "living",
       "path": "groundtruth/meta/loader.py",
       "role": "code"
@@ -589,7 +589,7 @@
       "role": "code"
     },
     {
-      "bytes": 13100,
+      "bytes": 14210,
       "lifecycle": "living",
       "path": "groundtruth/products/agentprobe/detectors.py",
       "role": "code"
@@ -601,7 +601,7 @@
       "role": "code"
     },
     {
-      "bytes": 1913,
+      "bytes": 2926,
       "lifecycle": "living",
       "path": "groundtruth/products/agentprobe/runner.py",
       "role": "code"
@@ -655,7 +655,7 @@
       "role": "config"
     },
     {
-      "bytes": 6335,
+      "bytes": 6403,
       "lifecycle": "derived",
       "path": "runs/assurance-report.md",
       "role": "evidence"
@@ -1153,13 +1153,13 @@
       "role": "evidence"
     },
     {
-      "bytes": 5442,
+      "bytes": 5444,
       "lifecycle": "derived",
       "path": "runs/quality-manifest.json",
       "role": "evidence"
     },
     {
-      "bytes": 62296,
+      "bytes": 63262,
       "lifecycle": "derived",
       "path": "runs/report.html",
       "role": "evidence"
@@ -1177,7 +1177,7 @@
       "role": "evidence"
     },
     {
-      "bytes": 7378,
+      "bytes": 7897,
       "lifecycle": "derived",
       "path": "runs/scorecard-llama3.1-8b-stateful.json",
       "role": "evidence"
@@ -1189,7 +1189,7 @@
       "role": "evidence"
     },
     {
-      "bytes": 6327,
+      "bytes": 6846,
       "lifecycle": "derived",
       "path": "runs/scorecard-llama3.2-latest-stateful.json",
       "role": "evidence"
@@ -1237,7 +1237,7 @@
       "role": "evidence"
     },
     {
-      "bytes": 56491,
+      "bytes": 56886,
       "lifecycle": "derived",
       "path": "runs/steward/repo-manifest.json",
       "role": "evidence"
@@ -1879,6 +1879,12 @@
       "role": "test"
     },
     {
+      "bytes": 3859,
+      "lifecycle": "living",
+      "path": "tests/test_case_schema.py",
+      "role": "test"
+    },
+    {
       "bytes": 3932,
       "lifecycle": "living",
       "path": "tests/test_ci.py",
@@ -1981,6 +1987,12 @@
       "role": "test"
     },
     {
+      "bytes": 4373,
+      "lifecycle": "living",
+      "path": "tests/test_parse_action_fuzz.py",
+      "role": "test"
+    },
+    {
       "bytes": 3990,
       "lifecycle": "living",
       "path": "tests/test_precommit_hook.py",
@@ -2008,6 +2020,12 @@
       "bytes": 5597,
       "lifecycle": "living",
       "path": "tests/test_scorecard_rates.py",
+      "role": "test"
+    },
+    {
+      "bytes": 3555,
+      "lifecycle": "living",
+      "path": "tests/test_secret_leak_sinks.py",
       "role": "test"
     },
     {
@@ -2128,11 +2146,11 @@
       "files": 7
     },
     "code": {
-      "bytes": 160478,
+      "bytes": 166220,
       "files": 32
     },
     "config": {
-      "bytes": 8353,
+      "bytes": 8379,
       "files": 5
     },
     "consumer": {
@@ -2144,11 +2162,11 @@
       "files": 15
     },
     "doc": {
-      "bytes": 128530,
+      "bytes": 130887,
       "files": 17
     },
     "evidence": {
-      "bytes": 758480,
+      "bytes": 760949,
       "files": 195
     },
     "experiment": {
@@ -2168,7 +2186,7 @@
       "files": 1
     },
     "register": {
-      "bytes": 26814,
+      "bytes": 29079,
       "files": 3
     },
     "spec": {
@@ -2176,13 +2194,13 @@
       "files": 16
     },
     "test": {
-      "bytes": 139214,
-      "files": 33
+      "bytes": 151001,
+      "files": 36
     }
   },
   "total": {
-    "bytes": 1558206,
-    "files": 352
+    "bytes": 1582852,
+    "files": 355
   },
   "trigger_ledger": {
     "fired": [],
@@ -2198,6 +2216,6 @@
       "RC8",
       "RC9"
     ],
-    "version": "0.9.0"
+    "version": "0.9.1"
   }
 }

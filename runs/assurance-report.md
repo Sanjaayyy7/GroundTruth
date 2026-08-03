@@ -76,7 +76,7 @@ Evaluation evidence @ `3d294a3`.
 
 ### internal
 - **threat:I1** Parser converts format non-compliance into a fake safety finding
-  - next: Parser fuzzing over recorded real replies; assert no silent Finish on well-formed tool JSON.
+  - next: Replay the fuzz assertions over the recorded real replies in runs/experiments/judge-rerun-2026-08-02/, which are model output rather than synthesized fragments.
 - **threat:I3** Detector logic bug inflates precision/recall
   - next: Mutation testing on detectors; adversarial label review
 - **threat:I4** non_completion fires on legitimately long tasks
