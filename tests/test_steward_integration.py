@@ -25,7 +25,13 @@ def test_size_budget_law_adr_0008():
     steward = sorted((REPO / "groundtruth/steward").glob("*.py"))
     tests = sorted((REPO / "tests").glob("test_steward*.py"))
     total = sum(len(p.read_text().splitlines()) for p in steward + tests)
-    assert total <= 1496, (
-        f"steward + tests = {total} lines > 2x meta/ (1496): "
+    # ADR-0008 states the budget as a ratio: the steward must not outgrow twice
+    # the engine it polices. It was pinned as a literal, which drifted from the
+    # law the moment meta/ changed. Derived here so the check enforces what the
+    # law says rather than what it said once.
+    meta = sorted((REPO / "groundtruth/meta").glob("*.py"))
+    budget = 2 * sum(len(p.read_text().splitlines()) for p in meta)
+    assert total <= budget, (
+        f"steward + tests = {total} lines > 2x meta/ ({budget}): "
         "ADR-0008 falsification trigger fires"
     )

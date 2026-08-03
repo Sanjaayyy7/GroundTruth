@@ -78,6 +78,14 @@ class RescoreError(RuntimeError):
     """A rescore cannot proceed from the committed traces. CLI exit code 2."""
 
 
+def _package_version() -> str:
+    """Declared package version. Imported lazily so the steward's manifest can
+    name the milestone it describes without cli importing the package eagerly."""
+    from . import __version__
+
+    return __version__
+
+
 def _repo_root() -> Path:
     """Root that the corpus and default artifact paths resolve against.
 
@@ -595,7 +603,7 @@ def _steward(args: argparse.Namespace) -> int:
         load_debt,
     )
     from .steward.model import DeclarationError
-    from .steward.report import render_manifest, render_report
+    from .steward.report import render_manifest, render_report, trigger_ledger
 
     root = Path(args.root) if args.root else _repo_root()
     try:
@@ -609,6 +617,11 @@ def _steward(args: argparse.Namespace) -> int:
 
     inventory = build_inventory(index, decls.roles, sizes)
     active, exempted = run_checks(root, decls, debt, index)
+
+    # The ledger travels in the manifest so the firing record is byte-checked
+    # like every other piece of committed evidence; a trigger nobody can audit
+    # is the prose promise this replaces.
+    inventory["trigger_ledger"] = trigger_ledger(active, exempted, _package_version())
 
     out_dir = Path(args.out) if args.out else root / "runs/steward"
     out_dir.mkdir(parents=True, exist_ok=True)

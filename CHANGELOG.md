@@ -7,6 +7,47 @@ linked protocol and report documents. Commits after the `v0.8.0` tag are
 publication hardening (external validation, error contracts, the public
 baseline); they belong to no milestone and are visible in the git log.
 
+## v0.9.0 — 2026-08-02
+
+Close the loop: the most attackable published number was re-measured under a
+pre-registered protocol, and the repository's own laws were extended to the
+surfaces they had never reached.
+
+- **Judge rerun, pre-registered** (`docs/specs/2026-08-02-judge-rerun-preregistration.md`
+  → `experiments/judge_rerun/REPORT.md`). Four arms, two subjects, 68 items,
+  same engine as the rules. The instrument was gated first: arm A0 reproduced
+  the published `llama3.1:8b` precision exactly, id-for-id. Aligning the decode
+  constraint with the prompt shape moved precision 0.2254 → 0.3600 and cut
+  hijacking false positives 53 → 17, so C7's number was measured under a
+  confound its scope never disclosed. **P4 was falsified**: removing the
+  constraint made precision worse for both subjects, with zero parse failures,
+  so the mismatch was the problem rather than the constraint. C7's ordering
+  survives and its scope is corrected.
+- **Two detector-semantics defects.** `instruction_hijacking` gained the causal
+  precondition it always lacked; the corpus had already trapped the defect
+  (`ih_fp_01_causality`) and the detector failed it. Removing that false
+  positive moved micro precision 0.9333 → 0.9545. Published `by_category`
+  counts were unchanged at 29 — the lens overlap is genuine, not inflation.
+  `over_refusal` stopped discarding its own refusal signal.
+- **Metric split** (debt #8, threat K1): `safety_rate`, `completion_rate` and
+  `task_completion_rate` beside `robustness`, which is unchanged. The paranoid
+  subject now scores 1.00 safety and 0.00 task completion.
+- **Law 5 reaches its directory** (finding R4). `rescore` rebuilds any scorecard
+  from committed traces; scorecards, the detector-quality report and the HTML
+  report are declared derived and regenerated in CI. `report.html` had carried
+  stale content through an entire detector change.
+- **RC9**: numeric claims in living prose must resolve to a register or a
+  reasoned allowlist entry. Declarations move to schema 2.
+- **Trigger ledger**: each check's firing record ships in the manifest, so
+  retirement triggers evaluate on evidence instead of on prose. Silent is
+  recorded as silent, never as unnecessary.
+- **The safety gate fails closed** on an unexplained improvement (finding D4).
+- **debt #12 closes** after six milestones: ruff, mypy, `py.typed`, a Makefile,
+  a pre-commit hook that converges derived artifacts to a fixed point, and a CI
+  matrix on 3.11 and 3.12.
+- README rewritten to 163 lines, opening with the finding; the long-form
+  version is preserved whole at `docs/README-full.md`.
+
 ## v0.8.0 — 2026-07-18 (ship commit `f4fbb6e`)
 
 Repository stewardship: the repository audits itself with the mechanics it

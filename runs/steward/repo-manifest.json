@@ -31,6 +31,12 @@
       "role": "ci"
     },
     {
+      "bytes": 5597,
+      "lifecycle": "living",
+      "path": ".github/tools/check_site_claims.py",
+      "role": "ci"
+    },
+    {
       "bytes": 3811,
       "lifecycle": "living",
       "path": ".github/workflows/ci.yml",
@@ -49,7 +55,7 @@
       "role": "config"
     },
     {
-      "bytes": 7267,
+      "bytes": 9894,
       "lifecycle": "historical",
       "path": "CHANGELOG.md",
       "role": "doc"
@@ -475,7 +481,7 @@
       "role": "code"
     },
     {
-      "bytes": 27846,
+      "bytes": 28397,
       "lifecycle": "living",
       "path": "groundtruth/cli.py",
       "role": "code"
@@ -637,7 +643,7 @@
       "role": "code"
     },
     {
-      "bytes": 2159,
+      "bytes": 3838,
       "lifecycle": "living",
       "path": "groundtruth/steward/report.py",
       "role": "code"
@@ -1231,13 +1237,13 @@
       "role": "evidence"
     },
     {
-      "bytes": 55932,
+      "bytes": 56491,
       "lifecycle": "derived",
       "path": "runs/steward/repo-manifest.json",
       "role": "evidence"
     },
     {
-      "bytes": 932,
+      "bytes": 1224,
       "lifecycle": "derived",
       "path": "runs/steward/steward-report.md",
       "role": "evidence"
@@ -2005,6 +2011,12 @@
       "role": "test"
     },
     {
+      "bytes": 2456,
+      "lifecycle": "living",
+      "path": "tests/test_site_claims.py",
+      "role": "test"
+    },
+    {
       "bytes": 10036,
       "lifecycle": "living",
       "path": "tests/test_steward_checks.py",
@@ -2017,7 +2029,7 @@
       "role": "test"
     },
     {
-      "bytes": 1286,
+      "bytes": 1706,
       "lifecycle": "living",
       "path": "tests/test_steward_integration.py",
       "role": "test"
@@ -2112,11 +2124,11 @@
       "files": 1
     },
     "ci": {
-      "bytes": 16984,
-      "files": 6
+      "bytes": 22581,
+      "files": 7
     },
     "code": {
-      "bytes": 158248,
+      "bytes": 160478,
       "files": 32
     },
     "config": {
@@ -2132,11 +2144,11 @@
       "files": 15
     },
     "doc": {
-      "bytes": 125903,
+      "bytes": 128530,
       "files": 17
     },
     "evidence": {
-      "bytes": 757629,
+      "bytes": 758480,
       "files": 195
     },
     "experiment": {
@@ -2164,12 +2176,28 @@
       "files": 16
     },
     "test": {
-      "bytes": 136338,
-      "files": 32
+      "bytes": 139214,
+      "files": 33
     }
   },
   "total": {
-    "bytes": 1544025,
-    "files": 350
+    "bytes": 1558206,
+    "files": 352
+  },
+  "trigger_ledger": {
+    "fired": [],
+    "note": "silent here, not unnecessary: a check fixed pre-push never reaches this run",
+    "silent": [
+      "RC1",
+      "RC2",
+      "RC3",
+      "RC4",
+      "RC5",
+      "RC6",
+      "RC7",
+      "RC8",
+      "RC9"
+    ],
+    "version": "0.9.0"
   }
 }
