@@ -129,6 +129,29 @@ def resolves(literal: str, supported: set[str]) -> bool:
     return any(round(float(v), places) == target for v in supported)
 
 
+#: Provenance prefixes that make a stat answerable to the toolchain rather than
+#: to the claims register. The register is the authority for *measured claims* —
+#: a precision, a recall, a corpus size — because those carry falsification and
+#: scope. It is deliberately not the authority for *repository facts* like a
+#: commit count or a CI step count: forcing those into claims.yaml would put
+#: entries there with nothing to falsify, which is how a register of scientific
+#: claims decays into a bag of statistics.
+#:
+#: A stat citing one of these is checked for *having* reproducible provenance,
+#: not for register membership. Anything else must still resolve against the
+#: register, so the strict path stays the default and this list is the exception
+#: that has to be argued for, one prefix at a time.
+#: `runs/`, `docs/` and `tests/` are deliberately absent: measured artifacts and
+#: registers live there, and a metric citing its own output file is exactly the
+#: drift this tool exists to catch.
+_SELF_CITING = ("git ", "pytest ", "github api ", ".github/",
+                "pyproject.toml", "changelog.md", "license")
+
+
+def _is_self_citing(source: str) -> bool:
+    return source.strip().lower().startswith(_SELF_CITING)
+
+
 def check(html: str, claims: str) -> list[str]:
     parser = StatExtractor()
     parser.feed(html)
@@ -138,8 +161,11 @@ def check(html: str, claims: str) -> list[str]:
         literals = [m.group(1) for m in _NUM.finditer(text)]
         if not literals:
             continue
-        if not title or not _SOURCE.search(title):
+        match = _SOURCE.search(title) if title else None
+        if not match:
             findings.append(f"uncited stat (no Source: title): {text!r}")
+            continue
+        if _is_self_citing(match.group(1)):
             continue
         for literal in literals:
             if not resolves(literal, supported):

@@ -25,7 +25,8 @@ claims:
       - {name: micro_recall, value: 0.8936}
     corpus: 68
 """
-TITLE = 'title="Source: git rev-list --count HEAD @ 86ae6c2 (verified 2026-07-18)"'
+#: A measured-metric provenance: answerable to the register.
+TITLE = 'title="Source: runs/detector-quality.json micro precision (verified 2026-08-03)"'
 
 
 def _page(body: str) -> str:
@@ -125,3 +126,34 @@ def test_a_number_only_in_a_hidden_subtree_is_not_treated_as_published():
     assert _extract(
         f'<dt>a</dt><dd {TITLE}><span aria-hidden="true">0.1234</span></dd>'
     ) == []
+
+
+METRIC_TITLE = TITLE
+GIT_TITLE = 'title="Source: git rev-list --count HEAD @ d1d0c37 (verified 2026-08-03)"'
+
+
+def test_a_repository_fact_cites_the_toolchain_not_the_register():
+    """A commit count has no falsification condition, so it is not a claim.
+
+    Forcing it into claims.yaml would put an entry there with nothing to refute,
+    which is how a register of scientific claims decays into a bag of statistics.
+    Its provenance is the command in its own Source: string.
+    """
+    assert site.check(_page(f"<dt>Commits</dt><dd {GIT_TITLE}>91</dd>"), CLAIMS) == []
+
+
+def test_a_measured_metric_must_still_resolve_against_the_register():
+    """The strict path stays the default: self-citing is the argued exception."""
+    findings = site.check(_page(f"<dt>precision</dt><dd {METRIC_TITLE}>0.9333</dd>"), CLAIMS)
+    assert len(findings) == 1
+    assert "0.9333" in findings[0]
+
+
+def test_a_measured_metric_that_matches_the_register_passes():
+    assert site.check(_page(f"<dt>precision</dt><dd {METRIC_TITLE}>0.9545</dd>"), CLAIMS) == []
+
+
+def test_a_stat_with_no_source_is_still_uncited_whatever_its_kind():
+    findings = site.check(_page("<dt>Commits</dt><dd>91</dd>"), CLAIMS)
+    assert len(findings) == 1
+    assert "uncited" in findings[0]

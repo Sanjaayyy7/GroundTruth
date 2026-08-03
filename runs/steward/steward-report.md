@@ -32,7 +32,7 @@ silent: RC1, RC2, RC3, RC4, RC5, RC6, RC7, RC8, RC9
 |---|---|---|
 | adr | 8 | 20273 |
 | asset | 1 | 9574 |
-| ci | 7 | 24388 |
+| ci | 7 | 25720 |
 | code | 32 | 166220 |
 | config | 5 | 8379 |
 | consumer | 10 | 14403 |
@@ -45,6 +45,6 @@ silent: RC1, RC2, RC3, RC4, RC5, RC6, RC7, RC8, RC9
 | plan | 1 | 4302 |
 | register | 3 | 29079 |
 | spec | 16 | 149774 |
-| test | 36 | 153104 |
+| test | 36 | 154431 |
 
-total: 355 files, 1586762 bytes
+total: 355 files, 1589421 bytes

@@ -31,7 +31,7 @@
       "role": "ci"
     },
     {
-      "bytes": 7404,
+      "bytes": 8736,
       "lifecycle": "living",
       "path": ".github/tools/check_site_claims.py",
       "role": "ci"
@@ -2029,7 +2029,7 @@
       "role": "test"
     },
     {
-      "bytes": 4559,
+      "bytes": 5886,
       "lifecycle": "living",
       "path": "tests/test_site_claims.py",
       "role": "test"
@@ -2142,7 +2142,7 @@
       "files": 1
     },
     "ci": {
-      "bytes": 24388,
+      "bytes": 25720,
       "files": 7
     },
     "code": {
@@ -2194,12 +2194,12 @@
       "files": 16
     },
     "test": {
-      "bytes": 153104,
+      "bytes": 154431,
       "files": 36
     }
   },
   "total": {
-    "bytes": 1586762,
+    "bytes": 1589421,
     "files": 355
   },
   "trigger_ledger": {
