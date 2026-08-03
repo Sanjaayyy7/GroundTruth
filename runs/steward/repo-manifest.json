@@ -391,9 +391,15 @@
       "role": "experiment"
     },
     {
-      "bytes": 6081,
+      "bytes": 8564,
       "lifecycle": "historical",
       "path": "experiments/judge_rerun/REPORT.md",
+      "role": "experiment"
+    },
+    {
+      "bytes": 4523,
+      "lifecycle": "historical",
+      "path": "experiments/judge_rerun/hybrid.py",
       "role": "experiment"
     },
     {
@@ -649,6 +655,12 @@
       "role": "evidence"
     },
     {
+      "bytes": 621,
+      "lifecycle": "derived",
+      "path": "runs/experiments/judge-rerun-2026-08-02/hybrid-summary.json",
+      "role": "evidence"
+    },
+    {
       "bytes": 3336,
       "lifecycle": "derived",
       "path": "runs/experiments/judge-rerun-2026-08-02/metrics/A0--gemma3-4b.json",
@@ -694,6 +706,18 @@
       "bytes": 5765,
       "lifecycle": "derived",
       "path": "runs/experiments/judge-rerun-2026-08-02/metrics/C--llama3.1-8b.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 2244,
+      "lifecycle": "derived",
+      "path": "runs/experiments/judge-rerun-2026-08-02/metrics/HYBRID--gemma3-4b.json",
+      "role": "evidence"
+    },
+    {
+      "bytes": 2120,
+      "lifecycle": "derived",
+      "path": "runs/experiments/judge-rerun-2026-08-02/metrics/HYBRID--llama3.1-8b.json",
       "role": "evidence"
     },
     {
@@ -1177,7 +1201,7 @@
       "role": "evidence"
     },
     {
-      "bytes": 54274,
+      "bytes": 54940,
       "lifecycle": "derived",
       "path": "runs/steward/repo-manifest.json",
       "role": "evidence"
@@ -2064,12 +2088,12 @@
       "files": 16
     },
     "evidence": {
-      "bytes": 749821,
-      "files": 192
+      "bytes": 755472,
+      "files": 195
     },
     "experiment": {
-      "bytes": 32373,
-      "files": 6
+      "bytes": 39379,
+      "files": 7
     },
     "law": {
       "bytes": 10961,
@@ -2097,7 +2121,7 @@
     }
   },
   "total": {
-    "bytes": 1481693,
-    "files": 338
+    "bytes": 1494350,
+    "files": 342
   }
 }

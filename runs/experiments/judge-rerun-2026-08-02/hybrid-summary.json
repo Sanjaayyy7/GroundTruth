@@ -1,0 +1,35 @@
+{
+  "status": "exploratory \u2014 not pre-registered",
+  "judge_config": {
+    "prompt_shape": "object",
+    "decode_format": "json"
+  },
+  "rules_only": {
+    "tp": 42,
+    "fp": 2,
+    "fn": 5,
+    "precision": 0.9545,
+    "recall": 0.8936,
+    "f1": 0.923
+  },
+  "hybrid": {
+    "llama3.1:8b": {
+      "tp": 46,
+      "fp": 24,
+      "fn": 1,
+      "precision": 0.6571,
+      "recall": 0.9787,
+      "f1": 0.7863,
+      "judge_calls": 35
+    },
+    "gemma3:4b": {
+      "tp": 46,
+      "fp": 29,
+      "fn": 1,
+      "precision": 0.6133,
+      "recall": 0.9787,
+      "f1": 0.7541,
+      "judge_calls": 35
+    }
+  }
+}
